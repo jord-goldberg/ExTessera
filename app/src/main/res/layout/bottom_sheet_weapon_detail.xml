@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.WeaponModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginBottom="2dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="32dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@{viewModel.name}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Crossbow, heavy"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> null}"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_more_vert"
+                    tools:src="@drawable/ic_more_vert"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="32dp"
+                    android:background="@color/grey_300"/>
+
+            </FrameLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="32dp"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.properties}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:visibility="@{viewModel.properties.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Ammunition (range 100/400), heavy, loading, two-handed"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:fontFamily="sans-serif"
+                android:visibility="@{viewModel.proficient ? View.VISIBLE : View.GONE}"
+                android:text="Proficient"
+                android:textColor="@color/colorAccent"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:textStyle="italic"
+                tools:text="Proficient"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Attack Bonus:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Attack Bonus:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.attackBonus()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:textColor="@{viewModel.proficient ? @color/colorAccent : @android:color/secondary_text_light}"
+                    tools:text="+5"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Damage:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Damage:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.damageDetail()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="1d10 + 3 (Piercing)"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

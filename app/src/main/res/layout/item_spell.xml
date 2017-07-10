@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.SpellModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:foreground="?selectableItemBackground"
+        android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+        android:onLongClick="@{() -> presenter.longClick(viewModel.updatePrepared())}"
+        app:cardCornerRadius="0px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.name}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    tools:text="Protection from Evil and Good"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="sans-serif"
+                        android:visibility="@{viewModel.prepared ? View.VISIBLE : View.GONE}"
+                        android:text="PREPARED"
+                        android:textColor="@color/colorAccent"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                        android:textStyle="italic"
+                        tools:text="PREPARED"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="sans-serif"
+                        android:text="@{viewModel.type}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                        android:textStyle="italic"
+                        tools:text="1st-level abjuration"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="end"
+                android:orientation="vertical"
+                android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:text="@{viewModel.requirements}"
+                    tools:text="1 action (V,S,M)"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:text="@{viewModel.range}"
+                    tools:text="Touch"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

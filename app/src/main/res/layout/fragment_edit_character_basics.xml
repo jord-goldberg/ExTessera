@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.edit_character.edit_basics.EditBasicsModel"/>
+
+        <import type="android.view.View"/>
+
+        <import type="java.lang.reflect.Array"/>
+    </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".feature.edit_character.EditCharacterActivity">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:text="What's your name, race, class &amp; level?"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textColor="@android:color/tertiary_text_light"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:hint="Character Name"
+                    android:inputType="textCapSentences|textNoSuggestions"
+                    android:onTextChanged="@{(name, i, x, y) -> viewModel.setName(name)}"
+                    android:privateImeOptions="nm"
+                    android:text="@{viewModel.name}"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorAccent"
+                        android:entries="@{viewModel.raceOptions()}"
+                        android:onItemSelected="@{(p, v, position, id) -> viewModel.selectRace(position)}"
+                        android:selectedItemPosition="@{viewModel.selectedRacePosition()}"
+                        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorAccent"
+                        android:entries="@{viewModel.jobOptions()}"
+                        android:onItemSelected="@{(p, v, position, id) -> viewModel.selectJob(position)}"
+                        android:selectedItemPosition="@{viewModel.selectedJobPosition()}"
+                        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:gravity="center"
+                        android:hint="@{viewModel.showLevelHint()}"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:onTextChanged="@{(level, i, x, y) -> viewModel.setLevel(level)}"
+                        tools:hint="  1  "/>
+
+                </LinearLayout>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:backgroundTint="@color/colorAccent"
+                    android:entries="@{viewModel.subraceOptions()}"
+                    android:onItemSelected="@{(p, v, position, id) -> viewModel.selectSubrace(position)}"
+                    android:selectedItemPosition="@{viewModel.selectedSubracePosition()}"
+                    android:visibility="@{viewModel.subraceOptions().length == 0 ? View.GONE : View.VISIBLE}"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</layout>

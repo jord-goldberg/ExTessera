@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_spells_add"
+        android:title="Add a Spell"/>
+
+    <item
+        android:id="@+id/action_spells_hide"
+        android:title="Hide"/>
+
+</menu>

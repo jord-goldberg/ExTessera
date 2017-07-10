@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.spell_detail.SpellDetailModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.spell_detail.SpellDetailBottomFragment"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginStart="32dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@{viewModel.name}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Fireball"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:visibility="@{viewModel.inSpellBook ? View.GONE : View.VISIBLE}"
+                    android:onClick="@{(v) -> presenter.showAddSpell(v, viewModel)}"
+                    android:foreground="?selectableItemBackground"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_add_black"
+                    tools:src="@drawable/ic_add_black"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="32dp"
+                    android:background="@color/grey_300"/>
+
+            </FrameLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.classes}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                tools:text="Sorcerer, Wizard"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.type}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:textStyle="italic"
+                tools:text="3rd-level evocation"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Casting Time:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Casting Time:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.castingTime}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="1 action"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Range:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Range:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.range}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="150 feet"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Components:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Components:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.components}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="V, S, M (a tiny ball of bat guano and sulfur)"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Duration:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Duration:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.duration}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="Instantaneous"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.description}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                tools:text="A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot-radius sphere centered on that point must make a dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one.
+
+The fire spreads around corners. It ignites flammable objects in the area that aren't being worn or carried."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="At Higher Levels:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.hasHigherLevels() ? View.VISIBLE : View.GONE}"
+                tools:text="At Higher Levels:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.higherLevels}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="@{viewModel.hasHigherLevels() ? View.VISIBLE : View.GONE}"
+                tools:text="When you cast this knownSpell using a knownSpell slot of 4th level or higher, the damage increases by 1D6 for each slot level above 3rd."/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.AvatarModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="0px">
+
+        <ImageView
+            android:id="@+id/edit_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:alpha=".87"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground"
+            android:onClick="@{(v) -> presenter.click(v, viewModel.edit())}"
+            android:paddingBottom="12dp"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="12dp"
+            android:src="@drawable/ic_edit_black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
+
+            <android.support.v7.widget.CardView
+                style="@style/CardView.Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+                android:onLongClick="@{() -> presenter.longClick(viewModel.toggleInspiration())}"
+                app:contentPadding="4dp">
+
+                <ny.gelato.extessera.common.AvatarView
+                    android:id="@+id/avatar"
+                    android:layout_width="172dp"
+                    android:layout_height="172dp"
+                    app:avatar_shape="@string/square"
+                    bind:viewModel="@{viewModel}"/>
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:layout_marginTop="8dp"
+                android:maxLines="2"
+                android:text="@{viewModel.name}"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                tools:text="Azazel, Lord of All That Is Holy And All That Is Unholy"/>
+
+            <TextView
+                android:id="@+id/description_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="56dp"
+                android:layout_marginRight="56dp"
+                android:layout_marginTop="4dp"
+                android:text="@{viewModel.description}"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                tools:text="Tiefling Warlock, Level 1"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@color/grey_200">
+
+                <TextView
+                    android:id="@+id/about_text_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:onClick="@{(v) -> presenter.click(v, viewModel.about())}"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:text="about"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:id="@+id/add_exp_text_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:onClick="@{(v) -> presenter.click(v, viewModel.addExp())}"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:text="add exp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:id="@+id/go_to_text_button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:onClick="@{(v) -> presenter.click(v, viewModel.goTo())}"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:text="go to"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

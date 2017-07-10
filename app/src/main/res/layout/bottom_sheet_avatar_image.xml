@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sheet"
+            type="android.support.design.widget.BottomSheetDialog"/>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.AvatarModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="java.lang.String"/>
+
+        <import type="android.view.View"/>
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="end"
+                android:alpha=".87"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:onClick="@{() -> presenter.save(viewModel.updateImage(sheet))}"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:src="@drawable/ic_save_white"
+                android:tint="@color/colorAccent"
+                android:visibility="@{viewModel.newImageUrl == null ? View.GONE : View.VISIBLE}"
+                tools:src="@drawable/ic_save_white"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="46dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="1dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="Profile Picture"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Profile Picture"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="32dp"
+                    android:background="@color/grey_300"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:hint="Set an image url"
+                    android:onTextChanged="@{(url, i, x, y) -> viewModel.setImageUrl(url)}"
+                    android:text="@{viewModel.newImageUrl}"
+                    android:textColor="@android:color/secondary_text_light"
+                    tools:hint="Set an image url"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:drawablePadding="@dimen/activity_horizontal_margin"
+                    android:drawableStart="@drawable/ic_image_black"
+                    android:drawableTint="@android:color/secondary_text_light"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:text="Choose from Gallery"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:drawablePadding="@dimen/activity_horizontal_margin"
+                    android:drawableStart="@drawable/ic_clear_black"
+                    android:drawableTint="@android:color/secondary_text_light"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:onClick="@{() -> presenter.save(viewModel.clearImage(sheet))}"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:text="Clear profile picture"
+                    android:textColor="@android:color/secondary_text_light"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

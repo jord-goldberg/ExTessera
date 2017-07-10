@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sheet"
+            type="android.support.design.widget.BottomSheetDialog"/>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.ExpModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="com.robinhood.ticker.TickerUtils"/>
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="32dp"
+                    android:layout_weight="1"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="Add Experience"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Add Experience"/>
+
+                <com.robinhood.ticker.TickerView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                    app:ticker_animationDuration="800"
+                    bind:characterList="@{TickerUtils.defaultNumberList}"
+                    bind:text="@{viewModel.showExp()}"
+                    tools:text="147,900"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="47dp"
+                android:background="@color/grey_300"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="88dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="64dp"
+                android:hint="@{viewModel.hint()}"
+                android:inputType="number"
+                android:maxLength="9"
+                android:onTextChanged="@{(exp, i, x, y) -> viewModel.setAdditional(exp)}"
+                tools:hint="+370 exp to next level"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="@dimen/fab_margin"
+                android:onClick="@{() -> viewModel.additional == 0 ? sheet.dismiss() : presenter.save(viewModel.update(sheet))}"
+                android:src="@{viewModel.additional == 0 ? @drawable/ic_close_white : @drawable/ic_check_white}"
+                app:fabSize="mini"/>
+
+        </FrameLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

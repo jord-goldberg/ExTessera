@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.StatusModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:clipToPadding="false"
+        app:cardCornerRadius="0px">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground">
+
+                    <ny.gelato.extessera.common.AvatarView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="8dp"
+                        android:onClick="@{(v) -> presenter.click(v, viewModel.avatar)}"
+                        android:onLongClick="@{() -> presenter.longClick(viewModel.avatar.toggleInspiration())}"
+                        bind:viewModel="@{viewModel.avatar}"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:alpha=".87"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:text="@{viewModel.showHp()}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                        tools:text="134"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginTop="2sp"
+                        android:alpha=".87"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:maxLines="1"
+                        android:text="@{viewModel.showOutOfMaxHp()}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        tools:text=" / 355 hp"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> viewModel.hpDown()}"
+                        android:paddingEnd="12dp"
+                        android:paddingStart="12dp"
+                        android:src="@drawable/ic_remove_black"
+                        android:tint="@color/colorAccent"
+                        tools:src="@drawable/ic_remove_black"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> viewModel.hpUp()}"
+                        android:paddingEnd="12dp"
+                        android:paddingStart="12dp"
+                        android:src="@drawable/ic_add_black"
+                        android:tint="@color/colorAccent"
+                        tools:src="@drawable/ic_add_black"/>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:alpha=".87"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{(v) -> viewModel.isEditable() ? presenter.save(viewModel.update()) : presenter.click(v, viewModel)}"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
+                        android:src="@{viewModel.isEditable() ? @drawable/ic_save_white : @drawable/ic_more_vert}"
+                        android:tint="@{viewModel.isEditable() ? @color/colorAccent : @color/black}"
+                        tools:src="@drawable/ic_more_vert"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="80dp"
+                    android:background="@color/grey_300"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:gravity="center"
+                        android:onLongClick="@{() -> viewModel.isArmorEditable ? presenter.longClick(viewModel.update()) : viewModel.editArmor()}"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/activity_vertical_margin">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="start"
+                                android:clickable="true"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.armorDown()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_down"
+                                android:visibility="@{viewModel.isArmorEditable ? View.VISIBLE : View.GONE}"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:alpha=".87"
+                                android:fontFamily="sans-serif"
+                                android:maxLines="1"
+                                android:text="@{viewModel.showArmor()}"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                tools:text="15"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.armorUp()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_up"
+                                android:visibility="@{viewModel.isArmorEditable ? View.VISIBLE : View.GONE}"/>
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Armor Class"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
+                        android:paddingTop="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showPassiveWisdom()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="9"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="Passive\nPerception"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:gravity="center"
+                        android:onLongClick="@{() -> viewModel.isInitiativeEditable ? presenter.longClick(viewModel.update()) : viewModel.editInitiative()}"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="@dimen/activity_vertical_margin">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="start"
+                                android:layout_marginStart="6dp"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.initiativeDown()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_down"
+                                android:visibility="@{viewModel.isInitiativeEditable ? View.VISIBLE : View.GONE}"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:alpha=".87"
+                                android:fontFamily="sans-serif"
+                                android:maxLines="1"
+                                android:text="@{viewModel.showInitiative()}"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                tools:text="+3"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:layout_marginEnd="6dp"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.initiativeUp()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_up"
+                                android:visibility="@{viewModel.isInitiativeEditable ? View.VISIBLE : View.GONE}"/>
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Initiative"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:paddingTop="4dp">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showProficiencyBonus()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="+3"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="Proficiency\nBonus"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:gravity="center"
+                        android:onLongClick="@{() -> viewModel.isSpeedEditable ? presenter.longClick(viewModel.update()) : viewModel.editSpeed()}"
+                        android:orientation="vertical"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/activity_vertical_margin">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="start"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.speedDown()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_down"
+                                android:visibility="@{viewModel.isSpeedEditable ? View.VISIBLE : View.GONE}"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal|bottom"
+                                android:alpha=".87"
+                                android:fontFamily="sans-serif"
+                                android:maxLines="1"
+                                android:text="@{viewModel.showSpeed()}"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                tools:text="30"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.speedUp()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_up"
+                                android:visibility="@{viewModel.isSpeedEditable ? View.VISIBLE : View.GONE}"/>
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="Speed"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:paddingBottom="@dimen/activity_vertical_margin"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingTop="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showDiceNum()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="3"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:maxLines="2"
+                            android:text="@{viewModel.showHitDice()}"
+                            tools:text="Hit Dice\n(d8)"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

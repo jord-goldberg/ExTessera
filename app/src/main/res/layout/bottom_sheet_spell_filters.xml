@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="java.util.List"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.search_5e.spell_search.SpellSearchPresenter"/>
+
+        <import type="android.view.View"/>
+
+        <import type="ny.gelato.extessera.feature.search_5e.spell_search.SpellSearchFilter"/>
+
+        <import type="ny.gelato.extessera.data.model.character.Job.Type"/>
+
+        <import type="ny.gelato.extessera.data.model.Spell.School"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="32dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:text="Search Spells"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Search Spells"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="48dp"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:onClick="@{() -> presenter.clearFilters()}"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:text="Reset"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    android:textColor="@{presenter.filters.isEmpty() ? @android:color/tertiary_text_light : @color/colorAccent}"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:onClick="@{() -> presenter.toggleSortSelection()}"
+                    android:foreground="?selectableItemBackground"
+                    android:scaleType="center"
+                    android:src="@{presenter.filters.sortByLevel ? @drawable/ic_sort_alphabet : @drawable/ic_sort_numbers}"
+                    tools:src="@drawable/ic_sort_alphabet"/>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="33dp"
+                    android:layout_marginTop="39dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginStart="32dp"
+                        android:layout_weight="1"
+                        android:alpha=".87"
+                        android:fontFamily="sans-serif"
+                        android:text="@{presenter.filters.levelDescription()}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                        tools:text="...up to level 8"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="32dp"
+                            android:background="@color/grey_300"/>
+
+                        <android.support.v7.widget.AppCompatSeekBar
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top"
+                            android:layout_marginEnd="112dp"
+                            android:layout_marginStart="@dimen/activity_horizontal_margin"
+                            android:max="9"
+                            android:progress="@{presenter.filters.level}"
+                            android:onProgressChanged="@{(sb, level, b) -> presenter.updateLevelFilter(level)}"/>
+
+                    </FrameLayout>
+
+                </FrameLayout>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.BARD.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.BARD.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Bard"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.CLERIC.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.CLERIC.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Cleric"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.DRUID.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.DRUID.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Druid"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.PALADIN.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.PALADIN.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Paladin"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.RANGER.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.RANGER.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Ranger"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.SORCERER.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.SORCERER.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Sorcerer"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.WARLOCK.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.WARLOCK.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Warlock"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleJobFilter(Type.WIZARD.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.jobs.contains(Type.WIZARD.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Wizard"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="32dp"
+                android:alpha=".87"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_vertical"
+                android:text="Additional Options"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Additional Options"/>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:onClick="@{() -> presenter.toggleRitualFilter()}">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:checked="@{presenter.filters.ritual}"
+                    android:clickable="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="48dp"
+                    android:alpha=".87"
+                    android:text="Ritual"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.ABJURATION.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.ABJURATION.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Abjuration"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.CONJURATION.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.CONJURATION.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Conjuration"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.DIVINATION.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.DIVINATION.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Divination"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.ENCHANTMENT.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.ENCHANTMENT.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Enchantment"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.EVOCATION.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.EVOCATION.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Evocation"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.ILLUSION.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.ILLUSION.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Illusion"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.NECROMANCY.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.NECROMANCY.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Necromancy"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleSchoolFilter(School.TRANSMUTATION.name())}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.schools.contains(School.TRANSMUTATION.name())}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Transmutation"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

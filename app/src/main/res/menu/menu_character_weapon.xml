@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_weapon_attack_1"
+        android:title="Set as Attack 1"/>
+
+    <item
+        android:id="@+id/action_weapon_attack_2"
+        android:title="Set as Attack 2"/>
+
+</menu>

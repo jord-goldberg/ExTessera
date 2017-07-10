@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sheet"
+            type="android.support.design.widget.BottomSheetDialog"/>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.StatusModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>
+
+        <import type="ny.gelato.extessera.data.model.character.Ability.Type"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="1dp"
+                android:alpha=".87"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:text="Difficulty Check"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Difficulty Check"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="32dp"
+                android:background="@color/grey_300"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> presenter.save(viewModel.update(Type.STR, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Strength"
+                android:textColor="@{viewModel.dcAbility == Type.STR ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> presenter.save(viewModel.update(Type.DEX, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Dexterity"
+                android:textColor="@{viewModel.dcAbility == Type.DEX ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> presenter.save(viewModel.update(Type.CON, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Constitution"
+                android:textColor="@{viewModel.dcAbility == Type.CON ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> presenter.save(viewModel.update(Type.INT, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Intelligence"
+                android:textColor="@{viewModel.dcAbility == Type.INT ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> presenter.save(viewModel.update(Type.WIS, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Wisdom"
+                android:textColor="@{viewModel.dcAbility == Type.WIS ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> presenter.save(viewModel.update(Type.CHA, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Charisma"
+                android:textColor="@{viewModel.dcAbility == Type.CHA ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

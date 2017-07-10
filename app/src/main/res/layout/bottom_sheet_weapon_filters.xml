@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.util.List"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.search_5e.weapon_search.WeaponSearchPresenter"/>
+
+        <import type="android.view.View"/>
+
+        <import type="ny.gelato.extessera.feature.search_5e.weapon_search.WeaponSearchFilter"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="32dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:text="Search Weapons"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Search Weapons"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:gravity="center"
+                    android:onClick="@{() -> presenter.clearFilters()}"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:text="Reset"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    android:textColor="@{presenter.filters.isEmpty() ? @android:color/tertiary_text_light : @color/colorAccent}"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="47dp"
+                    android:background="@color/grey_300"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:checked="@{presenter.filters.simple}"
+                            android:onCheckedChanged="@{(cb, isChecked) -> presenter.toggleSimple(isChecked)}"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:text="Simple"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:checked="@{presenter.filters.martial}"
+                            android:onCheckedChanged="@{(cb, isChecked) -> presenter.toggleMartial(isChecked)}"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:text="Martial"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </RadioGroup>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleFinesse()}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.finesse}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Finesse"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:checked="@{presenter.filters.melee}"
+                            android:onCheckedChanged="@{(cb, isChecked) -> presenter.toggleMelee(isChecked)}"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:text="Melee"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                        <RadioButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:checked="@{presenter.filters.ranged}"
+                            android:onCheckedChanged="@{(cb, isChecked) -> presenter.toggleRanged(isChecked)}"
+                            android:paddingLeft="@dimen/activity_horizontal_margin"
+                            android:text="Ranged"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </RadioGroup>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> presenter.toggleThrown()}">
+
+                        <CheckBox
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:checked="@{presenter.filters.thrown}"
+                            android:clickable="false"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="48dp"
+                            android:alpha=".87"
+                            android:text="Thrown"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"/>
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

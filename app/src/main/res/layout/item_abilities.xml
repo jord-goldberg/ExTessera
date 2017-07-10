@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.AbilitiesModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:clickable="true"
+        android:clipToPadding="false"
+        android:foreground="?selectableItemBackground"
+        android:onLongClick="@{() -> viewModel.editable ? presenter.longClick(viewModel.update()) : viewModel.longEdit()}"
+        app:cardCornerRadius="0px"
+        app:contentPaddingBottom="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ny.gelato.extessera.common.AvatarView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginTop="8dp"
+                        android:onClick="@{(v) -> presenter.click(v, viewModel.avatar)}"
+                        android:onLongClick="@{() -> presenter.longClick(viewModel.avatar.toggleInspiration())}"
+                        bind:viewModel="@{viewModel.avatar}"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_weight="1"
+                        android:alpha=".87"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:text="@{viewModel.editable ? @string/ability_scores : @string/ability_modifiers}"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                        tools:text="@string/ability_scores"/>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:alpha=".87"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
+                        android:onClick="@{() -> viewModel.editable ? presenter.save(viewModel.update()) : viewModel.edit()}"
+                        android:paddingEnd="@dimen/activity_horizontal_margin"
+                        android:paddingStart="@dimen/activity_horizontal_margin"
+                        android:src="@{!viewModel.editable ? @drawable/ic_edit_black : @drawable/ic_save_white}"
+                        android:tint="@{viewModel.editable ? @color/colorAccent : @color/black}"
+                        tools:src="@drawable/ic_edit_black"/>
+
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="80dp"
+                    android:background="@color/grey_300"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:clickable="true"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.strDown()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                        <TextView
+                            android:id="@+id/stat_str"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showStr()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="10"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.strUp()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_up"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="1"
+                        android:text="Strength"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.intDown()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                        <TextView
+                            android:id="@+id/stat_int"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showInt()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="10"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.intUp()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_up"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="1"
+                        android:text="Intelligence"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.dexDown()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                        <TextView
+                            android:id="@+id/stat_dex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showDex()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="10"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.dexUp()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_up"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="1"
+                        android:text="Dexterity"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.wisDown()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                        <TextView
+                            android:id="@+id/stat_wis"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showWis()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="10"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.wisUp()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_up"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="1"
+                        android:text="Wisdom"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.conDown()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                        <TextView
+                            android:id="@+id/stat_con"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showCon()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="10"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.conUp()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_up"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="1"
+                        android:text="Constitution"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.chaDown()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                        <TextView
+                            android:id="@+id/stat_cha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal|bottom"
+                            android:alpha=".87"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:text="@{viewModel.showCha()}"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                            tools:text="10"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:foreground="?selectableItemBackground"
+                            android:onClick="@{() -> viewModel.chaUp()}"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="6dp"
+                            android:src="@drawable/ic_arrow_drop_up"
+                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:maxLines="1"
+                        android:text="Charisma"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

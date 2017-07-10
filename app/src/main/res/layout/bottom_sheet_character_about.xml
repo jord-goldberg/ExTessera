@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.AboutModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>
+        <import type="java.lang.String"/>
+    </data>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginStart="32dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:text="@{viewModel.title()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="About Reginald"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="32dp"
+                    android:background="@color/grey_300"/>
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Background:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Background:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.background}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="Noble"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Alignment:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"
+                    tools:text="Alignment:"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.alignment}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="Lawful Evil"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.about}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                tools:text="I love to make a big entrance and I want everybody in town talking about me.
+                \nI tend to look down on people I see as below me
+                \nHealing my brother is the the only thing that matters. I'll go to any length except harming kids. I send him money each week."/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="Racial Traits:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.racialTraits.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Racial Traits:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.racialTraits}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="@{viewModel.racialTraits.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Darkvision (60 ft), Hellish Resistance, Infernal Legacy (3rd &amp; 5th level)"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="Class Features:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.classFeatures.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Class Features:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.classFeatures}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="@{viewModel.classFeatures.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Spellcasting"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="Weapon Proficiencies:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.weaponProficiencies.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Weapon Proficiencies:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.weaponProficiencies}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="@{viewModel.weaponProficiencies.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Simple weapons, Crossbow (hand), Shortsword, Rapier, Longsword"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="Armor Proficiencies:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.armorProficiencies.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Armor Proficiencies:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.armorProficiencies}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="@{viewModel.armorProficiencies.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Light Armor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="Tool Proficiencies:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                android:visibility="@{viewModel.toolProficiencies.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Tool Proficiencies:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.toolProficiencies}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                android:visibility="@{viewModel.toolProficiencies.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Thieves tools, Dragonchess"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="Languages:"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textStyle="bold"
+                tools:text="Languages:"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.languages}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                tools:text="Common, Elvish"/>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>
