@@ -30,7 +30,7 @@ open class Proficiency(
             override fun isGaming(): Boolean = false
             override fun isMusical(): Boolean = false
         },
-        CALLIGRAPHER("Calligrapher's sools") {
+        CALLIGRAPHER("Calligrapher's tools") {
             override fun isArtisan(): Boolean = true
             override fun isGaming(): Boolean = false
             override fun isMusical(): Boolean = false

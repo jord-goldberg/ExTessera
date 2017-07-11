@@ -13,8 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".feature.navigate.MainActivity"
-            android:launchMode="singleTop"
+            android:name=".feature.player.PlayerActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,14 +22,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.search_5e.Search5eActivity"
+            android:name=".feature.navigate.MainActivity"
+            android:parentActivityName=".feature.player.PlayerActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".feature.navigate.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".feature.edit_character.EditCharacterActivity"
-            android:label="Character Basics">
+            android:name=".feature.search_5e.Search5eActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".feature.edit_character.EditCharacterActivity">
         </activity>
     </application>
 

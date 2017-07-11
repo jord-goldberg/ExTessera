@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.player.view_model.HeaderModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.player.PlayerPresenter"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:clipToPadding="false"
+        app:cardCornerRadius="0px"
+        app:contentPaddingBottom="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:paddingTop="1dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="32dp"
+                    android:layout_weight="1"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:text="@{viewModel.title}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Local Characters"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:alpha=".87"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_more_vert"
+                    tools:src="@drawable/ic_more_vert"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="32dp"
+                android:background="@color/grey_300"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

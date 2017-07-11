@@ -105,6 +105,11 @@ class Search5eActivity : AppCompatActivity(), Search5eView {
         savedInstanceState?.let { savedQuery = it.getString(QUERY_KEY) }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return super.onSupportNavigateUp()
+    }
+
     override fun queryText(): Observable<String> = querySubject.startWith(savedQuery)
 
 

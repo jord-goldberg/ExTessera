@@ -16,4 +16,10 @@ class PlayerManager @Inject constructor(val realm: Realm) : PlayerDataSource {
             .findAll()
             .asObservable()
 
+    override fun deleteCharacter(id: String) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            character.deleteFromRealm()
+        }
+    }
 }

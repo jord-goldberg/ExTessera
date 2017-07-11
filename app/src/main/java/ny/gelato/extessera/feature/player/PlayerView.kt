@@ -2,7 +2,10 @@ package ny.gelato.extessera.feature.player
 
 import io.realm.RealmResults
 import ny.gelato.extessera.base.BaseView
+import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
+import ny.gelato.extessera.feature.player.view_model.CharacterModel
+import ny.gelato.extessera.feature.player.view_model.NewCharacterModel
 
 /**
  * Created by jord.goldberg on 6/27/17.
@@ -10,7 +13,9 @@ import ny.gelato.extessera.data.model.character.Character
 
 interface PlayerView : BaseView {
 
-    fun showPlayerCharacters(characters: RealmResults<Character>)
+    fun showPlayer(feed: MutableList<BaseViewModel>)
 
-    fun showPlayerCampaigns()
+    fun showCreateCharacter(newCharacter: NewCharacterModel)
+    
+    fun showCharacter(character: CharacterModel)
 }

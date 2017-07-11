@@ -2,6 +2,7 @@ package ny.gelato.extessera.feature.character_sheet.view_model
 
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.common.AvatarInterface
 import ny.gelato.extessera.data.model.character.Character
 
 /**
@@ -9,13 +10,13 @@ import ny.gelato.extessera.data.model.character.Character
  */
 
 data class AvatarModel(
-        val name: String = "",
+        override val name: String = "",
         val description: String = "",
-        var isInspired: Boolean = false,
-        var imagePath: String = "",
-        var imageUrl: String = ""
+        override var isInspired: Boolean = false,
+        override var imagePath: String = "",
+        override var imageUrl: String = ""
 
-) : BaseViewModel() {
+) : AvatarInterface, BaseViewModel() {
 
     var newImageUrl: String? = null
 

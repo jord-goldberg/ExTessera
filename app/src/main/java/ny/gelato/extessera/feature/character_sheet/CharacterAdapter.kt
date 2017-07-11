@@ -17,7 +17,7 @@ class CharacterAdapter @Inject constructor(override val presenter: CharacterPres
 
     var feed: MutableList<BaseViewModel> = mutableListOf()
         set(value) {
-            val diffResult = DiffUtil.calculateDiff(CharacterDiffUtil(field, value))
+            val diffResult = DiffUtil.calculateDiff(BaseViewModelDiffUtil(field, value))
             field = value
             diffResult.dispatchUpdatesTo(this)
         }
@@ -33,36 +33,20 @@ class CharacterAdapter @Inject constructor(override val presenter: CharacterPres
     override fun getViewModelForPosition(position: Int): Any = feed[position]
 
     override fun getLayoutIdForPosition(position: Int): Int = when (feed[position]) {
-        is AvatarModel -> R.layout.item_avatar
-        is HeaderModel -> R.layout.item_header
-        is FooterModel -> R.layout.item_footer
-        is NoteModel -> R.layout.item_note
-        is LevelUpModel -> R.layout.item_level_up
-        is StatusModel -> R.layout.item_status
-        is AbilitiesModel -> R.layout.item_abilities
-        is SavingThrowsModel -> R.layout.item_saving_throws
-        is SkillModel -> R.layout.item_skill
-        is SkillSubheaderModel -> R.layout.item_skill_subheader
-        is SpellModel -> R.layout.item_spell
-        is WeaponModel -> R.layout.item_weapon
-        else -> throw ModelLayoutException(feed[position]::class.java.simpleName)
+        is AvatarModel -> R.layout.item_character_avatar
+        is HeaderModel -> R.layout.item_character_header
+        is FooterModel -> R.layout.item_character_footer
+        is NoteModel -> R.layout.item_character_note
+        is LevelUpModel -> R.layout.item_character_level_up
+        is StatusModel -> R.layout.item_character_status
+        is AbilitiesModel -> R.layout.item_character_abilities
+        is SavingThrowsModel -> R.layout.item_character_saving_throws
+        is SkillModel -> R.layout.item_character_skill
+        is SkillSubheaderModel -> R.layout.item_character_skill_subheader
+        is SpellModel -> R.layout.item_character_spell
+        is WeaponModel -> R.layout.item_character_weapon
+        else -> throw ModelLayoutException(feed[position]::class.java.simpleName, this::class.java.simpleName)
     }
 
     override fun getItemCount(): Int = feed.size
-
-    class ModelLayoutException(className: String) : RuntimeException("Please create branch for destination " +
-            "$className in CharacterAdapter.getLayoutIdForPosition()")
-
-    class CharacterDiffUtil(private val oldList: List<BaseViewModel>, private val newList: List<BaseViewModel>) : DiffUtil.Callback() {
-
-        override fun getOldListSize(): Int = oldList.size
-
-        override fun getNewListSize(): Int = newList.size
-
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                oldList[oldItemPosition].isSameAs(newList[newItemPosition])
-
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
-                oldList[oldItemPosition] == newList[newItemPosition]
-    }
 }

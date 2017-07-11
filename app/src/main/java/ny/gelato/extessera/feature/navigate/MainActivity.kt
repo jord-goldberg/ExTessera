@@ -1,5 +1,7 @@
 package ny.gelato.extessera.feature.navigate
 
+import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.*
@@ -25,6 +27,16 @@ import ny.gelato.extessera.util.realmWeapons
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        fun showCharacter(context: Context, id: String) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("id", id)
+            context.startActivity(intent)
+        }
+    }
+
+    val id: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("id") }
+
     val realm: Realm = App.component.realm()
 
     val characters: RealmResults<Character> by lazy {
@@ -46,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        toolbar.setNavigationIcon(R.drawable.ic_d20)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         Log.d("Path:", externalCacheDir.canonicalPath)
 
@@ -80,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CharacterFragment.newInstance(characters.first().id))
+                .replace(R.id.container, CharacterFragment.newInstance(id))
                 .commit()
     }
 
@@ -90,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         searchView.apply {
             queryHint = "Spells, weapons, monsters..."
             setIconifiedByDefault(false)
-            setOnClickListener { Search5eActivity.showSpellSearch(this@MainActivity) }
+            setOnClickListener { Search5eActivity.showSearchAll(this@MainActivity) }
             findViewById(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->
                 Search5eActivity.showSearchAll(this@MainActivity); true
             }

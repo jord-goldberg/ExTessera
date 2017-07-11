@@ -11,4 +11,6 @@ import rx.Observable
 interface PlayerDataSource {
 
     fun getPlayerCharacters(): Observable<RealmResults<Character>>
+
+    fun deleteCharacter(id: String)
 }

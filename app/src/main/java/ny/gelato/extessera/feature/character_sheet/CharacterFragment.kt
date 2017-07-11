@@ -57,7 +57,7 @@ class CharacterFragment : Fragment(), CharacterView {
         BottomSheetDialog(activity)
     }
 
-    val spellSwipeToRemoveHelper: ItemTouchHelper by lazy {
+    val swipeToRemoveHelper: ItemTouchHelper by lazy {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
             override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?,
                                 target: RecyclerView.ViewHolder?): Boolean = false
@@ -126,7 +126,7 @@ class CharacterFragment : Fragment(), CharacterView {
             layoutManager = SmoothStaggeredLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = this@CharacterFragment.adapter
         }
-        spellSwipeToRemoveHelper.attachToRecyclerView(recycler_view)
+        swipeToRemoveHelper.attachToRecyclerView(recycler_view)
         presenter.attachView(this)
     }
 

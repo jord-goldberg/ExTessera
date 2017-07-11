@@ -73,15 +73,9 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
                 val name = character.name.substringBefore(" ")
                 menu.add(0, index, index, "Add to $name")
             }
-            menu.add(1, Int.MAX_VALUE, characters.size, "Create Character")
             setOnMenuItemClickListener {
-                when (it.itemId) {
-                    Int.MAX_VALUE -> EditCharacterActivity.show(activity)
-                    else -> {
-                        CharacterManager(App.component.realm(), characters[it.itemId].id).learnSpell(spell.name)
-                        Handler().postDelayed({ dismiss(); activity.finish() }, 200)
-                    }
-                }
+                CharacterManager(App.component.realm(), characters[it.itemId].id).learnSpell(spell.name)
+                Handler().postDelayed({ dismiss(); activity.finish() }, 200)
                 true
             }
             show()

@@ -2,6 +2,7 @@ package ny.gelato.extessera.base
 
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -41,5 +42,21 @@ abstract class BaseViewModelAdapter(open val presenter: BasePresenter<*>? = null
             }
             binding.executePendingBindings()
         }
+    }
+
+    class ModelLayoutException(modelName: String, adapterName: String) : RuntimeException("Please create branch for destination " +
+            "$modelName in $adapterName.getLayoutIdForPosition()")
+
+    class BaseViewModelDiffUtil(private val oldList: List<BaseViewModel>, private val newList: List<BaseViewModel>) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                oldList[oldItemPosition].isSameAs(newList[newItemPosition])
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                oldList[oldItemPosition] == newList[newItemPosition]
     }
 }
