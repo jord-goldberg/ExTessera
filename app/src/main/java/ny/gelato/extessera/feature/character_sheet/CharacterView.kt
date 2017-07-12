@@ -33,7 +33,9 @@ interface CharacterView : BaseView {
 
     fun showScrollToDestination(destination: BaseViewModel)
 
-    fun showDamageHeal(hp: HpModel)
+    fun showEditHp(hp: HpModel)
+
+    fun showEditMaxHp(maxHp: MaxHpModel)
 
     fun showSelectDcAbility(status: StatusModel)
 

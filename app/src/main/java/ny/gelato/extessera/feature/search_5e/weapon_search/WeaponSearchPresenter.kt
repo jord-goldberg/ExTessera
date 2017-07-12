@@ -62,7 +62,7 @@ class WeaponSearchPresenter : Search5ePresenter<WeaponSearchView>() {
             else if (filters.ranged) query = query.equalTo("isRanged", true)
 
             if (filters.finesse) query = query.contains("properties", "finesse", Case.INSENSITIVE)
-            if (filters.thrown) query = query.equalTo("properties", "thrown", Case.INSENSITIVE)
+            if (filters.thrown) query = query.contains("properties", "thrown", Case.INSENSITIVE)
 
             query.findAllAsync()
                     .sort("isSimple", Sort.DESCENDING, "isRanged", Sort.ASCENDING)

@@ -37,7 +37,8 @@
                 android:padding="@dimen/activity_horizontal_margin"
                 android:text="Level Up"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-                tools:text="+ Rogue"/>
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="Level Up"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -47,6 +48,7 @@
                 android:padding="@dimen/activity_horizontal_margin"
                 android:text="Multiclass"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                android:textColor="@color/colorPrimaryDark"
                 android:visibility="gone"
                 tools:visibility="visible"/>
 

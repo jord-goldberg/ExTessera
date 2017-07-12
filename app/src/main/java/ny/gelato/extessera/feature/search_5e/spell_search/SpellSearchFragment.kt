@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.mvp_view_wait_error_empty.*
 import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.data.model.Spell
-import ny.gelato.extessera.databinding.BottomSheetSpellFiltersBinding
+import ny.gelato.extessera.databinding.BottomSheetSearchSpellFiltersBinding
 import ny.gelato.extessera.feature.search_5e.*
 import ny.gelato.extessera.feature.spell_detail.SpellDetailBottomFragment
 import rx.Observable
@@ -54,7 +54,7 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
     var isCreated = false
 
     lateinit var search5eView: Search5eView
-    lateinit var filterBinding: BottomSheetSpellFiltersBinding
+    lateinit var filterBinding: BottomSheetSearchSpellFiltersBinding
 
     @Inject lateinit var presenter: SpellSearchPresenter
     lateinit var adapter: Search5eRecyclerAdapter
@@ -78,7 +78,7 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
             layoutManager.onRestoreInstanceState(savedInstanceState?.getParcelable(LAYOUT_KEY))
         }
 
-        filterBinding = DataBindingUtil.inflate(activity.layoutInflater, R.layout.bottom_sheet_spell_filters, null, false)
+        filterBinding = DataBindingUtil.inflate(activity.layoutInflater, R.layout.bottom_sheet_search_spell_filters, null, false)
         presenter.attachView(this)
     }
 

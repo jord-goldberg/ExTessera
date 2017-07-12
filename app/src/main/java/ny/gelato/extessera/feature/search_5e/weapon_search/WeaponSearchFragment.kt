@@ -20,8 +20,7 @@ import ny.gelato.extessera.R
 import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.source.CharacterManager
-import ny.gelato.extessera.databinding.BottomSheetWeaponFiltersBinding
-import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
+import ny.gelato.extessera.databinding.BottomSheetSearchWeaponFiltersBinding
 import ny.gelato.extessera.feature.search_5e.Search5eRecyclerAdapter
 import ny.gelato.extessera.feature.search_5e.Search5eView
 import rx.Observable
@@ -54,7 +53,7 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
     var isCreated = false
 
     lateinit var search5eView: Search5eView
-    lateinit var filterBinding: BottomSheetWeaponFiltersBinding
+    lateinit var filterBinding: BottomSheetSearchWeaponFiltersBinding
 
     val presenter = WeaponSearchPresenter()
     val adapter = Search5eRecyclerAdapter(presenter)
@@ -76,7 +75,7 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
             layoutManager.onRestoreInstanceState(savedInstanceState?.getParcelable(LAYOUT_KEY))
         }
 
-        filterBinding = DataBindingUtil.inflate(activity.layoutInflater, R.layout.bottom_sheet_weapon_filters, null, false)
+        filterBinding = DataBindingUtil.inflate(activity.layoutInflater, R.layout.bottom_sheet_search_weapon_filters, null, false)
         presenter.attachView(this)
     }
 

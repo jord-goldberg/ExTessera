@@ -185,5 +185,7 @@ data class StatusModel(
 
     fun showDc(): String = "$dc"
 
-    fun showDamageHeal(): HpModel = HpModel()
+    fun showEditHp(): HpModel = HpModel()
+
+    fun showEditMaxHp(): MaxHpModel = MaxHpModel()
 }

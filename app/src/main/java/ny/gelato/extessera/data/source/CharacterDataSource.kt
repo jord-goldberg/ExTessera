@@ -24,6 +24,8 @@ interface CharacterDataSource {
 
     fun updateHp(hp: HpModel)
 
+    fun updateMaxHp(maxHp: MaxHpModel)
+
     fun updateAbilities(abilities: AbilitiesModel)
 
     fun updateSaves(savingThrows: SavingThrowsModel)

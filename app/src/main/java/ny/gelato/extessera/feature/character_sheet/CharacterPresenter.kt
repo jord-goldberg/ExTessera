@@ -64,6 +64,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is NoteModel -> characterManager.updateNote(model)
             is StatusModel -> characterManager.updateStatus(model)
             is HpModel -> characterManager.updateHp(model)
+            is MaxHpModel -> characterManager.updateMaxHp(model)
             is AbilitiesModel -> characterManager.updateAbilities(model)
             is SavingThrowsModel -> characterManager.updateSaves(model)
             is SkillModel -> characterManager.updateSkill(model)
@@ -107,7 +108,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is StatusModel ->
                 if (model.isDcEditable) view.showSelectDcAbility(model)
                 else view.showPopupMenu(v, R.menu.menu_character_status)
-            is HpModel -> view.showDamageHeal(HpModel(character))
+            is HpModel -> view.showEditHp(HpModel(character))
             is SkillModel -> view.showSelectSkillProficiency(model)
             is WeaponModel -> view.showWeaponDetail(model)
             is SpellModel -> view.showSpellDetail(model)
@@ -123,6 +124,10 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
         }
         is StatusModel -> {
             characterManager.updateStatus(model)
+            true
+        }
+        is MaxHpModel -> {
+            view.showEditMaxHp(MaxHpModel(character))
             true
         }
         is AbilitiesModel -> {
@@ -145,6 +150,9 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             R.id.action_notes_add -> null
             R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
+            R.id.action_status_short_rest -> null
+            R.id.action_status_long_rest -> null
+            R.id.action_status_edit_max_hp -> view.showEditMaxHp(MaxHpModel(character))
             R.id.action_skills_toggle_sort -> characterManager.updatePreference(Preferences.Toggle.SORT_SKILLS)
             R.id.action_weapons_add -> view.showWeaponsFor(character)
             R.id.action_spells_add -> view.showSpellsFor(character)

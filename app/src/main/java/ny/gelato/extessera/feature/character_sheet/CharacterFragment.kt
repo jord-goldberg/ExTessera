@@ -228,11 +228,23 @@ class CharacterFragment : Fragment(), CharacterView {
         }, 200)
     }
 
-    override fun showDamageHeal(hp: HpModel) {
+    override fun showEditHp(hp: HpModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
                 R.layout.bottom_sheet_character_hp, null, false)
         binding.apply {
             setVariable(BR.viewModel, hp)
+            setVariable(BR.presenter, presenter)
+            setVariable(BR.sheet, sheet)
+        }
+        sheet.setContentView(binding.root)
+        sheet.show()
+    }
+
+    override fun showEditMaxHp(maxHp: MaxHpModel) {
+        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
+                R.layout.bottom_sheet_character_max_hp, null, false)
+        binding.apply {
+            setVariable(BR.viewModel, maxHp)
             setVariable(BR.presenter, presenter)
             setVariable(BR.sheet, sheet)
         }
@@ -267,7 +279,7 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showWeaponDetail(weapon: WeaponModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-            R.layout.bottom_sheet_weapon_detail, null, false)
+            R.layout.bottom_sheet_character_weapon, null, false)
         binding.apply {
             setVariable(BR.viewModel, weapon)
             setVariable(BR.presenter, presenter)

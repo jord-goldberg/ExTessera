@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.HpModel"/>
+            type="ny.gelato.extessera.feature.character_sheet.view_model.MaxHpModel"/>
 
         <variable
             name="presenter"
@@ -30,17 +30,37 @@
             android:orientation="vertical"
             android:paddingBottom="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="46dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="1dp"
-                android:alpha=".87"
-                android:fontFamily="sans-serif-smallcaps"
-                android:gravity="center"
-                android:text="Damage / Heal"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                tools:text="Damage / Heal"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="47dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="46dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="1dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center_vertical"
+                    android:text="Max Hit Points"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    tools:text="Max Hit Points"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="46dp"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="1dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:text="@{viewModel.showCurrent()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                    tools:text="34"/>
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -61,44 +81,43 @@
                 android:hint="Hit points"
                 android:inputType="number"
                 android:maxLength="3"
-                android:onTextChanged="@{(hp, i, x, y) -> viewModel.setChange(hp)}"
+                android:onTextChanged="@{(maxHp, i, x, y) -> viewModel.setChange(maxHp)}"
                 android:textColor="@android:color/secondary_text_light"
-
                 tools:hint="Hit points"/>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:alpha=".87"
-                android:layoutDirection="rtl">
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.damage(sheet))}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.plusToMax(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Damage"
+                    android:text="+ to Max"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"
-                    tools:text="Damage"/>
+                    tools:text="+ to Max"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.heal(sheet))}"
+                    android:onClick="@{(v) -> viewModel.change != 0 ? presenter.save(viewModel.setNewMax(sheet)) : sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Heal"
+                    android:text="Set new Max"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"
                     tools:visibility="visible"/>
 
-            </LinearLayout>
+            </FrameLayout>
 
         </LinearLayout>
 

@@ -39,7 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.showDamageHeal())}"
+                    android:onClick="@{(v) -> presenter.click(v, viewModel.showEditHp())}"
+                    android:onLongClick="@{() -> presenter.longClick(viewModel.showEditMaxHp())}"
                     android:foreground="?selectableItemBackground">
 
                     <ny.gelato.extessera.common.AvatarView

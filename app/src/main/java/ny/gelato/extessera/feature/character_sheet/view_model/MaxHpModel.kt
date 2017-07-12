@@ -5,31 +5,33 @@ import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
 
 /**
- * Created by jord.goldberg on 7/11/17.
+ * Created by jord.goldberg on 7/12/17.
  */
 
-data class HpModel(
+data class MaxHpModel(
         var current: Int = 0,
         var change: Int = 0
 
 ) : BaseViewModel() {
 
-    constructor(character: Character) : this(character.hp)
+    constructor(character: Character) : this(character.maxHp)
 
-    fun setChange(hp: CharSequence) {
-        if (hp.isEmpty()) change = 0
-        else change = hp.toString().toInt()
+    fun setChange(maxHp: CharSequence) {
+        if (maxHp.isEmpty()) change = 0
+        else change = maxHp.toString().toInt()
     }
 
-    fun heal(sheet: BottomSheetDialog): HpModel {
+    fun plusToMax(sheet: BottomSheetDialog): MaxHpModel {
         sheet.dismiss()
         current += change
         return this
     }
 
-    fun damage(sheet: BottomSheetDialog): HpModel {
+    fun setNewMax(sheet: BottomSheetDialog): MaxHpModel {
         sheet.dismiss()
-        current -= change
+        current = change
         return this
     }
+
+    fun showCurrent(): String = current.toString()
 }
