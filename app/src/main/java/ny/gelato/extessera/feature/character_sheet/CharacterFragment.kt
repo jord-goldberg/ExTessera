@@ -164,7 +164,7 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showImageSelect(avatar: AvatarModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_avatar_image, null, false)
+                R.layout.bottom_sheet_character_avatar, null, false)
         binding.apply {
             setVariable(BR.viewModel, avatar)
             setVariable(BR.presenter, presenter)
@@ -196,7 +196,7 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showAddExp(additional: ExpModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_add_exp, null, false)
+                R.layout.bottom_sheet_character_add_exp, null, false)
         binding.apply {
             setVariable(BR.viewModel, additional)
             setVariable(BR.presenter, presenter)
@@ -228,10 +228,11 @@ class CharacterFragment : Fragment(), CharacterView {
         }, 200)
     }
 
-    override fun showSelectAttack(weapons: MutableList<BaseViewModel>) {
+    override fun showDamageHeal(hp: HpModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_dc_ability, null, false)
+                R.layout.bottom_sheet_character_hp, null, false)
         binding.apply {
+            setVariable(BR.viewModel, hp)
             setVariable(BR.presenter, presenter)
             setVariable(BR.sheet, sheet)
         }
@@ -241,7 +242,7 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showSelectDcAbility(status: StatusModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_dc_ability, null, false)
+                R.layout.bottom_sheet_character_dc_ability, null, false)
         binding.apply {
             setVariable(BR.viewModel, status)
             setVariable(BR.presenter, presenter)
@@ -253,7 +254,7 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showSelectSkillProficiency(skill: SkillModel) {
         val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_skill_proficiency, null, false)
+                R.layout.bottom_sheet_character_skill, null, false)
         binding.apply {
             setVariable(BR.viewModel, skill)
             setVariable(BR.presenter, presenter)

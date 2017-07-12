@@ -8,8 +8,4 @@
         android:id="@+id/nav_campaign"
         android:icon="@drawable/ic_campaign_black"
         android:title="Campaign"/>
-    <item
-        android:id="@+id/nav_recent"
-        android:icon="@drawable/ic_compendium_black"
-        android:title="Player Kit"/>
 </menu>

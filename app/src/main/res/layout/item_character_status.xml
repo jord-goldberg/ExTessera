@@ -16,6 +16,7 @@
             type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
 
         <import type="android.view.View"/>
+        <import type="com.robinhood.ticker.TickerUtils"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -38,6 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:onClick="@{(v) -> presenter.click(v, viewModel.showDamageHeal())}"
                     android:foreground="?selectableItemBackground">
 
                     <ny.gelato.extessera.common.AvatarView
@@ -50,16 +52,19 @@
                         android:onLongClick="@{() -> presenter.longClick(viewModel.avatar.toggleInspiration())}"
                         bind:viewModel="@{viewModel.avatar}"/>
 
-                    <TextView
+                    <com.robinhood.ticker.TickerView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/activity_horizontal_margin"
                         android:alpha=".87"
                         android:fontFamily="sans-serif-smallcaps"
-                        android:text="@{viewModel.showHp()}"
+                        android:gravity="center"
+                        android:maxLines="1"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                        tools:text="134"/>
+                        app:ticker_animationDuration="300"
+                        bind:characterList="@{TickerUtils.defaultNumberList}"
+                        bind:text="@{viewModel.showHp()}"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -402,22 +407,54 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:foreground="?selectableItemBackground"
                         android:gravity="center"
+                        android:onLongClick="@{() -> viewModel.isHitDiceEditable ? presenter.longClick(viewModel.update()) : viewModel.editHitDice()}"
                         android:orientation="vertical"
                         android:paddingBottom="@dimen/activity_vertical_margin"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingTop="4dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:alpha=".87"
-                            android:fontFamily="sans-serif"
-                            android:maxLines="1"
-                            android:text="@{viewModel.showDiceNum()}"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                            tools:text="3"/>
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="start"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.hitDiceDown()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_down"
+                                android:visibility="@{viewModel.isHitDiceEditable ? View.VISIBLE : View.GONE}"/>
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:alpha=".87"
+                                android:fontFamily="sans-serif"
+                                android:maxLines="1"
+                                android:text="@{viewModel.showDiceNum()}"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                                tools:text="3"/>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="end"
+                                android:foreground="?selectableItemBackground"
+                                android:onClick="@{() -> viewModel.hitDiceUp()}"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:src="@drawable/ic_arrow_drop_up"
+                                android:visibility="@{viewModel.isHitDiceEditable ? View.VISIBLE : View.GONE}"/>
+
+                        </FrameLayout>
 
                         <TextView
                             android:layout_width="wrap_content"

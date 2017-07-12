@@ -17,7 +17,8 @@ data class StatusModel(
         var speed: Int,
         val proficiencyBonus: Int,
         val passiveWisdom: Int,
-        val hitDice: String,
+        var dice: Int,
+        val hitDie: String,
         val dc: Int,
         val dcAbility: Ability.Type,
         val isDcEditable: Boolean = false,
@@ -33,7 +34,8 @@ data class StatusModel(
                     character.speed,
                     character.proficiencyBonus(),
                     10 + character.wisdom.modifier(),
-                    character.primary.hitDiceFormatted(),
+                    character.primary.dice,
+                    character.primary.hitDieMaxFormatted(),
                     avatar = AvatarModel(character),
                     dcAbility = Ability.Type.valueOf(character.preferences.dcAbility),
                     dc = 8 + when (Ability.Type.valueOf(character.preferences.dcAbility)) {
@@ -56,7 +58,10 @@ data class StatusModel(
     var isSpeedEditable: Boolean = false
         get() = field || editable
 
-    fun isEditable(): Boolean = isHpChanged || isArmorEditable || isInitiativeEditable || isSpeedEditable || editable
+    var isHitDiceEditable: Boolean = false
+        get() = field || editable
+
+    fun isEditable(): Boolean = isHpChanged || isArmorEditable || isInitiativeEditable || isSpeedEditable || isHitDiceEditable || editable
 
     fun editArmor(): Boolean {
         isArmorEditable = true
@@ -76,6 +81,12 @@ data class StatusModel(
         return true
     }
 
+    fun editHitDice(): Boolean {
+        isHitDiceEditable = true
+        notifyChange()
+        return true
+    }
+
     fun editDc(): StatusModel {
         return copy(isDcEditable = true)
     }
@@ -86,6 +97,7 @@ data class StatusModel(
         isArmorEditable = false
         isInitiativeEditable = false
         isSpeedEditable = false
+        isHitDiceEditable = false
         notifyChange()
         return this
     }
@@ -143,6 +155,16 @@ data class StatusModel(
         notifyChange()
     }
 
+    fun hitDiceUp() {
+        dice += 1
+        notifyChange()
+    }
+
+    fun hitDiceDown() {
+        dice -= 1
+        notifyChange()
+    }
+
     fun showHp(): String = "$hp"
 
     fun showOutOfMaxHp(): String = " / $maxHp hp"
@@ -157,9 +179,11 @@ data class StatusModel(
 
     fun showPassiveWisdom(): String = "$passiveWisdom"
 
-    fun showDiceNum(): String = hitDice.substringBefore("d")
+    fun showDiceNum(): String = dice.toString()
 
-    fun showHitDice(): String = "Hit Dice\n(${hitDice.substring(hitDice.indexOf("d"))})"
+    fun showHitDice(): String = "Hit Dice\n($hitDie)"
 
     fun showDc(): String = "$dc"
+
+    fun showDamageHeal(): HpModel = HpModel()
 }

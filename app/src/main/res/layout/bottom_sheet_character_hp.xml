@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sheet"
+            type="android.support.design.widget.BottomSheetDialog"/>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.HpModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+
+        <import type="android.view.View"/>/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="1dp"
+                android:alpha=".87"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:text="Damage / Heal"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                tools:text="Damage / Heal"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="32dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/grey_300"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:hint="Hit points"
+                android:inputType="number"
+                android:maxLength="3"
+                android:onTextChanged="@{(hp, i, x, y) -> viewModel.setChange(hp)}"
+                android:textColor="@android:color/secondary_text_light"
+
+                tools:hint="Hit points"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:alpha=".87"
+                android:layoutDirection="rtl">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> presenter.save(viewModel.damage(sheet))}"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="Damage"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    tools:text="Damage"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> presenter.save(viewModel.heal(sheet))}"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="Heal"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    tools:visibility="visible"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

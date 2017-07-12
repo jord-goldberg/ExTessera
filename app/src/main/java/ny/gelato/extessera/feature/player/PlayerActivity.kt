@@ -31,41 +31,41 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
                 .build()
     }
 
-    val swipeToRemoveHelper: ItemTouchHelper by lazy {
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
-            override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?,
-                                target: RecyclerView.ViewHolder?): Boolean = false
+    val swipeToRemoveHelper: ItemTouchHelper = ItemTouchHelper(object :
+            ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val model = adapter.feed[position]
-                when (model) {
-                    is CharacterModel -> {
-                        val snackBar = Snackbar.make(coordinator, "Delete ${model.name.substringBefore(" ")}?", Snackbar.LENGTH_LONG)
-                                .setAction("confirm") { _ ->
-                                    adapter.feed.removeAt(position)
-                                    adapter.notifyItemRemoved(position)
-                                    presenter.delete(model)
-                                 }
-                                .addCallback(object : Snackbar.Callback() {
-                                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                            adapter.notifyItemChanged(position)
-                                    }
-                                })
-                        snackBar.show()
-                    }
+        override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?,
+                            target: RecyclerView.ViewHolder?): Boolean = false
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.adapterPosition
+            val model = adapter.feed[position]
+            when (model) {
+                is CharacterModel -> {
+                    val snackBar = Snackbar.make(coordinator, "Delete ${model.name.substringBefore(" ")}?", Snackbar.LENGTH_LONG)
+                            .setAction("confirm") { _ ->
+                                adapter.feed.removeAt(position)
+                                adapter.notifyItemRemoved(position)
+                                presenter.delete(model)
+                            }
+                            .addCallback(object : Snackbar.Callback() {
+                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
+                                        adapter.notifyItemChanged(position)
+                                }
+                            })
+                    snackBar.show()
                 }
             }
+        }
 
-            override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
-                val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
-                if (model is CharacterModel)
-                    return super.getSwipeDirs(recyclerView, viewHolder)
-                return 0
-            }
-        })
-    }
+        override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
+            val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
+            if (model is CharacterModel)
+                return super.getSwipeDirs(recyclerView, viewHolder)
+            return 0
+        }
+    })
 
     @Inject lateinit var presenter: PlayerPresenter
 
@@ -85,7 +85,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
         swipeToRemoveHelper.attachToRecyclerView(recycler_view)
         presenter.attachView(this)
     }
-    
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_player_toolbar, menu)
         val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView

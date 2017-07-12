@@ -22,6 +22,8 @@ interface CharacterDataSource {
 
     fun updateStatus(status: StatusModel)
 
+    fun updateHp(hp: HpModel)
+
     fun updateAbilities(abilities: AbilitiesModel)
 
     fun updateSaves(savingThrows: SavingThrowsModel)

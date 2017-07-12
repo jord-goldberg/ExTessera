@@ -33,7 +33,7 @@ interface CharacterView : BaseView {
 
     fun showScrollToDestination(destination: BaseViewModel)
 
-    fun showSelectAttack(weapons: MutableList<BaseViewModel>)
+    fun showDamageHeal(hp: HpModel)
 
     fun showSelectDcAbility(status: StatusModel)
 

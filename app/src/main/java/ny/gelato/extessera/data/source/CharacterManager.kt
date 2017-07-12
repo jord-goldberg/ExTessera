@@ -55,8 +55,16 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             character.armor = status.armor - character.dexterity.modifier()
             character.initiative = status.initiative - character.dexterity.modifier()
             character.speed = status.speed
+            character.primary.dice = status.dice
             character.preferences.dcAbility = status.dcAbility.name
             character.updated = Date()
+        }
+    }
+
+    override fun updateHp(hp: HpModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            character.hp = hp.current
         }
     }
 

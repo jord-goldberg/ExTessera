@@ -63,6 +63,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is LevelUpModel -> characterManager.updateLevel(model)
             is NoteModel -> characterManager.updateNote(model)
             is StatusModel -> characterManager.updateStatus(model)
+            is HpModel -> characterManager.updateHp(model)
             is AbilitiesModel -> characterManager.updateAbilities(model)
             is SavingThrowsModel -> characterManager.updateSaves(model)
             is SkillModel -> characterManager.updateSkill(model)
@@ -106,6 +107,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is StatusModel ->
                 if (model.isDcEditable) view.showSelectDcAbility(model)
                 else view.showPopupMenu(v, R.menu.menu_character_status)
+            is HpModel -> view.showDamageHeal(HpModel(character))
             is SkillModel -> view.showSelectSkillProficiency(model)
             is WeaponModel -> view.showWeaponDetail(model)
             is SpellModel -> view.showSpellDetail(model)

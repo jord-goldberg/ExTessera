@@ -72,12 +72,9 @@ open class Job(
         Type.SORCERER, Type.WIZARD -> 6
     }
 
-    fun hitDiceFormatted(): String = when (Type.valueOf(job)) {
-        Type.BARBARIAN -> "${dice}d12"
-        Type.FIGHTER, Type.PALADIN, Type.RANGER -> "${dice}d10"
-        Type.BARD, Type.CLERIC, Type.DRUID, Type.MONK, Type.ROGUE, Type.WARLOCK -> "${dice}d8"
-        Type.SORCERER, Type.WIZARD -> "${dice}d6"
-    }
+    fun hitDieMaxFormatted(): String = "d${hitDieMax()}"
+
+    fun hitDiceFormatted(): String = "$dice${hitDieMaxFormatted()}"
 
     fun castingAbility(): Ability.Type = when (Type.valueOf(job)) {
         Type.BARD, Type.PALADIN, Type.SORCERER, Type.WARLOCK -> Ability.Type.CHA
