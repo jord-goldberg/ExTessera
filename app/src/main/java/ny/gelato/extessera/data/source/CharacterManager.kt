@@ -204,6 +204,20 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     }
 
 
+    override fun updateCoin(coin: CoinModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            when (coin.type) {
+                CoinModel.Type.COPPER -> character.copper = coin.amount
+                CoinModel.Type.SILVER -> character.silver = coin.amount
+                CoinModel.Type.ELECTRUM -> character.electrum = coin.amount
+                CoinModel.Type.GOLD -> character.gold = coin.amount
+                CoinModel.Type.PLATINUM -> character.platinum = coin.amount
+            }
+        }
+    }
+
+
     override fun updatePreference(preference: Preferences.Toggle) {
         realm.executeTransaction { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()

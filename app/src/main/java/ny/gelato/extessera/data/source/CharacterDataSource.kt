@@ -54,6 +54,9 @@ interface CharacterDataSource {
     fun forgetSpell(spellName: String)
 
 
+    fun updateCoin(coin: CoinModel)
+
+
     fun updatePreference(preference: Preferences.Toggle)
 
     fun fullRest()

@@ -36,6 +36,12 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 addAll(character.weaponModels())
                 if (character.preferences.showSpells)
                     addAll(character.spellModels())
+                add(HeaderModel("Equipment", AvatarModel(character), R.menu.menu_character_equipment))
+                for (coin in CoinModel.Type.values()) {
+                    add(CoinModel(coin, character))
+                    add(EquipmentModel("Arrows", 20))
+                }
+                add(FooterModel())
             }
         }.observeOn(AndroidSchedulers.mainThread())
     }
@@ -70,6 +76,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is SkillModel -> characterManager.updateSkill(model)
             is WeaponModel -> characterManager.addWeapon(model.name)
             is SpellModel -> characterManager.updateSpell(model)
+            is CoinModel -> characterManager.updateCoin(model)
         }
     }
 
@@ -112,6 +119,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is SkillModel -> view.showSelectSkillProficiency(model)
             is WeaponModel -> view.showWeaponDetail(model)
             is SpellModel -> view.showSpellDetail(model)
+            is CoinModel -> view.showCoin(model)
             is HeaderModel -> view.showPopupMenu(v, model.menuRes)
         }
     }

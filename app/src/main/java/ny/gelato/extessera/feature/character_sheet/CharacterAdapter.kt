@@ -22,14 +22,6 @@ class CharacterAdapter @Inject constructor(override val presenter: CharacterPres
             diffResult.dispatchUpdatesTo(this)
         }
 
-    override fun onBindViewHolder(holder: ViewModelHolder, position: Int) {
-        super.onBindViewHolder(holder, position)
-        val model = feed[position]
-        if (model !is SkillModel && model !is SkillSubheaderModel)
-            (holder.itemView.layoutParams as StaggeredGridLayoutManager.LayoutParams)
-                    .isFullSpan = true
-    }
-
     override fun getViewModelForPosition(position: Int): Any = feed[position]
 
     override fun getLayoutIdForPosition(position: Int): Int = when (feed[position]) {
@@ -45,6 +37,8 @@ class CharacterAdapter @Inject constructor(override val presenter: CharacterPres
         is SkillSubheaderModel -> R.layout.item_character_skill_subheader
         is SpellModel -> R.layout.item_character_spell
         is WeaponModel -> R.layout.item_character_weapon
+        is CoinModel -> R.layout.item_character_equipment_coin
+        is EquipmentModel -> R.layout.item_character_equipment_item
         else -> throw ModelLayoutException(feed[position]::class.java.simpleName, this::class.java.simpleName)
     }
 

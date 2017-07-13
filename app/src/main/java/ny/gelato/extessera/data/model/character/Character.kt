@@ -52,6 +52,12 @@ open class Character(
         var saves: Int = 0,
         var failures: Int = 0,
 
+        var copper: Int = 0,
+        var silver: Int = 0,
+        var electrum: Int = 0,
+        var gold: Int = 0,
+        var platinum: Int = 0,
+
         var notes: RealmList<Note> = RealmList(Note("Welcome! Make sure to set your skills and " +
                 "abilities according to character creation outlined in the Player's Handbook. " +
                 "Check the box to the left and swipe to dismiss once you're done.")),

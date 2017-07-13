@@ -49,5 +49,7 @@ interface CharacterView : BaseView {
 
     fun showSpellsFor(character: Character)
 
+    fun showCoin(coin: CoinModel)
+
     fun showPopupMenu(view: View, menuRes: Int)
 }

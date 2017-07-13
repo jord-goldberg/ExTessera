@@ -63,7 +63,7 @@
                         android:gravity="center"
                         android:maxLines="1"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                        app:ticker_animationDuration="300"
+                        app:ticker_animationDuration="200"
                         bind:characterList="@{TickerUtils.defaultNumberList}"
                         bind:text="@{viewModel.showHp()}"/>
 

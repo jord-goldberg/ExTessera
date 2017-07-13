@@ -7,9 +7,9 @@ import android.os.Handler
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.StaggeredGridLayoutManager
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +30,7 @@ import ny.gelato.extessera.feature.spell_detail.SpellDetailBottomFragment
 import javax.inject.Inject
 import android.view.Gravity
 import android.widget.TextView
-import ny.gelato.extessera.common.SmoothStaggeredLayoutManager
+import ny.gelato.extessera.common.SmoothGridLayoutManager
 
 
 /**
@@ -57,58 +57,58 @@ class CharacterFragment : Fragment(), CharacterView {
         BottomSheetDialog(activity)
     }
 
-    val swipeToRemoveHelper: ItemTouchHelper by lazy {
-        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
-            override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?,
-                                target: RecyclerView.ViewHolder?): Boolean = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val model = adapter.feed.removeAt(position)
-                when (model) {
-                    is NoteModel -> {
-                        adapter.notifyItemRemoved(position)
-                        presenter.delete(model)
-                    }
-                    is WeaponModel -> {
-                        val snackBar = Snackbar.make(coordinator, "Removed ${model.name}", Snackbar.LENGTH_LONG)
-                                .setAction("undo") { _ ->
-                                    adapter.feed.add(position, model)
-                                    adapter.notifyItemInserted(position)
-                                    presenter.save(model)
-                                }
-                        adapter.notifyItemRemoved(position)
-                        presenter.delete(model)
-                        snackBar.show()
-                    }
-                    is SpellModel -> {
-                        val snackBar = Snackbar.make(coordinator, "Removed ${model.name}", Snackbar.LENGTH_LONG)
-                                .setAction("undo") { _ ->
-                                    adapter.feed.add(position, model)
-                                    adapter.notifyItemInserted(position)
-                                    presenter.save(model)
-                                }
-                        adapter.notifyItemRemoved(position)
-                        presenter.delete(model)
-                        snackBar.show()
-                    }
-                }
-            }
-
-            override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
-                val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
-                if ((model is NoteModel && model.isDone)
-                        .or(model is WeaponModel && model.name != "Unarmed Strike")
-                        .or(model is SpellModel))
-                    return super.getSwipeDirs(recyclerView, viewHolder)
-                return 0
-            }
-        })
-    }
-
     @Inject lateinit var presenter: CharacterPresenter
 
     @Inject lateinit var adapter: CharacterAdapter
+
+    val swipeToRemoveHelper: ItemTouchHelper =
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
+                override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?,
+                                    target: RecyclerView.ViewHolder?): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    val model = adapter.feed.removeAt(position)
+                    when (model) {
+                        is NoteModel -> {
+                            adapter.notifyItemRemoved(position)
+                            presenter.delete(model)
+                        }
+                        is WeaponModel -> {
+                            val snackBar = Snackbar.make(coordinator, "Removed ${model.name}", Snackbar.LENGTH_LONG)
+                                    .setAction("undo") { _ ->
+                                        adapter.feed.add(position, model)
+                                        adapter.notifyItemInserted(position)
+                                        presenter.save(model)
+                                    }
+                            adapter.notifyItemRemoved(position)
+                            presenter.delete(model)
+                            snackBar.show()
+                        }
+                        is SpellModel -> {
+                            val snackBar = Snackbar.make(coordinator, "Removed ${model.name}", Snackbar.LENGTH_LONG)
+                                    .setAction("undo") { _ ->
+                                        adapter.feed.add(position, model)
+                                        adapter.notifyItemInserted(position)
+                                        presenter.save(model)
+                                    }
+                            adapter.notifyItemRemoved(position)
+                            presenter.delete(model)
+                            snackBar.show()
+                        }
+                    }
+                }
+
+                override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
+                    val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
+                    if ((model is NoteModel && model.isDone)
+                            .or(model is WeaponModel && model.name != "Unarmed Strike")
+                            .or(model is SpellModel)
+                            .or(model is EquipmentModel))
+                        return super.getSwipeDirs(recyclerView, viewHolder)
+                    return 0
+                }
+            })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -123,8 +123,21 @@ class CharacterFragment : Fragment(), CharacterView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.apply {
-            layoutManager = SmoothStaggeredLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = this@CharacterFragment.adapter
+            layoutManager = SmoothGridLayoutManager(context, 6).apply {
+                spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                    override fun getSpanSize(position: Int): Int {
+                        val model = this@CharacterFragment.adapter.feed[position]
+                        return when (model) {
+                            is SkillModel -> 3
+                            is SkillSubheaderModel -> 3
+                            is CoinModel -> 2
+                            is EquipmentModel -> 4
+                            else -> 6
+                        }
+                    }
+                }
+            }
         }
         swipeToRemoveHelper.attachToRecyclerView(recycler_view)
         presenter.attachView(this)
@@ -154,24 +167,18 @@ class CharacterFragment : Fragment(), CharacterView {
         EditCharacterActivity.show(activity, character.id)
     }
 
-    override fun isAtScrollTop(): Boolean =
-            (recycler_view.layoutManager as StaggeredGridLayoutManager)
-                    .findFirstCompletelyVisibleItemPositions(IntArray(2)).contains(0)
+    override fun isAtScrollTop(): Boolean {
+        val position = (recycler_view.layoutManager as GridLayoutManager)
+                .findFirstCompletelyVisibleItemPosition()
+        return position == 0 || position == RecyclerView.NO_POSITION
+    }
 
     override fun showScrollToTop() {
         recycler_view.smoothScrollToPosition(0)
     }
 
     override fun showImageSelect(avatar: AvatarModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_avatar, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, avatar)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(avatar, R.layout.bottom_sheet_character_avatar)
     }
 
     override fun showHasInspiration(avatar: AvatarModel) {
@@ -184,38 +191,15 @@ class CharacterFragment : Fragment(), CharacterView {
     }
 
     override fun showAbout(about: AboutModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_about, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, about)
-            setVariable(BR.presenter, presenter)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(about, R.layout.bottom_sheet_character_about)
     }
 
     override fun showAddExp(additional: ExpModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_add_exp, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, additional)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(additional, R.layout.bottom_sheet_character_add_exp)
     }
 
     override fun showGoTo(goTo: GoToModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_go_to, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, goTo)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(goTo, R.layout.bottom_sheet_character_go_to)
     }
 
     override fun showScrollToDestination(destination: BaseViewModel) {
@@ -229,64 +213,23 @@ class CharacterFragment : Fragment(), CharacterView {
     }
 
     override fun showEditHp(hp: HpModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_hp, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, hp)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(hp, R.layout.bottom_sheet_character_hp)
     }
 
     override fun showEditMaxHp(maxHp: MaxHpModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_max_hp, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, maxHp)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(maxHp, R.layout.bottom_sheet_character_max_hp)
     }
 
     override fun showSelectDcAbility(status: StatusModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_dc_ability, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, status)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(status, R.layout.bottom_sheet_character_dc_ability)
     }
 
     override fun showSelectSkillProficiency(skill: SkillModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-                R.layout.bottom_sheet_character_skill, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, skill)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(skill, R.layout.bottom_sheet_character_skill)
     }
 
-
     override fun showWeaponDetail(weapon: WeaponModel) {
-        val binding: ViewDataBinding = DataBindingUtil.inflate(activity.layoutInflater,
-            R.layout.bottom_sheet_character_weapon, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, weapon)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
+        showBottomSheet(weapon, R.layout.bottom_sheet_character_weapon)
     }
 
     override fun showWeaponsFor(character: Character) {
@@ -299,6 +242,10 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showSpellsFor(character: Character) {
         Search5eActivity.showSpellSearch(activity, character.primary.job, character.primary.spellLevel())
+    }
+
+    override fun showCoin(coin: CoinModel) {
+        showBottomSheet(coin, R.layout.bottom_sheet_character_coin)
     }
 
     override fun showPopupMenu(view: View, menuRes: Int) {
@@ -315,5 +262,17 @@ class CharacterFragment : Fragment(), CharacterView {
             }
             show()
         }
+    }
+
+    private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {
+        val binding: ViewDataBinding =
+                DataBindingUtil.inflate(activity.layoutInflater, layoutRes, null, false)
+        binding.apply {
+            setVariable(BR.viewModel, model)
+            setVariable(BR.presenter, presenter)
+            setVariable(BR.sheet, sheet)
+        }
+        sheet.setContentView(binding.root)
+        sheet.show()
     }
 }
