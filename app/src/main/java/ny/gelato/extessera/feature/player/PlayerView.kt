@@ -15,7 +15,7 @@ interface PlayerView : BaseView {
 
     fun showPlayer(feed: MutableList<BaseViewModel>)
 
-    fun showCreateCharacter(newCharacter: NewCharacterModel)
+    fun showCreateCharacter(newCharacter: NewCharacterModel? = null)
     
     fun showCharacter(character: CharacterModel)
 }

@@ -12,4 +12,9 @@ data class HeaderModel(
         val menuRes: Int,
         val titleInfo: String = ""
 
-) : BaseViewModel()
+) : BaseViewModel() {
+
+    override fun isSameAs(model: BaseViewModel): Boolean =
+            if (model is HeaderModel) title == model.title
+            else false
+}

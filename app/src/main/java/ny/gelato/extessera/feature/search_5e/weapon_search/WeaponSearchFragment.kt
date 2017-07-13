@@ -125,17 +125,18 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
     }
 
     override fun showAddWeapon(v: View, weapon: Weapon) {
-        PopupMenu(activity, v, Gravity.END).apply {
-            if (characters.isNotEmpty()) characters.forEachIndexed { index, character ->
-                val name = character.name.substringBefore(" ")
-                menu.add(0, index, index, "Add to $name")
+        if (characters.isNotEmpty())
+            PopupMenu(activity, v, Gravity.END).apply {
+                if (characters.isNotEmpty()) characters.forEachIndexed { index, character ->
+                    val name = character.name.substringBefore(" ")
+                    menu.add(0, index, index, "Add to $name")
+                }
+                setOnMenuItemClickListener {
+                    CharacterManager(App.component.realm(), characters[it.itemId].id).addWeapon(weapon.name)
+                    Handler().postDelayed({ dismiss(); activity.finish() }, 200)
+                    true
+                }
+                show()
             }
-            setOnMenuItemClickListener {
-                CharacterManager(App.component.realm(), characters[it.itemId].id).addWeapon(weapon.name)
-                Handler().postDelayed({ dismiss(); activity.finish() }, 200)
-                true
-            }
-            show()
-        }
     }
 }

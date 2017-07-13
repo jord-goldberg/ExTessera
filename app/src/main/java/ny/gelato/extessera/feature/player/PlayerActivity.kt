@@ -78,6 +78,8 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
         toolbar.setNavigationIcon(R.drawable.ic_d20)
         component.inject(this)
 
+        fab.setOnClickListener { showCreateCharacter() }
+
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@PlayerActivity)
             adapter = this@PlayerActivity.adapter
@@ -115,7 +117,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
     }
 
 
-    override fun showCreateCharacter(newCharacter: NewCharacterModel) {
+    override fun showCreateCharacter(newCharacter: NewCharacterModel?) {
         EditCharacterActivity.show(this)
     }
 

@@ -98,6 +98,10 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is ExpModel -> view.showAddExp(ExpModel(character.exp, character.expToNextLevel()))
             is GoToModel -> when (model.destination) {
                 GoToModel.Destination.NONE -> view.showGoTo(model)
+                GoToModel.Destination.NOTES -> {
+                    if (!character.preferences.showNotes)
+                        characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
+                }
                 GoToModel.Destination.ABILITIES -> view.showScrollToDestination(AbilitiesModel())
                 GoToModel.Destination.SAVES -> view.showScrollToDestination(SavingThrowsModel())
                 GoToModel.Destination.SKILLS -> view.showScrollToDestination(SkillModel())
@@ -107,10 +111,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                         characterManager.updatePreference(Preferences.Toggle.SHOW_SPELLS)
                     view.showScrollToDestination(SpellModel())
                 }
-                GoToModel.Destination.NOTES -> {
-                    if (!character.preferences.showNotes)
-                        characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
-                }
+                GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
             }
             is StatusModel ->
                 if (model.isDcEditable) view.showSelectDcAbility(model)

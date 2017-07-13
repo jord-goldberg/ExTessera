@@ -39,21 +39,6 @@ class MainActivity : AppCompatActivity() {
 
     val realm: Realm = App.component.realm()
 
-    val characters: RealmResults<Character> by lazy {
-        realm.where(Character::class.java)
-                .findAllSorted("updated", Sort.DESCENDING)
-    }
-
-    val spells: RealmResults<Spell> by lazy {
-        realm.where(Spell::class.java)
-                .findAll()
-    }
-
-    val weapons: RealmResults<Weapon> by lazy {
-        realm.where(Weapon::class.java)
-                .findAll()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -68,27 +53,6 @@ class MainActivity : AppCompatActivity() {
             realm.writeCopyTo(file)
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-
-        if (spells.isEmpty()) {
-            val spells = rawToRealmSpells(parseSpells(R.raw.spells))
-            realm.executeTransactionAsync { realm ->
-                for (spell in spells) {
-                    Log.d("KnownSpell", "${spell.name} (${spell.level}) ${spell.range} ${spell.castingTime} ${spell.school} ${spell.isRitual}")
-                    realm.copyToRealmOrUpdate(spell)
-                }
-            }
-        }
-
-        if (weapons.isEmpty()) {
-            val weapons = realmWeapons()
-            realm.executeTransactionAsync { realm ->
-                for (weapon in weapons) realm.copyToRealmOrUpdate(weapon)
-            }
-        }
-
-        if (characters.isEmpty()) realm.executeTransaction {
-            it.copyToRealm(Character())
         }
 
         savedInstanceState ?: supportFragmentManager.beginTransaction()
@@ -109,20 +73,4 @@ class MainActivity : AppCompatActivity() {
         }
         return true
     }
-
-    fun parseSpells(resource: Int): String {
-        var json: String = ""
-        try {
-            val input = resources.openRawResource(resource)
-            val buffer = ByteArray(input.available())
-            input.read(buffer)
-            input.close()
-            json = String(buffer)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return json
-    }
-
-
 }

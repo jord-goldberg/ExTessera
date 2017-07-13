@@ -103,8 +103,7 @@ class CharacterFragment : Fragment(), CharacterView {
                     val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
                     if ((model is NoteModel && model.isDone)
                             .or(model is WeaponModel && model.name != "Unarmed Strike")
-                            .or(model is SpellModel)
-                            .or(model is EquipmentModel))
+                            .or(model is SpellModel))
                         return super.getSwipeDirs(recyclerView, viewHolder)
                     return 0
                 }
@@ -203,6 +202,7 @@ class CharacterFragment : Fragment(), CharacterView {
     }
 
     override fun showScrollToDestination(destination: BaseViewModel) {
+        // The delay is to allow any hidden destinations to appear if necessary
         Handler().postDelayed({
             for (i in 0 until adapter.feed.size)
                 if (adapter.feed[i].javaClass == destination.javaClass) {

@@ -68,17 +68,18 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = sheet
 
     fun showAddSpell(v: View, spell: SpellDetailModel) {
-        PopupMenu(activity, v).apply {
-            if (characters.isNotEmpty()) characters.forEachIndexed { index, character ->
-                val name = character.name.substringBefore(" ")
-                menu.add(0, index, index, "Add to $name")
+        if (characters.isNotEmpty())
+            PopupMenu(activity, v).apply {
+                if (characters.isNotEmpty()) characters.forEachIndexed { index, character ->
+                    val name = character.name.substringBefore(" ")
+                    menu.add(0, index, index, "Add to $name")
+                }
+                setOnMenuItemClickListener {
+                    CharacterManager(App.component.realm(), characters[it.itemId].id).learnSpell(spell.name)
+                    Handler().postDelayed({ dismiss(); activity.finish() }, 200)
+                    true
+                }
+                show()
             }
-            setOnMenuItemClickListener {
-                CharacterManager(App.component.realm(), characters[it.itemId].id).learnSpell(spell.name)
-                Handler().postDelayed({ dismiss(); activity.finish() }, 200)
-                true
-            }
-            show()
-        }
     }
 }

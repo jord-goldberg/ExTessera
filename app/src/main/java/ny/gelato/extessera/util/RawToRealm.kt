@@ -1,17 +1,31 @@
 package ny.gelato.extessera.util
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ny.gelato.extessera.data.model.JsonSpell
 import ny.gelato.extessera.data.model.Spell
 import ny.gelato.extessera.data.model.Weapon
+import java.io.IOException
 
 /**
  * Created by jord.goldberg on 4/26/17.
  */
 
-fun rawToRealmSpells(json: String): List<Spell> {
+fun rawToRealmSpells(context: Context, resource: Int): List<Spell> {
+
+    var json: String = ""
+    try {
+        val input = context.resources.openRawResource(resource)
+        val buffer = ByteArray(input.available())
+        input.read(buffer)
+        input.close()
+        json = String(buffer)
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+
     val spellsType = object : TypeToken<List<JsonSpell>>() {}.type
     val response = Gson().fromJson<List<JsonSpell>>(json, spellsType)
 

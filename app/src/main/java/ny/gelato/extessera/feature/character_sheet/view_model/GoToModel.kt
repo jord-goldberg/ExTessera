@@ -14,12 +14,13 @@ data class GoToModel(
 
     enum class Destination {
         NONE,
+        NOTES,
         ABILITIES,
         SAVES,
         SKILLS,
         WEAPONS,
         SPELLS,
-        NOTES
+        EQUIPMENT
     }
 
     fun goTo(destination: Destination, sheet: BottomSheetDialog): GoToModel {

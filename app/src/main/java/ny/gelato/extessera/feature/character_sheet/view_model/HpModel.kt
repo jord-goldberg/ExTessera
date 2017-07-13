@@ -32,4 +32,6 @@ data class HpModel(
         current -= change
         return this
     }
+
+    fun showCurrent(): String = current.toString()
 }

@@ -10,8 +10,8 @@ import java.text.NumberFormat
  */
 
 data class CoinModel(
-        val type: Type,
-        var amount: Int,
+        val type: Type = CoinModel.Type.COPPER,
+        var amount: Int = 0,
         var change: Int = 0
 
 ) : BaseViewModel() {

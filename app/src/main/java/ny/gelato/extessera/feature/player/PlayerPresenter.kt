@@ -26,9 +26,10 @@ class PlayerPresenter @Inject constructor(val playerManager: PlayerManager) : Ba
     val feed = Observable.Transformer<RealmResults<Character>, MutableList<BaseViewModel>> {
         it.filter { it.isLoaded }.map { characters ->
             mutableListOf<BaseViewModel>().apply {
-                add(NewCharacterModel())
-                add(HeaderModel("Local Characters", R.menu.menu_player_local_characters))
-                for (character in characters)
+                add(HeaderModel("Local Characters"))
+                if (characters.isEmpty())
+                    add(NewCharacterModel())
+                else for (character in characters)
                     add(CharacterModel(character))
             }
         }.observeOn(AndroidSchedulers.mainThread())

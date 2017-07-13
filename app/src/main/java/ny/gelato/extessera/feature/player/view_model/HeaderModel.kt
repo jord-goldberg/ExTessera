@@ -8,6 +8,6 @@ import ny.gelato.extessera.base.BaseViewModel
 
 data class HeaderModel(
         val title: String,
-        val menuRes: Int
+        val menuRes: Int = 0
 
 ) : BaseViewModel()

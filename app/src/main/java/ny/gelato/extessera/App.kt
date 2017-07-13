@@ -1,8 +1,10 @@
-    package ny.gelato.extessera
+package ny.gelato.extessera
 
 import android.app.Application
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import ny.gelato.extessera.util.rawToRealmSpells
+import ny.gelato.extessera.util.realmWeapons
 
 
 /**
@@ -24,6 +26,8 @@ class App : Application() {
                 .build()
 
         component.inject(this)
+
+        if (component.realm().isEmpty) populateRealm()
     }
 
     fun initRealm() {
@@ -34,5 +38,15 @@ class App : Application() {
                 .build()
 
         Realm.setDefaultConfiguration(config)
+    }
+
+    // To be removed when a pre-populated Realm is packaged with the apk
+    private fun populateRealm() {
+        val spells = rawToRealmSpells(this, R.raw.spells)
+        val weapons = realmWeapons()
+        component.realm().executeTransactionAsync { realm ->
+            for (spell in spells) realm.copyToRealmOrUpdate(spell)
+            for (weapon in weapons) realm.copyToRealmOrUpdate(weapon)
+        }
     }
 }
