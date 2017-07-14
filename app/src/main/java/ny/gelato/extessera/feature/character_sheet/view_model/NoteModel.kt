@@ -1,5 +1,6 @@
 package ny.gelato.extessera.feature.character_sheet.view_model
 
+import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
 
 /**
@@ -7,7 +8,8 @@ import ny.gelato.extessera.base.BaseViewModel
  */
 
 data class NoteModel(
-        val text: String = "",
+        val id: String = "",
+        var text: String = "",
         var isDone: Boolean = false
 
 ) : BaseViewModel() {
@@ -18,6 +20,17 @@ data class NoteModel(
 
     fun toggleDone(checked: Boolean): NoteModel {
         isDone = checked
+        return this
+    }
+
+    fun setText(note: CharSequence) {
+        text = note.toString()
+    }
+
+    fun validateText(): Boolean = text.isNotBlank()
+
+    fun createNote(sheet: BottomSheetDialog): NoteModel {
+        sheet.dismiss()
         return this
     }
 }

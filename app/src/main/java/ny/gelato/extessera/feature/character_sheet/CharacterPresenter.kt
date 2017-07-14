@@ -39,7 +39,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 add(HeaderModel("Equipment", AvatarModel(character), R.menu.menu_character_equipment))
                 for (coin in CoinModel.Type.values()) {
                     add(CoinModel(coin, character))
-                    add(EquipmentModel("Arrows", 20))
+                    add(EquipmentModel())
                 }
                 add(FooterModel())
             }
@@ -67,7 +67,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is AvatarModel -> characterManager.updateAvatar(model)
             is ExpModel -> characterManager.updateExp(model)
             is LevelUpModel -> characterManager.updateLevel(model)
-            is NoteModel -> characterManager.updateNote(model)
+            is NoteModel -> characterManager.createNote(model)
             is StatusModel -> characterManager.updateStatus(model)
             is HpModel -> characterManager.updateHp(model)
             is MaxHpModel -> characterManager.updateMaxHp(model)
@@ -113,14 +113,20 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 }
                 GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
             }
+            is NoteModel -> characterManager.updateNote(model)
             is StatusModel ->
                 if (model.isDcEditable) view.showSelectDcAbility(model)
                 else view.showPopupMenu(v, R.menu.menu_character_status)
             is HpModel -> view.showEditHp(HpModel(character))
             is SkillModel -> view.showSelectSkillProficiency(model)
             is WeaponModel -> view.showWeaponDetail(model)
-            is SpellModel -> view.showSpellDetail(model)
+            is SpellModel ->
+                if (model.isEmpty()) view.showSpellsFor(character)
+                else view.showSpellDetail(model)
             is CoinModel -> view.showCoin(model)
+            is EquipmentModel ->
+                if (model.isEmpty()) view.showEquipment(EquipmentModel().apply { editable = true })
+                else view.showEquipment(model)
             is HeaderModel -> view.showPopupMenu(v, model.menuRes)
         }
     }
@@ -156,7 +162,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
 
     fun menuClick(menuItem: MenuItem) {
         when (menuItem.itemId) {
-            R.id.action_notes_add -> null
+            R.id.action_notes_create -> view.showCreateNote()
             R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
             R.id.action_status_short_rest -> null

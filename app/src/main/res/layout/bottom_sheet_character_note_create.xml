@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.MaxHpModel"/>
+            type="ny.gelato.extessera.feature.character_sheet.view_model.NoteModel"/>
 
         <variable
             name="presenter"
@@ -30,94 +30,70 @@
             android:orientation="vertical"
             android:paddingBottom="8dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="47dp">
-
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="46dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="1dp"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center_vertical"
-                    android:text="Max Hit Points"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Max Hit Points"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="46dp"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="1dp"
-                    android:alpha=".87"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:gravity="center"
-                    android:text="@{viewModel.showCurrent()}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    tools:text="34"/>
-
-            </LinearLayout>
+                    android:text="Create a Note"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="32dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
                 android:background="@color/grey_300"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Hit points"
-                android:inputType="number"
-                android:maxLength="3"
-                android:onTextChanged="@{(maxHp, i, x, y) -> viewModel.setChange(maxHp)}"
-                android:textColor="@android:color/secondary_text_light"
-                tools:hint="Hit points"/>
+                android:hint="Write it down"
+                android:inputType="textMultiLine|textCapSentences"
+                android:onTextChanged="@{(note, i, x, y) -> viewModel.setText(note)}"
+                android:textColor="@android:color/secondary_text_light"/>
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:alpha=".87">
+                android:alpha=".87"
+                android:layoutDirection="rtl">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.plusToMax(sheet))}"
+                    android:onClick="@{(v) -> viewModel.validateText() ? presenter.save(viewModel.createNote(sheet)) : null}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="+ to Max"
+                    android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-                    android:textColor="@color/colorPrimaryDark"
-                    tools:text="+ to Max"/>
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change != 0 ? presenter.save(viewModel.setNewMax(sheet)) : sheet.dismiss()}"
+                    android:onClick="@{(v) -> sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Set new Max"
+                    android:text="Cancel"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"
                     tools:visibility="visible"/>
 
-            </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

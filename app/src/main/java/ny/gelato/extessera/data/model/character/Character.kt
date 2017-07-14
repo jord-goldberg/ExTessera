@@ -58,7 +58,7 @@ open class Character(
         var gold: Int = 0,
         var platinum: Int = 0,
 
-        var notes: RealmList<Note> = RealmList(Note("Welcome! Make sure to set your skills and " +
+        var notes: RealmList<Note> = RealmList(Note(text = "Welcome! Make sure to set your skills and " +
                 "abilities according to character creation outlined in the Player's Handbook. " +
                 "Check the box to the left and swipe to dismiss once you're done.")),
 
@@ -67,6 +67,7 @@ open class Character(
         var skills: RealmList<Skill> = RealmList(*Skill.Type.values().map { Skill(it.name) }.toTypedArray()),
         var weapons: RealmList<Weapon> = RealmList(),
         var spells: RealmList<KnownSpell> = RealmList(),
+        var equipment: RealmList<Equipment> = RealmList(),
 
         var spellSlots: SpellSlots = SpellSlots(),
 
@@ -151,7 +152,7 @@ open class Character(
     }
 
     fun noteModels(): List<BaseViewModel> =
-            notes.map { NoteModel(it.text, it.isDone) }
+            notes.map { NoteModel(it.id, it.text, it.isDone) }
                     .toMutableList<BaseViewModel>()
                     .apply {
                         if (hasToLevelUp()) add(LevelUpModel(this@Character))
@@ -166,14 +167,19 @@ open class Character(
 
     fun spellModels(): List<BaseViewModel> {
         if (primary.job == Job.Type.BARBARIAN.name) return emptyList()
-        val spellModels = spells.where().equalTo("prepared", true)
-                .findAllSorted("level", Sort.DESCENDING, "name", Sort.ASCENDING)
-                .map { SpellModel(it) }
-                .toMutableList<BaseViewModel>()
+        val spellModels = mutableListOf<BaseViewModel>()
 
-        spellModels.addAll(spells.where().equalTo("prepared", false)
-                .findAllSorted("level", Sort.ASCENDING, "name", Sort.ASCENDING)
-                .map { SpellModel(it) })
+        if (spells.isEmpty())
+            spellModels.add(SpellModel())
+        else {
+            spellModels.addAll(spells.where().equalTo("prepared", true)
+                    .findAllSorted("level", Sort.DESCENDING, "name", Sort.ASCENDING)
+                    .map { SpellModel(it) })
+
+            spellModels.addAll(spells.where().equalTo("prepared", false)
+                    .findAllSorted("level", Sort.ASCENDING, "name", Sort.ASCENDING)
+                    .map { SpellModel(it) })
+        }
 
         spellModels.add(0, HeaderModel("Spells", AvatarModel(this), R.menu.menu_character_spells,
                 "Spell Attack bonus:  ${Ability.format(proficiencyBonus() + when (primary.castingAbility()) {

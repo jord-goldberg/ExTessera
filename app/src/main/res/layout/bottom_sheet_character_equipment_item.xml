@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.MaxHpModel"/>
+            type="ny.gelato.extessera.feature.character_sheet.view_model.EquipmentModel"/>
 
         <variable
             name="presenter"
@@ -36,29 +36,30 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_height="46dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:gravity="center_vertical"
-                    android:text="Max Hit Points"
+                    android:text="@{viewModel.editable ? @string/equipment_item_new : viewModel.name}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Max Hit Points"/>
+                    tools:text="New Equipment Item"/>
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="46dp"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="1dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
                     android:alpha=".87"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:gravity="center"
-                    android:text="@{viewModel.showCurrent()}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    tools:text="34"/>
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{() -> presenter.save(viewModel.save())}"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:src="@drawable/ic_save_white"
+                    android:tint="@color/colorAccent"
+                    android:visibility="@{viewModel.editable &amp;&amp; !viewModel.isEmpty() ? View.VISIBLE : View.GONE}"
+                    tools:src="@drawable/ic_save_white"/>
 
             </LinearLayout>
 
@@ -78,19 +79,36 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Hit points"
-                android:inputType="number"
-                android:maxLength="3"
-                android:onTextChanged="@{(maxHp, i, x, y) -> viewModel.setChange(maxHp)}"
+                android:hint="Item name"
+                android:maxLines="1"
+                android:inputType="textCapSentences"
+                android:onTextChanged="@{(text, i, x, y) -> viewModel.setName(text)}"
                 android:textColor="@android:color/secondary_text_light"
-                tools:hint="Hit points"/>
+                android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
 
-            <FrameLayout
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:hint="Amount"
+                android:inputType="number"
+                android:maxLength="9"
+                android:onTextChanged="@{(amount, i, x, y) -> viewModel.setChange(amount)}"
+                android:textColor="@android:color/secondary_text_light"
+                android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"/>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:alpha=".87">
+                android:alpha=".87"
+                android:layoutDirection="rtl"
+                android:visibility="@{viewModel.editable ? View.INVISIBLE : View.VISIBLE}">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -98,26 +116,24 @@
                     android:clickable="true"
                     android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.plusToMax(sheet))}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.remove(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="+ to Max"
+                    android:text="Add"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-                    android:textColor="@color/colorPrimaryDark"
-                    tools:text="+ to Max"/>
+                    android:textColor="@color/colorPrimaryDark"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change != 0 ? presenter.save(viewModel.setNewMax(sheet)) : sheet.dismiss()}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.add(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Set new Max"
+                    android:text="Remove"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-                    android:textColor="@color/colorPrimaryDark"
-                    tools:visibility="visible"/>
+                    android:textColor="@color/colorPrimaryDark"/>
 
-            </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
 

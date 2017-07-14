@@ -103,7 +103,7 @@ class CharacterFragment : Fragment(), CharacterView {
                     val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
                     if ((model is NoteModel && model.isDone)
                             .or(model is WeaponModel && model.name != "Unarmed Strike")
-                            .or(model is SpellModel))
+                            .or(model is SpellModel && !model.isEmpty()))
                         return super.getSwipeDirs(recyclerView, viewHolder)
                     return 0
                 }
@@ -194,7 +194,7 @@ class CharacterFragment : Fragment(), CharacterView {
     }
 
     override fun showAddExp(additional: ExpModel) {
-        showBottomSheet(additional, R.layout.bottom_sheet_character_add_exp)
+        showBottomSheet(additional, R.layout.bottom_sheet_character_exp_add)
     }
 
     override fun showGoTo(goTo: GoToModel) {
@@ -210,6 +210,10 @@ class CharacterFragment : Fragment(), CharacterView {
                     break
                 }
         }, 200)
+    }
+
+    override fun showCreateNote() {
+        showBottomSheet(NoteModel(), R.layout.bottom_sheet_character_note_create)
     }
 
     override fun showEditHp(hp: HpModel) {
@@ -246,6 +250,10 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showCoin(coin: CoinModel) {
         showBottomSheet(coin, R.layout.bottom_sheet_character_coin)
+    }
+
+    override fun showEquipment(equipment: EquipmentModel) {
+        showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
     }
 
     override fun showPopupMenu(view: View, menuRes: Int) {

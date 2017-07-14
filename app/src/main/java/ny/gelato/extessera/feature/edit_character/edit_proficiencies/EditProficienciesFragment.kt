@@ -60,7 +60,10 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
                 }
                 .forEach { proficiency ->
                     proficiencies.find { it.proficiency == proficiency.name }
-                            ?.toggleIsChecked(true)
+                            ?.apply {
+                                origin = Proficiency.Origin.RACE_CLASS
+                                toggleIsChecked(true)
+                            }
                 }
 
         editProficienciesAdapter = EditProficienciesAdapter().apply { feed = proficienciesWithHeaders() }
@@ -90,17 +93,14 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
                     .equalTo("id", id)
                     .findFirst()
 
-            character.traits.deleteAllFromRealm()
-            character.proficiencies.deleteAllFromRealm()
-            character.setTraitsAndProficiencies()
-
             editProficienciesAdapter.feed
                     .filter { it is EditProficiencyModel && it.isChecked }
                     .forEach {
-                        if (it is EditProficiencyModel) {
-                            val proficiency = Proficiency(it.type.name, it.proficiency)
-                            if (character.proficiencies.find { it.name == proficiency.name } == null)
-                                character.proficiencies.add(proficiency)
+                        if (it is EditProficiencyModel && it.origin == Proficiency.Origin.CHOICE) {
+                            val name = it.proficiency
+                            if (character.proficiencies.find { it.name == name } == null)
+                                character.proficiencies.add(Proficiency(it.type.name, it.proficiency,
+                                        Proficiency.Origin.CHOICE.name))
                         }
                     }
         }

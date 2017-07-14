@@ -1,13 +1,14 @@
 package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmObject
+import io.realm.annotations.Index
 
 /**
  * Created by jord.goldberg on 5/8/17.
  */
 
 open class Trait(
-        var name: String = ""
+        @Index var name: String = ""
 
 ): RealmObject() {
 

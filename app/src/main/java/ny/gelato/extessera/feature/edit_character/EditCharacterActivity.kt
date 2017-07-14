@@ -73,7 +73,7 @@ class EditCharacterActivity : AppCompatActivity() {
         if (currentFragment.validateInput()) {
             page += 1
             currentFragment.showNext()
-            updateBottomButtons()
+            if (page < 3) updateBottomButtons()
         }
     }
 

@@ -34,7 +34,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginStart="4dp"
                 android:checked="@{viewModel.done}"
-                android:onCheckedChanged="@{(cb, isChecked) -> presenter.save(viewModel.toggleDone(isChecked))}"/>
+                android:onCheckedChanged="@{(cb, isChecked) -> presenter.click(cb, viewModel.toggleDone(isChecked))}"/>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -24,10 +24,6 @@ import ny.gelato.extessera.R;
 import static android.support.design.R.attr.borderWidth;
 
 
-/**
- * Created by jord.goldberg on 4/28/17.
- */
-
 public class AvatarView extends AppCompatImageView {
 
     /*

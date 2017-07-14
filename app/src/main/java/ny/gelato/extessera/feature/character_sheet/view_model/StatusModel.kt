@@ -27,15 +27,17 @@ data class StatusModel(
 ) : BaseViewModel() {
 
     constructor(character: Character) :
-            this(character.hp,
-                    character.maxHp,
-                    character.armor + character.dexterity.modifier(),
-                    character.initiative + character.dexterity.modifier(),
-                    character.speed,
-                    character.proficiencyBonus(),
-                    10 + character.wisdom.modifier(),
-                    character.primary.dice,
-                    character.primary.hitDieMaxFormatted(),
+            this(hp = character.hp,
+                    maxHp = character.maxHp,
+                    armor = character.armor + character.dexterity.modifier(),
+                    initiative = character.initiative + character.dexterity.modifier() +
+                            if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
+                            else 0,
+                    speed = character.speed,
+                    proficiencyBonus = character.proficiencyBonus(),
+                    passiveWisdom = 10 + character.wisdom.modifier(),
+                    dice = character.primary.dice,
+                    hitDie = character.primary.hitDieMaxFormatted(),
                     avatar = AvatarModel(character),
                     dcAbility = Ability.Type.valueOf(character.preferences.dcAbility),
                     dc = 8 + when (Ability.Type.valueOf(character.preferences.dcAbility)) {

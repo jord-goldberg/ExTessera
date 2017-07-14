@@ -15,6 +15,8 @@
             name="presenter"
             type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
 
+        <import type="android.view.View"/>
+
         <import type="com.robinhood.ticker.TickerUtils"/>
     </data>
 
@@ -31,29 +33,50 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:fontFamily="sans-serif"
-                    android:layout_gravity="center_vertical"
-                    android:text="@{viewModel.name}"
-                    tools:text="Arrows"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.name}"
+                tools:text="Arrows"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_gravity="center_vertical"
-                    android:fontFamily="sans-serif"
-                    android:alpha=".87"
-                    android:gravity="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:text="@{viewModel.amount == 0 ? viewModel.showNone() : viewModel.showAmount()}"
-                    tools:text="20"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:gravity="end"
+                android:maxLines="1"
+                android:text="@{viewModel.showAmount()}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:visibility="@{viewModel.isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="20"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif"
+                android:text="Click to add item"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:textStyle="italic"
+                android:visibility="@{viewModel.isEmpty() ? View.VISIBLE : View.GONE}"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".54"
+                android:src="@drawable/ic_add_black"
+                android:visibility="@{viewModel.isEmpty() ? View.VISIBLE : View.GONE}"/>
 
         </LinearLayout>
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.data.model.character.Character
+import ny.gelato.extessera.data.model.character.Proficiency
 import ny.gelato.extessera.databinding.FragmentEditCharacterBasicsBinding
 import ny.gelato.extessera.feature.edit_character.edit_about.EditAboutFragment
 import ny.gelato.extessera.feature.edit_character.EditCharacterView
@@ -91,7 +92,10 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
             character.setExpToLevel()
             character.maxHp = character.primary.hitDieMax() + character.constitution.modifier()
             character.traits.deleteAllFromRealm()
-            character.proficiencies.deleteAllFromRealm()
+            character.proficiencies.where()
+                    .equalTo("origin", Proficiency.Origin.RACE_CLASS.name)
+                    .findAll()
+                    .deleteAllFromRealm()
             character.setTraitsAndProficiencies()
 
             id = character.id

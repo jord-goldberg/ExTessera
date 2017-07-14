@@ -55,6 +55,8 @@
                     android:onClick="@{(v) -> null}"
                     android:scaleType="center"
                     android:src="@drawable/ic_more_vert"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     tools:src="@drawable/ic_more_vert"/>
 
                 <ImageView

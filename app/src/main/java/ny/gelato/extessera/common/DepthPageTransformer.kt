@@ -4,9 +4,6 @@ import android.support.v4.view.ViewPager
 import android.view.View
 
 
-/**
- * Created by joshuagoldberg on 9/7/16.
- */
 class DepthPageTransformer : ViewPager.PageTransformer {
 
     override fun transformPage(view: View, position: Float) {

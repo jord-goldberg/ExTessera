@@ -1,14 +1,16 @@
 package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmObject
+import io.realm.annotations.Index
 
 /**
  * Created by jord.goldberg on 6/16/17.
  */
 
 open class Proficiency(
-        var type: String = "",
-        var name: String = ""
+        @Index var type: String = "",
+        @Index var name: String = "",
+        @Index var origin: String = Proficiency.Origin.RACE_CLASS.name
 
 ) : RealmObject() {
 
@@ -17,6 +19,11 @@ open class Proficiency(
         ARMOR,
         TOOL,
         LANGUAGE
+    }
+
+    enum class Origin {
+        RACE_CLASS,
+        CHOICE
     }
 
     enum class Tool(val formatted: String) {

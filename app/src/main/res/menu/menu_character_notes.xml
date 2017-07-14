@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_notes_add"
-        android:title="Add a Note"/>
+        android:id="@+id/action_notes_create"
+        android:title="Create a Note"/>
 
     <item
         android:id="@+id/action_notes_clear_checked"

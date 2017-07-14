@@ -114,83 +114,84 @@ open class Job(
 
     fun levelNotes(): List<Note> = ArrayList<Note>().apply {
         val features = featuresForLevel()
+
         if (features.isNotEmpty()) {
             addOrUpdateFeatures(features)
-            add(Note("${Type.valueOf(job).formatted} $level " +
+            add(Note(text = "${Type.valueOf(job).formatted} $level " +
                     "${if (features.size > 1) "features" else "feature"} " +
                     "(PHB ${playersHandbookPage()}):\n" +
                     features.map { it.name }.toString().substring(1).dropLast(1)))
         }
 
         when (level) {
-            4, 8, 12, 16, 19 -> add(Note("Ability Score Improvement"))
+            4, 8, 12, 16, 19 -> add(Note(text = "Ability Score Improvement"))
         }
 
         when (Type.valueOf(job)) {
             Type.BARBARIAN -> when (level) {
-                6, 10, 14 -> add(Note("Choose Path feature"))
+                6, 10, 14 -> add(Note(text = "Choose Path feature"))
             }
             Type.BARD -> when (level) {
-                3 -> add(Note("Expertise: choose 2 skill proficiencies"))
-                6 -> add(Note("Choose Bard College feature"))
+                3 -> add(Note(text = "Expertise: choose 2 skill proficiencies"))
+                6 -> add(Note(text = "Choose Bard College feature"))
                 10 -> {
-                    add(Note("Expertise: choose 2 skill proficiencies"))
-                    add(Note("Magical Secrets: learn 2 spells"))
+                    add(Note(text = "Expertise: choose 2 skill proficiencies"))
+                    add(Note(text = "Magical Secrets: learn 2 spells"))
                 }
                 14 -> {
-                    add(Note("Magical Secrets: learn 2 spells"))
-                    add(Note("Choose Bard College feature"))
+                    add(Note(text = "Magical Secrets: learn 2 spells"))
+                    add(Note(text = "Choose Bard College feature"))
                 }
-                18 -> add(Note("Magical Secrets: learn 2 spells"))
+                18 -> add(Note(text = "Magical Secrets: learn 2 spells"))
             }
             Type.CLERIC -> when (level) {
-                2, 6, 8, 17 -> add(Note("Choose Divine Domain feature"))
+                2, 6, 8, 17 -> add(Note(text = "Choose Divine Domain feature"))
             }
             Type.DRUID -> when (level) {
-                4, 8 -> add(Note("Wild Shape improvement"))
-                6, 10, 14 -> add (Note("Choose Druid Circle feature"))
+                4, 8 -> add(Note(text = "Wild Shape improvement"))
+                6, 10, 14 -> add (Note(text = "Choose Druid Circle feature"))
 
-                18 -> add(Note("Magical Secrets: learn 2 spells"))
+                18 -> add(Note(text = "Magical Secrets: learn 2 spells"))
             }
             Type.FIGHTER -> when (level) {
-                6 -> add(Note("Ability Score Improvement"))
-                7, 10, 15, 18 -> add(Note("Choose Martial Archetype feature"))
+                6 -> add(Note(text = "Ability Score Improvement"))
+                7, 10, 15, 18 -> add(Note(text = "Choose Martial Archetype feature"))
             }
             Type.MONK -> when (level) {
-                6, 11, 17 -> add(Note("Choose Monastic Tradition feature"))
+                6, 11, 17 -> add(Note(text = "Choose Monastic Tradition feature"))
             }
             Type.PALADIN -> when (level) {
-                7, 15, 20 -> add(Note("Choose Sacred Oath feature"))
+                7, 15, 20 -> add(Note(text = "Choose Sacred Oath feature"))
             }
             Type.RANGER -> when (level) {
                 6 -> {
-                    add(Note("Favored Enemy improvement"))
-                    add(Note("Natural Explorer improvement"))
+                    add(Note(text = "Favored Enemy improvement"))
+                    add(Note(text = "Natural Explorer improvement"))
                 }
-                7, 11, 15 -> add(Note("Choose Ranger Archetype feature"))
-                10 -> add(Note("Natural Explorer improvement"))
-                14 -> add(Note("Favored Enemy improvement"))
+                7, 11, 15 -> add(Note(text = "Choose Ranger Archetype feature"))
+                10 -> add(Note(text = "Natural Explorer improvement"))
+                14 -> add(Note(text = "Favored Enemy improvement"))
             }
             Type.ROGUE -> when (level) {
-                1, 6 -> add(Note("Expertise: choose 2 skill proficiencies"))
-                9, 13, 17 -> add(Note("Choose Roguish Archetype feature"))
-                10 -> add(Note("Ability Score Improvement"))
+                1, 6 -> add(Note(text = "Expertise: choose 2 skill proficiencies"))
+                9, 13, 17 -> add(Note(text = "Choose Roguish Archetype feature"))
+                10 -> add(Note(text = "Ability Score Improvement"))
             }
             Job.Type.SORCERER -> when (level) {
-                10, 17 -> add(Note("Choose Metamagic option"))
-                6, 14, 18 -> add(Note("Choose Sorcerous Origin feature"))
+                10, 17 -> add(Note(text = "Choose Metamagic option"))
+                6, 14, 18 -> add(Note(text = "Choose Sorcerous Origin feature"))
             }
             Job.Type.WARLOCK -> when (level) {
-                5, 7, 9, 12, 18 -> add(Note("Choose additional Eldtritch Invocation"))
-                6, 10, 14 -> add(Note("Choose Otherworldly Patron feature"))
-                11, 13, 17 -> add(Note("Choose ${spellLevel()}th Mystic Arcanum"))
+                5, 7, 9, 12, 18 -> add(Note(text = "Choose additional Eldtritch Invocation"))
+                6, 10, 14 -> add(Note(text = "Choose Otherworldly Patron feature"))
+                11, 13, 17 -> add(Note(text = "Choose ${spellLevel()}th Mystic Arcanum"))
                 15 -> {
-                    add(Note("Choose additional Eldtritch Invocation"))
-                    add(Note("Choose ${spellLevel()}th Mystic Arcanum"))
+                    add(Note(text = "Choose additional Eldtritch Invocation"))
+                    add(Note(text = "Choose ${spellLevel()}th Mystic Arcanum"))
                 }
             }
             Job.Type.WIZARD -> when (level) {
-                6, 10, 14 -> add(Note("Choose Arcane Tradition feature"))
+                6, 10, 14 -> add(Note(text = "Choose Arcane Tradition feature"))
             }
         }
     }

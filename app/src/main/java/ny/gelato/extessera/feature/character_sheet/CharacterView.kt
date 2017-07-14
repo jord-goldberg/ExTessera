@@ -33,6 +33,8 @@ interface CharacterView : BaseView {
 
     fun showScrollToDestination(destination: BaseViewModel)
 
+    fun showCreateNote()
+
     fun showEditHp(hp: HpModel)
 
     fun showEditMaxHp(maxHp: MaxHpModel)
@@ -50,6 +52,8 @@ interface CharacterView : BaseView {
     fun showSpellsFor(character: Character)
 
     fun showCoin(coin: CoinModel)
+
+    fun showEquipment(equipment: EquipmentModel)
 
     fun showPopupMenu(view: View, menuRes: Int)
 }

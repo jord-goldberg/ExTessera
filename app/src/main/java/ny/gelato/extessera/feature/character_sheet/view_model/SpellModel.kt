@@ -10,11 +10,11 @@ import ny.gelato.extessera.data.model.character.KnownSpell
  */
 
 data class SpellModel(
-        val name: String = "",
+        val name: String = "No Spells",
         val level: Int = 0,
         val requirements: String = "",
         val range: String = "",
-        val type: String = "",
+        val type: String = "Click here to add one",
         var prepared: Boolean = false,
         var castsSinceLongRest: Int = 0
 
@@ -38,4 +38,6 @@ data class SpellModel(
         notifyChange()
         return this
     }
+
+    fun isEmpty(): Boolean = requirements.isEmpty()
 }

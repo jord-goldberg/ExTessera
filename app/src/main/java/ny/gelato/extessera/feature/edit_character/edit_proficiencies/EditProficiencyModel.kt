@@ -13,17 +13,21 @@ data class EditProficiencyModel(
         val name: String,
         val proficiency: String,
         val type: Proficiency.Type,
-        var isChecked: Boolean
+        var origin: Proficiency.Origin = Proficiency.Origin.CHOICE,
+        var isChecked: Boolean = false
 
 ) : BaseViewModel(), Parcelable {
-    constructor(tool: Proficiency. Tool) : this(tool.name, tool.formatted, Proficiency.Type.TOOL, false)
 
-    constructor(language: Proficiency. Language) : this(language.name, language.formatted, Proficiency.Type.LANGUAGE, false)
+    constructor(tool: Proficiency. Tool) : this(tool.name, tool.formatted, Proficiency.Type.TOOL)
+
+    constructor(language: Proficiency. Language) : this(language.name, language.formatted, Proficiency.Type.LANGUAGE)
 
     fun toggleIsChecked(isChecked: Boolean) {
         this.isChecked = isChecked
         notifyChange()
     }
+
+    fun isClickable(): Boolean = origin == Proficiency.Origin.CHOICE
 
     companion object {
         @JvmField val CREATOR: Parcelable.Creator<EditProficiencyModel> = object : Parcelable.Creator<EditProficiencyModel> {
@@ -33,10 +37,11 @@ data class EditProficiencyModel(
     }
 
     constructor(source: Parcel) : this(
-    source.readString(),
-    source.readString(),
-    Proficiency.Type.values()[source.readInt()],
-    1 == source.readInt()
+            source.readString(),
+            source.readString(),
+            Proficiency.Type.values()[source.readInt()],
+            Proficiency.Origin.values()[source.readInt()],
+            1 == source.readInt()
     )
 
     override fun describeContents() = 0
@@ -45,6 +50,7 @@ data class EditProficiencyModel(
         dest.writeString(name)
         dest.writeString(proficiency)
         dest.writeInt(type.ordinal)
+        dest.writeInt(origin.ordinal)
         dest.writeInt((if (isChecked) 1 else 0))
     }
 }

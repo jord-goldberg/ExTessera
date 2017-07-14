@@ -24,7 +24,7 @@
         android:clipToPadding="false"
         android:foreground="?selectableItemBackground"
         android:onClick="@{(v) -> presenter.click(v, viewModel)}"
-        android:onLongClick="@{() -> presenter.longClick(viewModel.updatePrepared())}"
+        android:onLongClick="@{() -> viewModel.isEmpty() ? false : presenter.longClick(viewModel.updatePrepared())}"
         app:cardCornerRadius="0px">
 
         <LinearLayout

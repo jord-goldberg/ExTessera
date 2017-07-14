@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:clickable="@{viewModel.isClickable()}"
                 android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleIsChecked(isChecked)}"
                 android:checked="@{viewModel.checked}"/>
 
