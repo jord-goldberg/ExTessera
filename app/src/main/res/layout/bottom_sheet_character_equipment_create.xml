@@ -42,24 +42,9 @@
                     android:layout_weight="1"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:text="@{viewModel.editable ? @string/equipment_item_new : viewModel.name}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="New Equipment Item"/>
+                    android:text="@string/equipment_item_new"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_gravity="end"
-                    android:alpha=".87"
-                    android:clickable="true"
-                    android:foreground="?selectableItemBackground"
-                    android:onClick="@{() -> presenter.save(viewModel)}"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_save_white"
-                    android:tint="@color/colorAccent"
-                    android:visibility="@{viewModel.editable &amp;&amp; !viewModel.isEmpty() ? View.VISIBLE : View.GONE}"
-                    tools:src="@drawable/ic_save_white"/>
 
             </LinearLayout>
 
@@ -79,12 +64,11 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Amount"
-                android:inputType="number"
-                android:maxLength="9"
-                android:onTextChanged="@{(amount, i, x, y) -> viewModel.setChange(amount)}"
-                android:textColor="@android:color/secondary_text_light"
-                android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                android:hint="Item name"
+                android:maxLines="1"
+                android:inputType="textCapSentences"
+                android:onTextChanged="@{(text, i, x, y) -> viewModel.setName(text)}"
+                android:textColor="@android:color/secondary_text_light"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,8 +76,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:alpha=".87"
-                android:layoutDirection="rtl"
-                android:visibility="@{viewModel.editable ? View.INVISIBLE : View.VISIBLE}">
+                android:layoutDirection="rtl">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -101,9 +84,9 @@
                     android:clickable="true"
                     android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.add(sheet))}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.update(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Add"
+                    android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 
@@ -112,9 +95,9 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.remove(sheet))}"
+                    android:onClick="@{(v) -> sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Remove"
+                    android:text="Cancel"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 

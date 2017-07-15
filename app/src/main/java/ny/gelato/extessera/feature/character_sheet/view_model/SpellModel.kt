@@ -14,7 +14,7 @@ data class SpellModel(
         val level: Int = 0,
         val requirements: String = "",
         val range: String = "",
-        val type: String = "Click here to add one",
+        val type: String = "Click to add one",
         var prepared: Boolean = false,
         var castsSinceLongRest: Int = 0
 

@@ -96,6 +96,10 @@ class CharacterFragment : Fragment(), CharacterView {
                             presenter.delete(model)
                             snackBar.show()
                         }
+                        is EquipmentModel -> {
+                            adapter.notifyItemRemoved(position)
+                            presenter.delete(model)
+                        }
                     }
                 }
 
@@ -103,7 +107,8 @@ class CharacterFragment : Fragment(), CharacterView {
                     val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
                     if ((model is NoteModel && model.isDone)
                             .or(model is WeaponModel && model.name != "Unarmed Strike")
-                            .or(model is SpellModel && !model.isEmpty()))
+                            .or(model is SpellModel && !model.isEmpty())
+                            .or(model is EquipmentModel && !model.isEmpty()))
                         return super.getSwipeDirs(recyclerView, viewHolder)
                     return 0
                 }
@@ -252,7 +257,11 @@ class CharacterFragment : Fragment(), CharacterView {
         showBottomSheet(coin, R.layout.bottom_sheet_character_coin)
     }
 
-    override fun showEquipment(equipment: EquipmentModel) {
+    override fun showCreateEquipment() {
+        showBottomSheet(EquipmentModel(), R.layout.bottom_sheet_character_equipment_create)
+    }
+
+    override fun showEquipmentItem(equipment: EquipmentModel) {
         showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
     }
 

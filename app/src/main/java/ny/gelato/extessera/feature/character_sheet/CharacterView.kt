@@ -53,7 +53,9 @@ interface CharacterView : BaseView {
 
     fun showCoin(coin: CoinModel)
 
-    fun showEquipment(equipment: EquipmentModel)
+    fun showCreateEquipment()
+
+    fun showEquipmentItem(equipment: EquipmentModel)
 
     fun showPopupMenu(view: View, menuRes: Int)
 }

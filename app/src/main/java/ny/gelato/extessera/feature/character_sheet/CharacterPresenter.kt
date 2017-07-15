@@ -1,5 +1,6 @@
 package ny.gelato.extessera.feature.character_sheet
 
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import ny.gelato.extessera.R
@@ -36,10 +37,12 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 addAll(character.weaponModels())
                 if (character.preferences.showSpells)
                     addAll(character.spellModels())
+
                 add(HeaderModel("Equipment", AvatarModel(character), R.menu.menu_character_equipment))
-                for (coin in CoinModel.Type.values()) {
-                    add(CoinModel(coin, character))
-                    add(EquipmentModel())
+                for (i in 0 until CoinModel.Type.values().size) {
+                    add(CoinModel(CoinModel.Type.values()[i], character))
+                    if (character.equipment.size <= i) add(EquipmentModel())
+                    else add(EquipmentModel(character.equipment[i]))
                 }
                 add(FooterModel())
             }
@@ -77,6 +80,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is WeaponModel -> characterManager.addWeapon(model.name)
             is SpellModel -> characterManager.updateSpell(model)
             is CoinModel -> characterManager.updateCoin(model)
+            is EquipmentModel -> characterManager.updateEquipment(model)
         }
     }
 
@@ -85,6 +89,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is NoteModel -> characterManager.deleteNote(model)
             is WeaponModel -> characterManager.removeWeapon(model.name)
             is SpellModel -> characterManager.forgetSpell(model.name)
+            is EquipmentModel -> characterManager.deleteEquipment(model)
         }
     }
 
@@ -125,8 +130,8 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 else view.showSpellDetail(model)
             is CoinModel -> view.showCoin(model)
             is EquipmentModel ->
-                if (model.isEmpty()) view.showEquipment(EquipmentModel().apply { editable = true })
-                else view.showEquipment(model)
+                if (model.isEmpty()) view.showCreateEquipment()
+                else view.showEquipmentItem(model)
             is HeaderModel -> view.showPopupMenu(v, model.menuRes)
         }
     }
@@ -172,6 +177,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             R.id.action_weapons_add -> view.showWeaponsFor(character)
             R.id.action_spells_add -> view.showSpellsFor(character)
             R.id.action_spells_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_SPELLS)
+            R.id.action_equipment_add -> view.showCreateEquipment()
         }
     }
 }

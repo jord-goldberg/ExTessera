@@ -56,6 +56,10 @@ interface CharacterDataSource {
 
     fun updateCoin(coin: CoinModel)
 
+    fun updateEquipment(equipment: EquipmentModel)
+
+    fun deleteEquipment(equipment: EquipmentModel)
+
 
     fun updatePreference(preference: Preferences.Toggle)
 

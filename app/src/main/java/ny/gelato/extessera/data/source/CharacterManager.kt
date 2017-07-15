@@ -1,5 +1,6 @@
 package ny.gelato.extessera.data.source
 
+import io.realm.Case
 import io.realm.Realm
 import ny.gelato.extessera.data.model.Spell
 import ny.gelato.extessera.data.model.Weapon
@@ -203,7 +204,6 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
-
     override fun updateCoin(coin: CoinModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
@@ -217,6 +217,32 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
+    override fun updateEquipment(equipment: EquipmentModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
+                    .findFirst()
+
+            if (currentEquipment == null) character.equipment.add(0, Equipment(equipment.name))
+            else if (equipment.amount > 0) currentEquipment.number = equipment.amount
+            else {
+                character.equipment.remove(currentEquipment)
+                currentEquipment.deleteFromRealm()
+            }
+            character.updated = Date()
+        }
+    }
+
+    override fun deleteEquipment(equipment: EquipmentModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val deleteEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
+                    .findFirst()
+            character.equipment.remove(deleteEquipment)
+            character.updated = Date()
+            deleteEquipment.deleteFromRealm()
+        }
+    }
 
     override fun updatePreference(preference: Preferences.Toggle) {
         realm.executeTransaction { realm ->

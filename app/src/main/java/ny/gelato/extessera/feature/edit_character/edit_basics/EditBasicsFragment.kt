@@ -90,7 +90,6 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
             character.primary.job = model.job.name
             character.primary.resetLevelTo(model.level)
             character.setExpToLevel()
-            character.maxHp = character.primary.hitDieMax() + character.constitution.modifier()
             character.traits.deleteAllFromRealm()
             character.proficiencies.where()
                     .equalTo("origin", Proficiency.Origin.RACE_CLASS.name)
