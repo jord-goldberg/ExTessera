@@ -69,38 +69,18 @@ class CharacterFragment : Fragment(), CharacterView {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     val model = adapter.feed.removeAt(position)
-                    when (model) {
-                        is NoteModel -> {
-                            adapter.notifyItemRemoved(position)
-                            presenter.delete(model)
-                        }
-                        is WeaponModel -> {
-                            val snackBar = Snackbar.make(coordinator, "Removed ${model.name}", Snackbar.LENGTH_LONG)
-                                    .setAction("undo") { _ ->
-                                        adapter.feed.add(position, model)
-                                        adapter.notifyItemInserted(position)
-                                        presenter.save(model)
-                                    }
-                            adapter.notifyItemRemoved(position)
-                            presenter.delete(model)
-                            snackBar.show()
-                        }
-                        is SpellModel -> {
-                            val snackBar = Snackbar.make(coordinator, "Removed ${model.name}", Snackbar.LENGTH_LONG)
-                                    .setAction("undo") { _ ->
-                                        adapter.feed.add(position, model)
-                                        adapter.notifyItemInserted(position)
-                                        presenter.save(model)
-                                    }
-                            adapter.notifyItemRemoved(position)
-                            presenter.delete(model)
-                            snackBar.show()
-                        }
-                        is EquipmentModel -> {
-                            adapter.notifyItemRemoved(position)
-                            presenter.delete(model)
-                        }
+                    val snackBarText = "Removed " + when (model) {
+                        is WeaponModel -> model.name
+                        is SpellModel -> model.name
+                        is EquipmentModel -> model.name
+                        else -> "note"
                     }
+                    val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
+                            .setAction("undo") { _ -> presenter.save(model) }
+
+                    adapter.notifyItemRemoved(position)
+                    presenter.delete(model)
+                    snackBar.show()
                 }
 
                 override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
@@ -219,6 +199,10 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showCreateNote() {
         showBottomSheet(NoteModel(), R.layout.bottom_sheet_character_note_create)
+    }
+
+    override fun showIsStabilized() {
+        Toast.makeText(activity, "Stabilized with 1 Hit Point", Toast.LENGTH_SHORT).show()
     }
 
     override fun showEditHp(hp: HpModel) {

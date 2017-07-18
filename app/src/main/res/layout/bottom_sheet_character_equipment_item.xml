@@ -42,24 +42,22 @@
                     android:layout_weight="1"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:text="@{viewModel.editable ? @string/equipment_item_new : viewModel.name}"
+                    android:text="@{viewModel.name}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="New Equipment Item"/>
+                    tools:text="Arrows"/>
 
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_gravity="end"
+                    android:layout_height="46dp"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="1dp"
                     android:alpha=".87"
-                    android:clickable="true"
-                    android:foreground="?selectableItemBackground"
-                    android:onClick="@{() -> presenter.save(viewModel)}"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_save_white"
-                    android:tint="@color/colorAccent"
-                    android:visibility="@{viewModel.editable &amp;&amp; !viewModel.isEmpty() ? View.VISIBLE : View.GONE}"
-                    tools:src="@drawable/ic_save_white"/>
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:gravity="center"
+                    android:text="@{viewModel.showAmount()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                    tools:text="348"/>
 
             </LinearLayout>
 

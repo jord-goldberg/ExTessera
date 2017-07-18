@@ -49,6 +49,20 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
+    override fun updateDeathSaves(deathSaves: DeathSaveModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            if (deathSaves.successes == 3) {
+                character.successes = 0
+                character.failures = 0
+                character.hp = 1
+            } else {
+                character.successes = deathSaves.successes
+                character.failures = deathSaves.failures
+            }
+        }
+    }
+
     override fun updateStatus(status: StatusModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
@@ -223,7 +237,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
                     .findFirst()
 
-            if (currentEquipment == null) character.equipment.add(0, Equipment(equipment.name))
+            if (currentEquipment == null) character.equipment.add(Equipment(equipment.name, equipment.amount))
             else if (equipment.amount > 0) currentEquipment.number = equipment.amount
             else {
                 character.equipment.remove(currentEquipment)

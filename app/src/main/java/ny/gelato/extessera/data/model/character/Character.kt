@@ -49,7 +49,7 @@ open class Character(
         var speed: Int = 30,
         var hp: Int = 1,
         var maxHp: Int = 1,
-        var saves: Int = 0,
+        var successes: Int = 0,
         var failures: Int = 0,
 
         var copper: Int = 0,

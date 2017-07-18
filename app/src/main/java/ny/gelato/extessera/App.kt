@@ -1,10 +1,13 @@
 package ny.gelato.extessera
 
 import android.app.Application
+import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import ny.gelato.extessera.util.rawToRealmSpells
 import ny.gelato.extessera.util.realmWeapons
+import java.io.File
+import java.io.IOException
 
 
 /**
@@ -47,6 +50,15 @@ class App : Application() {
         component.realm().executeTransactionAsync { realm ->
             for (spell in spells) realm.copyToRealmOrUpdate(spell)
             for (weapon in weapons) realm.copyToRealmOrUpdate(weapon)
+        }
+
+        try {
+            val file = File(this.externalCacheDir, "export.realm")
+            file.delete()
+            component.realm().writeCopyTo(file)
+            Log.d("Path:", externalCacheDir.canonicalPath)
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
     }
 }

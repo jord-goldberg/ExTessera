@@ -123,6 +123,10 @@ data class StatusModel(
 
     fun hpDown() {
         hp -= 1
+        if (hp < 0) {
+            hp = 0
+            return
+        }
         isHpChanged = true
         notifyChange()
     }

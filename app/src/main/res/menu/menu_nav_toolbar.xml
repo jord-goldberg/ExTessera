@@ -9,8 +9,7 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/action_log_out"
-        android:title="Log Out"
-        app:showAsAction="never"/>
+        android:id="@+id/action_search_also"
+        app:showAsAction="always"/>
 
 </menu>

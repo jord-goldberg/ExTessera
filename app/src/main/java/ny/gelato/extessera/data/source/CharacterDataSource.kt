@@ -20,6 +20,8 @@ interface CharacterDataSource {
 
     fun updateLevel(level: LevelUpModel)
 
+    fun updateDeathSaves(deathSaves: DeathSaveModel)
+
     fun updateStatus(status: StatusModel)
 
     fun updateHp(hp: HpModel)

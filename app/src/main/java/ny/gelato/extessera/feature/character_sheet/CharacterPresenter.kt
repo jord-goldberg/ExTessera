@@ -30,6 +30,8 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 add(AvatarModel(character))
                 if (character.preferences.showNotes || character.hasToLevelUp())
                     addAll(character.noteModels())
+                if (character.hp == 0)
+                    add(DeathSaveModel(character))
                 add(StatusModel(character))
                 add(AbilitiesModel(character))
                 add(SavingThrowsModel(character))
@@ -96,7 +98,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
     fun click(v: View, model: BaseViewModel) {
         when (model) {
             is AvatarModel ->
-                if (model.editable) view.showEditCharacter(character)
+                if (model.editable) view.showPopupMenu(v, R.menu.menu_character_avatar)
                 else if (view.isAtScrollTop()) view.showImageSelect(model)
                 else view.showScrollToTop()
             is AboutModel -> view.showAbout(AboutModel(character))
@@ -119,6 +121,12 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
             }
             is NoteModel -> characterManager.updateNote(model)
+            is DeathSaveModel ->
+                if (model.editable) view.showPopupMenu(v, R.menu.menu_character_death_saves)
+                else {
+                    characterManager.updateDeathSaves(model)
+                    if (model.successes == 3) view.showIsStabilized()
+                }
             is StatusModel ->
                 if (model.isDcEditable) view.showSelectDcAbility(model)
                 else view.showPopupMenu(v, R.menu.menu_character_status)
@@ -167,9 +175,17 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
 
     fun menuClick(menuItem: MenuItem) {
         when (menuItem.itemId) {
+            R.id.action_avatar_edit_character -> view.showEditCharacter(character)
+            R.id.action_avatar_select_picture -> view.showImageSelect(AvatarModel(character))
+            R.id.action_avatar_set_exp -> null
             R.id.action_notes_create -> view.showCreateNote()
             R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
+            R.id.action_death_save_reset -> characterManager.updateDeathSaves(DeathSaveModel())
+            R.id.action_death_save_stabilize -> {
+                characterManager.updateDeathSaves(DeathSaveModel(successes = 3))
+                view.showIsStabilized()
+            }
             R.id.action_status_short_rest -> null
             R.id.action_status_long_rest -> null
             R.id.action_status_edit_max_hp -> view.showEditMaxHp(MaxHpModel(character))

@@ -30,6 +30,7 @@ data class HpModel(
     fun damage(sheet: BottomSheetDialog): HpModel {
         sheet.dismiss()
         current -= change
+        if (current < 0) current = 0
         return this
     }
 

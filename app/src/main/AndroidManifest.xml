@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.navigate.MainActivity"
+            android:name=".feature.character_sheet.CharacterActivity"
             android:parentActivityName=".feature.player.PlayerActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">

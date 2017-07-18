@@ -30,6 +30,7 @@ class CharacterAdapter @Inject constructor(override val presenter: CharacterPres
         is FooterModel -> R.layout.item_character_footer
         is NoteModel -> R.layout.item_character_note
         is LevelUpModel -> R.layout.item_character_level_up
+        is DeathSaveModel -> R.layout.item_character_death_saves
         is StatusModel -> R.layout.item_character_status
         is AbilitiesModel -> R.layout.item_character_abilities
         is SavingThrowsModel -> R.layout.item_character_saving_throws

@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.Menu
 import kotlinx.android.synthetic.main.activity_player.*
 import ny.gelato.extessera.App
@@ -15,7 +14,7 @@ import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
-import ny.gelato.extessera.feature.navigate.MainActivity
+import ny.gelato.extessera.feature.character_sheet.CharacterActivity
 import ny.gelato.extessera.feature.player.view_model.CharacterModel
 import ny.gelato.extessera.feature.player.view_model.NewCharacterModel
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
@@ -122,6 +121,6 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
     }
 
     override fun showCharacter(character: CharacterModel) {
-        MainActivity.showCharacter(this, character.id)
+        CharacterActivity.showCharacter(this, character.id)
     }
 }

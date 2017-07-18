@@ -35,6 +35,8 @@ interface CharacterView : BaseView {
 
     fun showCreateNote()
 
+    fun showIsStabilized()
+
     fun showEditHp(hp: HpModel)
 
     fun showEditMaxHp(maxHp: MaxHpModel)

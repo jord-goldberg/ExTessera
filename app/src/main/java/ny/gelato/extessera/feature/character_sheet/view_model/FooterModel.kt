@@ -6,4 +6,4 @@ import ny.gelato.extessera.base.BaseViewModel
  * Created by jord.goldberg on 5/17/17.
  */
 
-data class FooterModel(val ignore: Any? = null) : BaseViewModel()
+data class FooterModel(private val ignore: Any? = null) : BaseViewModel()
