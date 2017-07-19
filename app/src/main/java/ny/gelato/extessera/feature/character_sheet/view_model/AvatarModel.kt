@@ -2,7 +2,7 @@ package ny.gelato.extessera.feature.character_sheet.view_model
 
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
-import ny.gelato.extessera.common.AvatarInterface
+import ny.gelato.extessera.base.BaseAvatar
 import ny.gelato.extessera.data.model.character.Character
 
 /**
@@ -16,7 +16,7 @@ data class AvatarModel(
         override var imagePath: String = "",
         override var imageUrl: String = ""
 
-) : AvatarInterface, BaseViewModel() {
+) : BaseAvatar, BaseViewModel() {
 
     var newImageUrl: String? = null
 

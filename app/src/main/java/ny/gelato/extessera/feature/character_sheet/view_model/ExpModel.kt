@@ -26,8 +26,15 @@ data class ExpModel(
         notifyChange()
     }
 
-    fun update(sheet: BottomSheetDialog): ExpModel {
+    fun addExp(sheet: BottomSheetDialog): ExpModel {
         total += additional
+        notifyChange()
+        Handler().postDelayed({ sheet.dismiss() }, 1000)
+        return this
+    }
+
+    fun setExp(sheet: BottomSheetDialog): ExpModel {
+        total = additional
         notifyChange()
         Handler().postDelayed({ sheet.dismiss() }, 1000)
         return this

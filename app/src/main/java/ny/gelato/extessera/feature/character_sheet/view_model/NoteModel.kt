@@ -15,8 +15,10 @@ data class NoteModel(
 ) : BaseViewModel() {
 
     override fun isSameAs(model: BaseViewModel): Boolean =
-            if (model is NoteModel) model.text == text
+            if (model is NoteModel) model.id == id
             else false
+
+    fun isEmpty(): Boolean = id.isEmpty()
 
     fun toggleDone(checked: Boolean): NoteModel {
         isDone = checked

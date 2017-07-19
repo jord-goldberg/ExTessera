@@ -98,6 +98,16 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
+                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.EQUIPMENT, sheet))}"
+                android:paddingStart="32dp"
+                android:text="Equipment"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:gravity="center_vertical"
                 android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.WEAPONS, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Weapons"/>
@@ -111,16 +121,6 @@
                 android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.SPELLS, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Spells"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:clickable="true"
-                android:foreground="?selectableItemBackground"
-                android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.EQUIPMENT, sheet))}"
-                android:paddingStart="32dp"
-                android:text="Equipment"/>
 
         </LinearLayout>
 

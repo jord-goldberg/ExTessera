@@ -123,7 +123,7 @@
                     android:onClick="@{(v) -> presenter.click(v, viewModel.addExp())}"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:text="add exp"
+                    android:text="experience"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 

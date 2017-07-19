@@ -16,6 +16,8 @@ data class CoinModel(
 
 ) : BaseViewModel() {
 
+    var isSpendingTooMuch = false
+
     constructor(type: Type, character: Character) : this(type, when (type) {
         Type.COPPER -> character.copper
         Type.SILVER -> character.silver
@@ -35,6 +37,13 @@ data class CoinModel(
     fun setChange(coin: CharSequence) {
         if (coin.isEmpty()) change = 0
         else change = coin.toString().toInt()
+        isSpendingTooMuch = false
+        notifyChange()
+    }
+
+    fun notifyError() {
+        isSpendingTooMuch = true
+        notifyChange()
     }
 
     fun addCoin(sheet: BottomSheetDialog): CoinModel {
@@ -64,4 +73,6 @@ data class CoinModel(
     fun showHint(): String = "${showName()} pieces"
 
     fun showAddCoin(): String = "+ ${showName()}"
+
+    fun showError(): String = "Not enough ${showName()}"
 }

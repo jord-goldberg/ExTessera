@@ -27,10 +27,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,7 +47,7 @@
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:text="Add Experience"
+                    android:text="Experience"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     tools:text="Add Experience"/>
 
@@ -69,34 +70,59 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_gravity="bottom"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="47dp"
+                android:layout_marginBottom="8dp"
                 android:background="@color/grey_300"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="32dp"
-                android:layout_marginEnd="88dp"
+                android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:hint="@{viewModel.hint()}"
                 android:inputType="number"
                 android:maxLength="9"
                 android:onTextChanged="@{(exp, i, x, y) -> viewModel.setAdditional(exp)}"
                 tools:hint="+370 exp to next level"/>
 
-            <android.support.design.widget.FloatingActionButton
-                android:layout_width="wrap_content"
+            <FrameLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/fab_margin"
-                android:onClick="@{() -> viewModel.additional == 0 ? sheet.dismiss() : presenter.save(viewModel.update(sheet))}"
-                android:src="@{viewModel.additional == 0 ? @drawable/ic_close_white : @drawable/ic_check_white}"
-                app:fabSize="mini"/>
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87">
 
-        </FrameLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:layout_gravity="end"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> presenter.save(viewModel.addExp(sheet))}"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="+ Exp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> viewModel.additional != 0 ? presenter.save(viewModel.setExp(sheet)) : sheet.dismiss()}"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="Set Exp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"
+                    tools:visibility="visible"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

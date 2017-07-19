@@ -35,7 +35,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateExp(experience: ExpModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.exp += experience.additional
+            character.exp = experience.total
         }
     }
 

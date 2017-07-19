@@ -50,7 +50,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="46dp"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="1dp"
                     android:alpha=".87"
@@ -58,7 +57,20 @@
                     android:gravity="center"
                     android:text="@{viewModel.showCurrent()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    tools:text="34"/>
+                    tools:text="334"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="2sp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:maxLines="1"
+                    android:text="@{viewModel.showOutOfMax()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    tools:text=" / 355"/>
 
             </LinearLayout>
 
@@ -98,24 +110,24 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.damage(sheet))}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.heal(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Damage"
+                    android:text="+ Heal"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"
-                    tools:text="Damage"/>
+                    tools:visibility="visible"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.heal(sheet))}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.damage(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Heal"
+                    android:text="Damage"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"
-                    tools:visibility="visible"/>
+                    tools:text="Damage"/>
 
             </LinearLayout>
 

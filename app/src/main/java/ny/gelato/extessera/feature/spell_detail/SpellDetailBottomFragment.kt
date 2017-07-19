@@ -35,7 +35,7 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
                 }
     }
 
-    val spell: Spell by lazy {
+    val spell: Spell by lazy(LazyThreadSafetyMode.NONE) {
         val name = arguments.getString("name")
         App.component.realm()
                 .where(Spell::class.java)
@@ -43,7 +43,7 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
                 .findFirst()
     }
 
-    val binding: BottomSheetSpellDetailBinding by lazy {
+    val binding: BottomSheetSpellDetailBinding by lazy(LazyThreadSafetyMode.NONE) {
         val isInSpellBook = arguments.getBoolean("isInSpellBook")
         DataBindingUtil.inflate<BottomSheetSpellDetailBinding>(
                 activity.layoutInflater, R.layout.bottom_sheet_spell_detail, null, false)
@@ -53,17 +53,15 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
                 }
     }
 
-    val sheet: BottomSheetDialog by lazy {
+    val sheet: BottomSheetDialog by lazy(LazyThreadSafetyMode.NONE) {
         BottomSheetDialog(activity).apply {
             setContentView(binding.root)
         }
     }
 
-    val characters: RealmResults<Character> by lazy {
-        App.component.realm()
-                .where(Character::class.java)
-                .findAllSorted("updated", Sort.DESCENDING)
-    }
+    val characters: RealmResults<Character> = App.component.realm()
+            .where(Character::class.java)
+            .findAllSorted("updated", Sort.DESCENDING)
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = sheet
 

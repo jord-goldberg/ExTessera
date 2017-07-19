@@ -156,7 +156,8 @@ open class Character(
                     .toMutableList<BaseViewModel>()
                     .apply {
                         if (hasToLevelUp()) add(LevelUpModel(this@Character))
-                        val title = if (expLevel() > level()) "Level Up to ${expLevel()}" else "Notes"
+                        if (isEmpty()) add(NoteModel(text = "No Notes\nClick to create one"))
+                        val title = if (hasToLevelUp()) "Level Up to ${expLevel()}" else "Notes"
                         add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_notes))
                         add(FooterModel())
                     }
@@ -164,6 +165,16 @@ open class Character(
     fun skillModels(): List<BaseViewModel> =
             if (preferences.sortSkillsByAbility) getSkillsSortByAbility()
             else getSkillsSortByName()
+
+    fun weaponModels(): List<BaseViewModel> =
+            weapons.map { WeaponModel(it, this) }
+                    .toMutableList<BaseViewModel>()
+                    .apply {
+                        if (weapons.isEmpty().or(primary.job == Job.Type.MONK.name))
+                            add(0, WeaponModel(this@Character))
+                        add(0, HeaderModel("Weapons", AvatarModel(this@Character), R.menu.menu_character_weapons))
+                        add(FooterModel())
+                    }
 
     fun spellModels(): List<BaseViewModel> {
         if (primary.job == Job.Type.BARBARIAN.name) return emptyList()
@@ -197,15 +208,16 @@ open class Character(
         return spellModels
     }
 
-    fun weaponModels(): List<BaseViewModel> =
-            weapons.map { WeaponModel(it, this) }
-                    .toMutableList<BaseViewModel>()
-                    .apply {
-                        if (weapons.isEmpty().or(primary.job == Job.Type.MONK.name))
-                            add(0, WeaponModel(this@Character))
-                        add(0, HeaderModel("Weapons", AvatarModel(this@Character), R.menu.menu_character_weapons))
-                        add(FooterModel())
-                    }
+    fun equipmentModels(): List<BaseViewModel> = mutableListOf<BaseViewModel>().apply {
+        add(HeaderModel("Equipment", AvatarModel(this@Character), R.menu.menu_character_equipment))
+        for (i in 0 until CoinModel.Type.values().size) {
+            add(CoinModel(CoinModel.Type.values()[i], this@Character))
+            if (equipment.size <= i) add(EquipmentModel())
+            else add(EquipmentModel(equipment[i]))
+        }
+        add(FooterModel())
+        add(EquipmentFooterModel(this@Character))
+    }
 
     private fun level(): Int = primary.level + multiclasses.sumBy { it.level }
 

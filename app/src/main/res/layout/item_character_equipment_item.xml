@@ -55,28 +55,8 @@
                 android:maxLines="1"
                 android:text="@{viewModel.showAmount()}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:visibility="@{viewModel.isEmpty() ? View.GONE : View.VISIBLE}"
+                android:visibility="@{viewModel.isEmpty() || viewModel.amount == 1 ? View.GONE : View.VISIBLE}"
                 tools:text="20"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif"
-                android:text="Click to add item"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                android:textStyle="italic"
-                android:visibility="@{viewModel.isEmpty() ? View.VISIBLE : View.GONE}"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:alpha=".54"
-                android:src="@drawable/ic_add_black"
-                android:visibility="@{viewModel.isEmpty() ? View.VISIBLE : View.GONE}"/>
 
         </LinearLayout>
 

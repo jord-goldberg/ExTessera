@@ -40,6 +40,7 @@ class CharacterAdapter @Inject constructor(override val presenter: CharacterPres
         is WeaponModel -> R.layout.item_character_weapon
         is CoinModel -> R.layout.item_character_equipment_coin
         is EquipmentModel -> R.layout.item_character_equipment_item
+        is EquipmentFooterModel -> R.layout.item_character_equipment_footer
         else -> throw ModelLayoutException(feed[position]::class.java.simpleName, this::class.java.simpleName)
     }
 

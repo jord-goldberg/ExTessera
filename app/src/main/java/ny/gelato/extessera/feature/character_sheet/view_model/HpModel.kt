@@ -10,11 +10,12 @@ import ny.gelato.extessera.data.model.character.Character
 
 data class HpModel(
         var current: Int = 0,
+        val max: Int = 0,
         var change: Int = 0
 
 ) : BaseViewModel() {
 
-    constructor(character: Character) : this(character.hp)
+    constructor(character: Character) : this(character.hp, character.maxHp)
 
     fun setChange(hp: CharSequence) {
         if (hp.isEmpty()) change = 0
@@ -35,4 +36,6 @@ data class HpModel(
     }
 
     fun showCurrent(): String = current.toString()
+
+    fun showOutOfMax(): String = " / $max"
 }

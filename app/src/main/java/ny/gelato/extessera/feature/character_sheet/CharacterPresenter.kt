@@ -1,6 +1,5 @@
 package ny.gelato.extessera.feature.character_sheet
 
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import ny.gelato.extessera.R
@@ -36,17 +35,10 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 add(AbilitiesModel(character))
                 add(SavingThrowsModel(character))
                 addAll(character.skillModels())
+                addAll(character.equipmentModels())
                 addAll(character.weaponModels())
                 if (character.preferences.showSpells)
                     addAll(character.spellModels())
-
-                add(HeaderModel("Equipment", AvatarModel(character), R.menu.menu_character_equipment))
-                for (i in 0 until CoinModel.Type.values().size) {
-                    add(CoinModel(CoinModel.Type.values()[i], character))
-                    if (character.equipment.size <= i) add(EquipmentModel())
-                    else add(EquipmentModel(character.equipment[i]))
-                }
-                add(FooterModel())
             }
         }.observeOn(AndroidSchedulers.mainThread())
     }
@@ -120,7 +112,9 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 }
                 GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
             }
-            is NoteModel -> characterManager.updateNote(model)
+            is NoteModel ->
+                if (model.isEmpty()) view.showCreateNote()
+                else characterManager.updateNote(model)
             is DeathSaveModel ->
                 if (model.editable) view.showPopupMenu(v, R.menu.menu_character_death_saves)
                 else {
@@ -140,6 +134,9 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is EquipmentModel ->
                 if (model.isEmpty()) view.showCreateEquipment()
                 else view.showEquipmentItem(model)
+            is EquipmentFooterModel ->
+                if (model.equipmentSize > CoinModel.Type.values().size) null
+                else view.showCreateEquipment()
             is HeaderModel -> view.showPopupMenu(v, model.menuRes)
         }
     }

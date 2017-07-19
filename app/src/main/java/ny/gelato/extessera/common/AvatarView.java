@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 
 import ny.gelato.extessera.R;
+import ny.gelato.extessera.base.BaseAvatar;
 
 import static android.support.design.R.attr.borderWidth;
 
@@ -65,7 +66,7 @@ public class AvatarView extends AppCompatImageView {
     /*
     * User whose avatar should be displayed
     * */
-    AvatarInterface avatar;
+    BaseAvatar avatar;
 
     /*
     * Bounds of the canvas in float
@@ -145,7 +146,7 @@ public class AvatarView extends AppCompatImageView {
      * set values based on the avatar
     * This is the only exposed method to the developer
     * */
-    public void setViewModel(AvatarInterface avatar) {
+    public void setViewModel(BaseAvatar avatar) {
         if (this.avatar != null && !this.avatar.equals(avatar)) {
             clipPath = new Path();
             if (avatar.isInspired()) {

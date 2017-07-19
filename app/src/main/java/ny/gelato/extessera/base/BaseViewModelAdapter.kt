@@ -44,10 +44,11 @@ abstract class BaseViewModelAdapter(open val presenter: BasePresenter<*>? = null
         }
     }
 
-    class ModelLayoutException(modelName: String, adapterName: String) : RuntimeException("Please create branch for destination " +
-            "$modelName in $adapterName.getLayoutIdForPosition()")
+    class ModelLayoutException(modelName: String, adapterName: String) : RuntimeException(
+            "Please create branch for destination $modelName in $adapterName.getLayoutIdForPosition()")
 
-    class BaseViewModelDiffUtil(private val oldList: List<BaseViewModel>, private val newList: List<BaseViewModel>) : DiffUtil.Callback() {
+    class BaseViewModelDiffUtil(private val oldList: List<BaseViewModel>, private val newList: List<BaseViewModel>)
+        : DiffUtil.Callback() {
 
         override fun getOldListSize(): Int = oldList.size
 

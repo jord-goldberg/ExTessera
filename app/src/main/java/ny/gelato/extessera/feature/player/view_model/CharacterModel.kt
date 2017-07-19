@@ -1,7 +1,7 @@
 package ny.gelato.extessera.feature.player.view_model
 
 import ny.gelato.extessera.base.BaseViewModel
-import ny.gelato.extessera.common.AvatarInterface
+import ny.gelato.extessera.base.BaseAvatar
 import ny.gelato.extessera.data.model.character.Character
 import java.text.SimpleDateFormat
 
@@ -19,7 +19,7 @@ data class CharacterModel(
         val created: String,
         val updated: String
 
-) : AvatarInterface, BaseViewModel() {
+) : BaseAvatar, BaseViewModel() {
 
     constructor(char: Character) :
             this(char.id,

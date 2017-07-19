@@ -101,7 +101,7 @@
                     android:foreground="?selectableItemBackground"
                     android:onClick="@{(v) -> presenter.save(viewModel.add(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Add"
+                    android:text="+ Add"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 

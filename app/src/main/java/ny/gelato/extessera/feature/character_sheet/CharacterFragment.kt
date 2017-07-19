@@ -14,8 +14,11 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Gravity
+import android.widget.TextView
 import android.widget.Toast
 
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_character_sheet.*
 
 import ny.gelato.extessera.App
@@ -27,9 +30,6 @@ import ny.gelato.extessera.feature.character_sheet.view_model.*
 import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
 import ny.gelato.extessera.feature.spell_detail.SpellDetailBottomFragment
-import javax.inject.Inject
-import android.view.Gravity
-import android.widget.TextView
 import ny.gelato.extessera.common.SmoothGridLayoutManager
 
 

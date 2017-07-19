@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character_sheet.view_model.EquipmentFooterModel"/>
+
+        <variable
+            name="presenter"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:alpha=".87"
+        android:clickable="true"
+        android:foreground="?selectableItemBackground"
+        android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+        app:cardCornerRadius="0px">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/grey_100">
+
+            <TextView
+                android:id="@+id/add_exp_text_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@{viewModel.equipmentSize > 5 ? viewModel.showAllItemsText() : @string/character_equipment_footer_add_item}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="@string/character_equipment_footer_add_item"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>

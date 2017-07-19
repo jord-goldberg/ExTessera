@@ -13,4 +13,5 @@
     <string name="ability_modifiers">Ability Modifiers</string>
     <string name="ability_scores">Ability Scores</string>
     <string name="equipment_item_new">New Equipment Item</string>
+    <string name="character_equipment_footer_add_item">add equipment item</string>
 </resources>

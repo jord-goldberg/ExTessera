@@ -1,10 +1,10 @@
-package ny.gelato.extessera.common
+package ny.gelato.extessera.base
 
 /**
  * Created by jord.goldberg on 6/8/17.
  */
 
-interface AvatarInterface {
+interface BaseAvatar {
     val name: String
     val isInspired: Boolean
     val imagePath: String
