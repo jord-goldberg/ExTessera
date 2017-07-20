@@ -74,7 +74,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             is WeaponModel -> characterManager.addWeapon(model.name)
             is SpellModel -> characterManager.updateSpell(model)
             is CoinModel -> characterManager.updateCoin(model)
-            is EquipmentModel -> characterManager.updateEquipment(model)
+            is EquipmentModel -> characterManager.createEquipment(model)
         }
     }
 
@@ -132,7 +132,8 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 else view.showSpellDetail(model)
             is CoinModel -> view.showCoin(model)
             is EquipmentModel ->
-                if (model.isEmpty()) view.showCreateEquipment()
+                if (model.editable) characterManager.updateEquipment(model)
+                else if (model.isEmpty()) view.showCreateEquipment()
                 else view.showEquipmentItem(model)
             is EquipmentFooterModel ->
                 if (model.equipmentSize > CoinModel.Type.values().size) null
@@ -174,7 +175,11 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
         when (menuItem.itemId) {
             R.id.action_avatar_edit_character -> view.showEditCharacter(character)
             R.id.action_avatar_select_picture -> view.showImageSelect(AvatarModel(character))
-            R.id.action_avatar_set_exp -> null
+            R.id.action_avatar_toggle_inspiration -> {
+                val avatar = AvatarModel(character).apply { isInspired = !isInspired }
+                characterManager.updateAvatar(avatar)
+                if (avatar.isInspired) view.showHasInspiration(avatar)
+            }
             R.id.action_notes_create -> view.showCreateNote()
             R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)

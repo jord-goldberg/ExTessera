@@ -3,6 +3,10 @@
 
     <item
         android:id="@+id/action_weapons_add"
-        android:title="Add a Weapon"/>
+        android:title="Add basic Weapon"/>
+
+    <item
+        android:id="@+id/action_weapons_add_custom"
+        android:title="Add custom Weapon"/>
 
 </menu>

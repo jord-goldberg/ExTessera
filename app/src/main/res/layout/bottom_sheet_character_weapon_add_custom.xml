@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -42,22 +43,15 @@
                     android:layout_weight="1"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:text="@{viewModel.name}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Arrows"/>
+                    android:text="Custom Weapon"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <CheckBox
+                    android:layout_width="46dp"
                     android:layout_height="46dp"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="1dp"
-                    android:alpha=".87"
-                    android:fontFamily="sans-serif-smallcaps"
+                    android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@{viewModel.showAmount()}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    tools:text="348"/>
+                    android:paddingTop="1dp"/>
 
             </LinearLayout>
 
@@ -65,8 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="32dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
                 android:background="@color/grey_300"/>
 
             <EditText
@@ -76,13 +70,50 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:hint="Weapon name"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:onTextChanged="@{(text, i, x, y) -> viewModel.setName(text)}"
+                android:textColor="@android:color/secondary_text_light"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:hint="Weapon description"
+                android:inputType="textCapSentences"
+                android:maxLines="1"
+                android:onTextChanged="@{(text, i, x, y) -> viewModel.setName(text)}"
+                android:textColor="@android:color/secondary_text_light"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Amount"
-                android:inputType="number"
-                android:maxLength="9"
-                android:onTextChanged="@{(amount, i, x, y) -> viewModel.setChange(amount)}"
-                android:textColor="@android:color/secondary_text_light"
-                android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="Weapon Type"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:backgroundTint="@color/colorAccent"
+                    android:entries="@{null}"
+                    android:onItemSelected="@{(p, v, position, id) -> null}"
+                    android:selectedItemPosition="@{0}"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,18 +121,17 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:alpha=".87"
-                android:layoutDirection="rtl"
-                android:visibility="@{viewModel.editable ? View.INVISIBLE : View.VISIBLE}">
+                android:layoutDirection="rtl">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:layout_gravity="end"
+                    android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.add(sheet))}"
+                    android:onClick="@{(v) -> presenter.save(viewModel.update(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="+ Add"
+                    android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 
@@ -110,9 +140,9 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.remove(sheet))}"
+                    android:onClick="@{(v) -> sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Remove"
+                    android:text="Cancel"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 

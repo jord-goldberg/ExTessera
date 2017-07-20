@@ -9,4 +9,8 @@ import android.databinding.BaseObservable
 abstract class BaseViewModel(var editable: Boolean = false) : BaseObservable() {
 
     open fun isSameAs(model: BaseViewModel): Boolean = this.javaClass == model.javaClass
+
+    enum class Action {
+        VIEW, CREATE, UPDATE, DELETE
+    }
 }

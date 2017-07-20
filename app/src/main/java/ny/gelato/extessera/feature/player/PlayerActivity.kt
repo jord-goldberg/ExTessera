@@ -91,7 +91,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
         menuInflater.inflate(R.menu.menu_player_toolbar, menu)
         val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.apply {
-            queryHint = "Spells, weapons, monsters..."
+            queryHint = "Search all spells, weapons..."
             setIconifiedByDefault(false)
             setOnClickListener { Search5eActivity.showSearchAll(this@PlayerActivity) }
             findViewById(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->

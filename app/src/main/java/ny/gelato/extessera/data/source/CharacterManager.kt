@@ -36,6 +36,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             character.exp = experience.total
+            character.updated = Date()
         }
     }
 
@@ -60,6 +61,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
                 character.successes = deathSaves.successes
                 character.failures = deathSaves.failures
             }
+            character.updated = Date()
         }
     }
 
@@ -167,6 +169,58 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
+    override fun updateCoin(coin: CoinModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            when (coin.type) {
+                CoinModel.Type.COPPER -> character.copper = coin.amount
+                CoinModel.Type.SILVER -> character.silver = coin.amount
+                CoinModel.Type.ELECTRUM -> character.electrum = coin.amount
+                CoinModel.Type.GOLD -> character.gold = coin.amount
+                CoinModel.Type.PLATINUM -> character.platinum = coin.amount
+            }
+            character.updated = Date()
+        }
+    }
+
+    override fun createEquipment(equipment: EquipmentModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
+                    .findFirst()
+
+            if (currentEquipment == null) character.equipment.add(Equipment(equipment.name))
+            else currentEquipment.number += 1
+            character.updated = Date()
+        }
+    }
+
+    override fun updateEquipment(equipment: EquipmentModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
+                    .findFirst()
+
+            if (equipment.amount > 0) currentEquipment.number = equipment.amount
+            else {
+                character.equipment.remove(currentEquipment)
+                currentEquipment.deleteFromRealm()
+            }
+            character.updated = Date()
+        }
+    }
+
+    override fun deleteEquipment(equipment: EquipmentModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val deleteEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
+                    .findFirst()
+            character.equipment.remove(deleteEquipment)
+            character.updated = Date()
+            deleteEquipment.deleteFromRealm()
+        }
+    }
+
     override fun addWeapon(weaponName: String) {
         realm.executeTransaction { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
@@ -215,46 +269,6 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             character.spells.remove(deleteSpell)
             character.updated = Date()
             deleteSpell.deleteFromRealm()
-        }
-    }
-
-    override fun updateCoin(coin: CoinModel) {
-        realm.executeTransactionAsync { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            when (coin.type) {
-                CoinModel.Type.COPPER -> character.copper = coin.amount
-                CoinModel.Type.SILVER -> character.silver = coin.amount
-                CoinModel.Type.ELECTRUM -> character.electrum = coin.amount
-                CoinModel.Type.GOLD -> character.gold = coin.amount
-                CoinModel.Type.PLATINUM -> character.platinum = coin.amount
-            }
-        }
-    }
-
-    override fun updateEquipment(equipment: EquipmentModel) {
-        realm.executeTransactionAsync { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
-                    .findFirst()
-
-            if (currentEquipment == null) character.equipment.add(Equipment(equipment.name, equipment.amount))
-            else if (equipment.amount > 0) currentEquipment.number = equipment.amount
-            else {
-                character.equipment.remove(currentEquipment)
-                currentEquipment.deleteFromRealm()
-            }
-            character.updated = Date()
-        }
-    }
-
-    override fun deleteEquipment(equipment: EquipmentModel) {
-        realm.executeTransactionAsync { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            val deleteEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
-                    .findFirst()
-            character.equipment.remove(deleteEquipment)
-            character.updated = Date()
-            deleteEquipment.deleteFromRealm()
         }
     }
 

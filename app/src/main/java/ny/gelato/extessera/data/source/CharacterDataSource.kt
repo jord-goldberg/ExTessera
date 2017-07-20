@@ -44,6 +44,15 @@ interface CharacterDataSource {
     fun deleteCheckedNotes()
 
 
+    fun updateCoin(coin: CoinModel)
+
+    fun createEquipment(equipment: EquipmentModel)
+
+    fun updateEquipment(equipment: EquipmentModel)
+
+    fun deleteEquipment(equipment: EquipmentModel)
+
+
     fun addWeapon(weaponName: String)
 
     fun removeWeapon(weaponName: String)
@@ -54,13 +63,6 @@ interface CharacterDataSource {
     fun updateSpell(spell: SpellModel)
 
     fun forgetSpell(spellName: String)
-
-
-    fun updateCoin(coin: CoinModel)
-
-    fun updateEquipment(equipment: EquipmentModel)
-
-    fun deleteEquipment(equipment: EquipmentModel)
 
 
     fun updatePreference(preference: Preferences.Toggle)

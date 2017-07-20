@@ -10,7 +10,7 @@
         android:title="Select Picture"/>
 
     <item
-        android:id="@+id/action_avatar_set_exp"
-        android:title="Set Experience"/>
+        android:id="@+id/action_avatar_toggle_inspiration"
+        android:title="Toggle Inspiration"/>
 
 </menu>

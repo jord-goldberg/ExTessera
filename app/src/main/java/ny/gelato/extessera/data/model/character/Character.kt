@@ -159,7 +159,7 @@ open class Character(
                         if (isEmpty()) add(NoteModel(text = "No Notes\nClick to create one"))
                         val title = if (hasToLevelUp()) "Level Up to ${expLevel()}" else "Notes"
                         add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_notes))
-                        add(FooterModel())
+                        add(FooterModel(title))
                     }
 
     fun skillModels(): List<BaseViewModel> =
@@ -172,8 +172,9 @@ open class Character(
                     .apply {
                         if (weapons.isEmpty().or(primary.job == Job.Type.MONK.name))
                             add(0, WeaponModel(this@Character))
-                        add(0, HeaderModel("Weapons", AvatarModel(this@Character), R.menu.menu_character_weapons))
-                        add(FooterModel())
+                        val title = "Weapons"
+                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_weapons))
+                        add(FooterModel(title))
                     }
 
     fun spellModels(): List<BaseViewModel> {
@@ -192,7 +193,8 @@ open class Character(
                     .map { SpellModel(it) })
         }
 
-        spellModels.add(0, HeaderModel("Spells", AvatarModel(this), R.menu.menu_character_spells,
+        val title = "Spells"
+        spellModels.add(0, HeaderModel(title, AvatarModel(this), R.menu.menu_character_spells,
                 "Spell Attack bonus:  ${Ability.format(proficiencyBonus() + when (primary.castingAbility()) {
                     Ability.Type.INT -> intelligence.modifier()
                     Ability.Type.WIS -> wisdom.modifier()
@@ -204,18 +206,19 @@ open class Character(
                     Ability.Type.CHA -> charisma.modifier()
                     else -> 0
                 }}"))
-        spellModels.add(FooterModel())
+        spellModels.add(FooterModel(title))
         return spellModels
     }
 
     fun equipmentModels(): List<BaseViewModel> = mutableListOf<BaseViewModel>().apply {
-        add(HeaderModel("Equipment", AvatarModel(this@Character), R.menu.menu_character_equipment))
+        val title = "Equipment"
+        add(HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_equipment))
         for (i in 0 until CoinModel.Type.values().size) {
             add(CoinModel(CoinModel.Type.values()[i], this@Character))
             if (equipment.size <= i) add(EquipmentModel())
             else add(EquipmentModel(equipment[i]))
         }
-        add(FooterModel())
+        add(FooterModel(title))
         add(EquipmentFooterModel(this@Character))
     }
 
@@ -255,8 +258,9 @@ open class Character(
                         add(12, SkillSubheaderModel(Ability.Type.INT.formatted))
                         add(13, SkillSubheaderModel(Ability.Type.CHA.formatted))
                         add(SkillSubheaderModel(""))
-                        add(0, HeaderModel("Skills", AvatarModel(this@Character), R.menu.menu_character_skills))
-                        add(FooterModel())
+                        val title = "Skills"
+                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_skills))
+                        add(FooterModel(title))
                     }
 
     private fun getSkillsSortByName(): List<BaseViewModel> =
@@ -264,8 +268,9 @@ open class Character(
                     .sortedBy { it.type.nameOrder() }
                     .toMutableList<BaseViewModel>()
                     .apply {
-                        add(0, HeaderModel("Skills", AvatarModel(this@Character), R.menu.menu_character_skills))
-                        add(FooterModel())
+                        val title = "Skills"
+                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_skills))
+                        add(FooterModel(title))
                     }
 
     private fun setSaveProficiencies() {

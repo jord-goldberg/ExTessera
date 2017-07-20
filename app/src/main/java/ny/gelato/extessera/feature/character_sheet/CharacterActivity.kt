@@ -2,20 +2,14 @@ package ny.gelato.extessera.feature.character_sheet
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.*
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 
-import io.realm.Realm
 import ny.gelato.extessera.R
-import java.io.File
-import java.io.IOException
 import kotlinx.android.synthetic.main.activity_main.*
-import ny.gelato.extessera.App
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
 
 
@@ -31,6 +25,8 @@ class CharacterActivity : AppCompatActivity() {
 
     val id: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("id") }
 
+    val characterFragment: CharacterFragment by lazy { CharacterFragment.newInstance(id) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,15 +34,15 @@ class CharacterActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .replace(R.id.container, CharacterFragment.newInstance(id))
+                .replace(R.id.container, characterFragment)
                 .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_nav_toolbar, menu)
+        menuInflater.inflate(R.menu.menu_character_toolbar, menu)
         val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.apply {
-            queryHint = "Spells, weapons, monsters..."
+            queryHint = "Search all spells, weapons..."
             setIconifiedByDefault(false)
             setOnClickListener { Search5eActivity.showSearchAll(this@CharacterActivity) }
             findViewById(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->

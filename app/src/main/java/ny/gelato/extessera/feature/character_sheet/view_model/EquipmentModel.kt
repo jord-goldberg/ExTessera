@@ -45,13 +45,13 @@ data class EquipmentModel(
         sheet.dismiss()
         amount += change
         notifyChange()
-        return this
+        return this.copy().apply { editable = true }
     }
 
     fun remove(sheet: BottomSheetDialog): EquipmentModel {
         sheet.dismiss()
         amount -= change
         notifyChange()
-        return this
+        return this.copy().apply { editable = true }
     }
 }
