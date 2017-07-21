@@ -8,6 +8,8 @@ import java.text.NumberFormat
 
 /**
  * Created by jord.goldberg on 5/23/17.
+ *
+ * @layout bottom_sheet_character_exp_add.xml
  */
 
 data class ExpModel(

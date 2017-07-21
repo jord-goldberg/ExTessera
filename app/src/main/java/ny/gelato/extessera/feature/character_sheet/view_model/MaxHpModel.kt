@@ -6,6 +6,8 @@ import ny.gelato.extessera.data.model.character.Character
 
 /**
  * Created by jord.goldberg on 7/12/17.
+ *
+ * @layout bottom_sheet_character_max_hp.xml
  */
 
 data class MaxHpModel(

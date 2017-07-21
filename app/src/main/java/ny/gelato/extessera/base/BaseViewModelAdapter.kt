@@ -12,6 +12,12 @@ import ny.gelato.extessera.BR
 
 /**
  * Created by jord.goldberg on 4/30/17.
+ *
+ * Provides a basic mechanism for displaying lists of BaseViewModels. If the BaseViewModels are data
+ * classes and have properly overridden isSameAs(...), the BaseViewModelDiffUtil should handle
+ * animating list updates smoothly if used
+ *
+ * Note: can also display objects that don't extend BaseViewModel for convenience
  */
 
 abstract class BaseViewModelAdapter(open val parent: BaseView? = null) :

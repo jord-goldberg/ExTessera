@@ -83,7 +83,7 @@
                     android:clickable="true"
                     android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel.createAndDismiss(sheet))}"
+                    android:onClick="@{(v) -> viewModel.validateName() ? parent.onClick(v, viewModel.createAndDismiss(sheet)) : null}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

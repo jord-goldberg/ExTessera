@@ -8,6 +8,9 @@ import ny.gelato.extessera.data.model.character.Skill
 
 /**
  * Created by jord.goldberg on 5/12/17.
+ *
+ * @layout bottom_sheet_character_skill.xml
+ * @layout item_character_skill.xml
  */
 
 data class SkillModel(

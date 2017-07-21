@@ -5,6 +5,8 @@ import ny.gelato.extessera.base.BaseViewModel
 
 /**
  * Created by jord.goldberg on 6/21/17.
+ *
+ * @layout bottom_sheet_character_go_to.xml
  */
 
 data class GoToModel(

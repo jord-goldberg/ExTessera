@@ -7,6 +7,8 @@ import ny.gelato.extessera.data.model.character.Trait
 
 /**
  * Created by jord.goldberg on 7/6/17.
+ *
+ * @layout fragment_edit_character_about.xml
  */
 
 data class EditAboutModel(

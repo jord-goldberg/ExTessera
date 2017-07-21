@@ -5,6 +5,8 @@ import ny.gelato.extessera.data.model.character.Character
 
 /**
  * Created by jord.goldberg on 7/17/17.
+ *
+ * @layout item_character_death_saves.xml
  */
 
 data class DeathSaveModel(

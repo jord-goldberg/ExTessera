@@ -6,6 +6,8 @@ import ny.gelato.extessera.data.model.character.Character
 
 /**
  * Created by jord.goldberg on 5/12/17.
+ *
+ * @layout item_character_abilities.xml
  */
 
 data class AbilitiesModel(

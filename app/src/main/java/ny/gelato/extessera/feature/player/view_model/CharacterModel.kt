@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat
 
 /**
  * Created by jord.goldberg on 7/11/17.
+ *
+ * @layout item_player_character.xml
  */
 
 data class CharacterModel(

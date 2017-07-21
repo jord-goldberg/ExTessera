@@ -4,6 +4,19 @@ import android.databinding.BaseObservable
 
 /**
  * Created by jord.goldberg on 5/12/17.
+ *
+ * Concrete ViewModels extend this class; they should be data classes.
+ *
+ * Generally they appear in lists that are displayed using BaseViewModelAdapters; isSameAs(...)
+ * should be overridden if multiple versions need to be differentiated for the RecyclerView.DiffUtils.
+ *
+ * ViewModels should be bite-sized portions of the underlying data, allowing manageable
+ * amounts to be shown and/or manipulated at once. They can sometimes be interacted with in multiple
+ * ways (e.g. update underlying info with Action.UPDATE or open a menu with Action.CONTEXT_MENU)
+ *
+ * @param action can be used to signal the click intention.
+ *
+ * @layout every BaseViewModel should have a corresponding .xml file here
  */
 
 abstract class BaseViewModel(var action: Action = BaseViewModel.Action.VIEW) : BaseObservable() {

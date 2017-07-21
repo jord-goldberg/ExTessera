@@ -7,6 +7,9 @@ import java.text.NumberFormat
 
 /**
  * Created by jord.goldberg on 7/12/17.
+ *
+ * @layout bottom_sheet_character_coin.xml
+ * @layout item_character_equipment_coin.xml
  */
 
 data class CoinModel(

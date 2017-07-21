@@ -7,6 +7,8 @@ import ny.gelato.extessera.data.model.character.KnownSpell
 
 /**
  * Created by jord.goldberg on 5/12/17.
+ *
+ * @layout item_character_spell.xml
  */
 
 data class SpellModel(

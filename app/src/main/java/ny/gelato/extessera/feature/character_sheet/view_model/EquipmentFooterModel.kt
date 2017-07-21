@@ -5,6 +5,8 @@ import ny.gelato.extessera.data.model.character.Character
 
 /**
  * Created by jord.goldberg on 7/18/17.
+ *
+ * @layout item_character_equipment_footer.xml
  */
 
 data class EquipmentFooterModel(

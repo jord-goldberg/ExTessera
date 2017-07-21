@@ -6,6 +6,9 @@ import ny.gelato.extessera.data.model.character.Note
 
 /**
  * Created by jord.goldberg on 6/7/17.
+ *
+ * @layout bottom_sheet_character_note_create.xml
+ * @layout item_character_note.xml
  */
 
 data class NoteModel(

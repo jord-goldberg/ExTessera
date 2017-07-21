@@ -7,6 +7,8 @@ import ny.gelato.extessera.data.model.character.Proficiency
 
 /**
  * Created by jord.goldberg on 6/26/17.
+ *
+ * @layout item_edit_proficiency.xml
  */
 
 data class EditProficiencyModel(

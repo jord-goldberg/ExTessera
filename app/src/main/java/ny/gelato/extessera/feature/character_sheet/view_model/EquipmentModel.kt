@@ -6,6 +6,10 @@ import ny.gelato.extessera.data.model.character.Equipment
 
 /**
  * Created by jord.goldberg on 7/12/17.
+ *
+ * @layout bottom_sheet_character_equipment_create.xml
+ * @layout bottom_sheet_character_equipment_item.xml
+ * @layout item_character_equipment_item.xml
  */
 
 data class EquipmentModel(
@@ -30,6 +34,8 @@ data class EquipmentModel(
         name = new.toString()
         notifyChange()
     }
+
+    fun validateName(): Boolean = name.isNotBlank()
 
     fun setChange(amount: CharSequence) {
         if (amount.isEmpty()) change = 0

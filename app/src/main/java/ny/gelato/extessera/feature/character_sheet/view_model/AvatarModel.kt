@@ -7,6 +7,9 @@ import ny.gelato.extessera.data.model.character.Character
 
 /**
  * Created by jord.goldberg on 6/8/17.
+ *
+ * @layout bottom_sheet_character_avatar.xml
+ * @layout item_character_avatar.xml
  */
 
 data class AvatarModel(
@@ -49,7 +52,10 @@ data class AvatarModel(
 
     fun updateImage(sheet: BottomSheetDialog): AvatarModel {
         sheet.dismiss()
-        return this.copy().apply { action = Action.UPDATE }
+        return this.copy().apply {
+            this@AvatarModel.newImageUrl?.let { imageUrl = it }
+            action = Action.UPDATE
+        }
     }
 
     fun about(): AboutModel = AboutModel()

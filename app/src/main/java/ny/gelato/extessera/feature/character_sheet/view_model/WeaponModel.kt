@@ -9,6 +9,10 @@ import ny.gelato.extessera.data.model.character.Proficiency
 
 /**
  * Created by jord.goldberg on 6/8/17.
+ *
+ * @layout bottom_sheet_character_weapon.xml
+ * @layout bottom_sheet_character_weapon_add_custom.xml
+ * @layout item_character_weapon.xml
  */
 
 data class WeaponModel(

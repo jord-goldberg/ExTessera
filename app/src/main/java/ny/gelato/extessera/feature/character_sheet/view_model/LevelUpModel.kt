@@ -6,6 +6,8 @@ import ny.gelato.extessera.data.model.character.Job
 
 /**
  * Created by jord.goldberg on 6/7/17.
+ *
+ * @layout item_character_level_up.xml
  */
 
 data class LevelUpModel(

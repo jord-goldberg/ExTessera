@@ -7,6 +7,8 @@ import ny.gelato.extessera.data.model.character.Character
 
 /**
  * Created by jord.goldberg on 5/23/17.
+ *
+ * @layout item_character_status.xml
  */
 
 data class StatusModel(

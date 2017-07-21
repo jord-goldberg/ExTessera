@@ -7,9 +7,11 @@ import ny.gelato.extessera.base.BaseViewModel
  *
  * FooterModel always follows a HeaderModel; everything between should be visually congruent.
  * To ensure that the RecyclerView DiffUtil's animation reflects this visual congruity,
- * we must hold a reference to the parent Header's title to differentiate between Footers
+ * we must hold a reference to the parent
  *
- * Layout: item_character_footer.xml
+ * @param headerTitle to differentiate between Footers
+ *
+ * @layout item_character_footer.xml
  */
 
 data class FooterModel(val headerTitle: String) : BaseViewModel() {

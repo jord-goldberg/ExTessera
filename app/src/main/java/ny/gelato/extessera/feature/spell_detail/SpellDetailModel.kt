@@ -5,6 +5,8 @@ import ny.gelato.extessera.data.model.Spell
 
 /**
  * Created by jord.goldberg on 5/22/17.
+ *
+ * @layout bottom_sheet_spell_detail.xml
  */
 
 data class SpellDetailModel(

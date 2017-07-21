@@ -4,6 +4,8 @@ import ny.gelato.extessera.base.BaseViewModel
 
 /**
  * Created by jord.goldberg on 5/12/17.
+ *
+ * @layout item_character_header.xml
  */
 
 data class HeaderModel(
