@@ -11,7 +11,7 @@ import ny.gelato.extessera.data.model.character.Job
 data class LevelUpModel(
         var primary: Job.Type
 
-) : BaseViewModel() {
+) : BaseViewModel(Action.UPDATE) {
 
     constructor(character: Character) :
             this(Job.Type.valueOf(character.primary.job))
@@ -20,7 +20,6 @@ data class LevelUpModel(
 
     fun levelUpPrimary(): LevelUpModel {
         selectedJob = primary
-        action = Action.UPDATE
         return this
     }
 }
