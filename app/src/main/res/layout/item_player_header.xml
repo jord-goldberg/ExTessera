@@ -12,8 +12,8 @@
             type="ny.gelato.extessera.feature.player.view_model.HeaderModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.player.PlayerPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.player.PlayerView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -53,7 +53,7 @@
                     android:alpha=".87"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingStart="@dimen/activity_horizontal_margin"
                     android:src="@drawable/ic_more_vert"

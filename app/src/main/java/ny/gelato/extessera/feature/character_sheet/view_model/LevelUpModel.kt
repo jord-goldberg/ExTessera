@@ -20,6 +20,7 @@ data class LevelUpModel(
 
     fun levelUpPrimary(): LevelUpModel {
         selectedJob = primary
+        action = Action.UPDATE
         return this
     }
 }

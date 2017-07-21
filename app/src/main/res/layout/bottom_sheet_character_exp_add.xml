@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -16,11 +15,10 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.ExpModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="com.robinhood.ticker.TickerUtils"/>
-
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -49,7 +47,7 @@
                     android:maxLines="1"
                     android:text="Experience"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Add Experience"/>
+                    tools:text="Experience"/>
 
                 <com.robinhood.ticker.TickerView
                     android:layout_width="wrap_content"
@@ -86,7 +84,7 @@
                 android:hint="@{viewModel.hint()}"
                 android:inputType="number"
                 android:maxLength="9"
-                android:onTextChanged="@{(exp, i, x, y) -> viewModel.setAdditional(exp)}"
+                android:onTextChanged="@{(exp, i, x, y) -> viewModel.setChange(exp)}"
                 tools:hint="+370 exp to next level"/>
 
             <FrameLayout
@@ -102,7 +100,7 @@
                     android:clickable="true"
                     android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.addExp(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.addExpAndDismiss(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="+ Exp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
@@ -113,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.additional != 0 ? presenter.save(viewModel.setExp(sheet)) : sheet.dismiss()}"
+                    android:onClick="@{(v) -> viewModel.change != 0 ? parent.onClick(v, viewModel.setExpAndDismiss(sheet)) : sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Set Exp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

@@ -10,8 +10,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.WeaponModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>

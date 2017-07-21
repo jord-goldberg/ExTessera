@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -15,13 +14,11 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.AvatarModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="java.lang.String"/>
-
         <import type="android.view.View"/>
-
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -39,7 +36,7 @@
                 android:alpha=".87"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{() -> presenter.save(viewModel.updateImage(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateImage(sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_save_white"
@@ -112,7 +109,7 @@
                     android:drawableTint="@android:color/secondary_text_light"
                     android:foreground="?selectableItemBackground"
                     android:gravity="center_vertical"
-                    android:onClick="@{() -> presenter.save(viewModel.clearImage(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.clearImage(sheet))}"
                     android:paddingStart="@dimen/activity_horizontal_margin"
                     android:text="Clear profile picture"
                     android:textColor="@android:color/secondary_text_light"/>

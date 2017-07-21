@@ -1,7 +1,5 @@
 package ny.gelato.extessera.feature.character_sheet
 
-import android.view.MenuItem
-import android.view.View
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BasePresenter
 import ny.gelato.extessera.base.BaseViewModel
@@ -59,93 +57,58 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
 
     fun stop() = subscriptions.clear()
 
-    fun save(model: BaseViewModel) {
-        when (model) {
-            is AvatarModel -> characterManager.updateAvatar(model)
-            is ExpModel -> characterManager.updateExp(model)
-            is LevelUpModel -> characterManager.updateLevel(model)
-            is NoteModel -> characterManager.createNote(model)
-            is StatusModel -> characterManager.updateStatus(model)
-            is HpModel -> characterManager.updateHp(model)
-            is MaxHpModel -> characterManager.updateMaxHp(model)
-            is AbilitiesModel -> characterManager.updateAbilities(model)
-            is SavingThrowsModel -> characterManager.updateSaves(model)
-            is SkillModel -> characterManager.updateSkill(model)
-            is WeaponModel -> characterManager.addWeapon(model.name)
-            is SpellModel -> characterManager.updateSpell(model)
-            is CoinModel -> characterManager.updateCoin(model)
-            is EquipmentModel -> characterManager.createEquipment(model)
-        }
-    }
-
-    fun delete(model: BaseViewModel) {
-        when (model) {
-            is NoteModel -> characterManager.deleteNote(model)
-            is WeaponModel -> characterManager.removeWeapon(model.name)
-            is SpellModel -> characterManager.forgetSpell(model.name)
-            is EquipmentModel -> characterManager.deleteEquipment(model)
-        }
-    }
-
-    fun click(v: View, model: BaseViewModel) {
-        when (model) {
-            is AvatarModel ->
-                if (model.editable) view.showPopupMenu(v, R.menu.menu_character_avatar)
-                else if (view.isAtScrollTop()) view.showImageSelect(model)
-                else view.showScrollToTop()
-            is AboutModel -> view.showAbout(AboutModel(character))
-            is ExpModel -> view.showAddExp(ExpModel(character.exp, character.expToNextLevel()))
-            is GoToModel -> when (model.destination) {
-                GoToModel.Destination.NONE -> view.showGoTo(model)
-                GoToModel.Destination.NOTES -> {
-                    if (!character.preferences.showNotes)
-                        characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
+    fun routeOnClick(model: BaseViewModel) {
+        when (model.action) {
+            BaseViewModel.Action.CREATE -> create(model)
+            BaseViewModel.Action.UPDATE -> update(model)
+            BaseViewModel.Action.DELETE -> delete(model)
+            else -> when (model) {
+                is AvatarModel ->
+                    if (view.isAtScrollTop())
+                        view.showImageSelect(model)
+                    else view.showScrollToTop()
+                is AboutModel -> view.showAbout(AboutModel(character))
+                is ExpModel -> view.showAddExp(ExpModel(character))
+                is GoToModel -> when (model.destination) {
+                    GoToModel.Destination.NONE -> view.showGoTo(model)
+                    GoToModel.Destination.NOTES -> {
+                        if (!character.preferences.showNotes)
+                            characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
+                    }
+                    GoToModel.Destination.ABILITIES -> view.showScrollToDestination(AbilitiesModel())
+                    GoToModel.Destination.SAVES -> view.showScrollToDestination(SavingThrowsModel())
+                    GoToModel.Destination.SKILLS -> view.showScrollToDestination(SkillModel())
+                    GoToModel.Destination.WEAPONS -> view.showScrollToDestination(WeaponModel())
+                    GoToModel.Destination.SPELLS -> {
+                        if (!character.preferences.showSpells)
+                            characterManager.updatePreference(Preferences.Toggle.SHOW_SPELLS)
+                        view.showScrollToDestination(SpellModel())
+                    }
+                    GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
                 }
-                GoToModel.Destination.ABILITIES -> view.showScrollToDestination(AbilitiesModel())
-                GoToModel.Destination.SAVES -> view.showScrollToDestination(SavingThrowsModel())
-                GoToModel.Destination.SKILLS -> view.showScrollToDestination(SkillModel())
-                GoToModel.Destination.WEAPONS -> view.showScrollToDestination(WeaponModel())
-                GoToModel.Destination.SPELLS -> {
-                    if (!character.preferences.showSpells)
-                        characterManager.updatePreference(Preferences.Toggle.SHOW_SPELLS)
-                    view.showScrollToDestination(SpellModel())
-                }
-                GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
+                is NoteModel -> view.showCreateNote()
+                is HpModel -> view.showEditHp(HpModel(character))
+                is MaxHpModel -> view.showEditMaxHp(MaxHpModel(character))
+                is SkillModel -> view.showSelectSkillProficiency(model)
+                is WeaponModel -> view.showWeaponDetail(model)
+                is SpellModel ->
+                    if (model.isEmpty()) view.showSpellsFor(character)
+                    else view.showSpellDetail(model)
+                is CoinModel -> view.showCoin(model)
+                is EquipmentModel ->
+                    if (model.isEmpty()) view.showCreateEquipment()
+                    else view.showEquipmentItem(model)
+                is EquipmentFooterModel ->
+                    if (model.equipmentSize > CoinModel.Type.values().size) null
+                    else view.showCreateEquipment()
             }
-            is NoteModel ->
-                if (model.isEmpty()) view.showCreateNote()
-                else characterManager.updateNote(model)
-            is DeathSaveModel ->
-                if (model.editable) view.showPopupMenu(v, R.menu.menu_character_death_saves)
-                else {
-                    characterManager.updateDeathSaves(model)
-                    if (model.successes == 3) view.showIsStabilized()
-                }
-            is StatusModel ->
-                if (model.isDcEditable) view.showSelectDcAbility(model)
-                else view.showPopupMenu(v, R.menu.menu_character_status)
-            is HpModel -> view.showEditHp(HpModel(character))
-            is SkillModel -> view.showSelectSkillProficiency(model)
-            is WeaponModel -> view.showWeaponDetail(model)
-            is SpellModel ->
-                if (model.isEmpty()) view.showSpellsFor(character)
-                else view.showSpellDetail(model)
-            is CoinModel -> view.showCoin(model)
-            is EquipmentModel ->
-                if (model.editable) characterManager.updateEquipment(model)
-                else if (model.isEmpty()) view.showCreateEquipment()
-                else view.showEquipmentItem(model)
-            is EquipmentFooterModel ->
-                if (model.equipmentSize > CoinModel.Type.values().size) null
-                else view.showCreateEquipment()
-            is HeaderModel -> view.showPopupMenu(v, model.menuRes)
         }
     }
 
-    fun longClick(model: BaseViewModel): Boolean = when (model) {
+    fun routeOnLongClick(model: BaseViewModel): Boolean = when (model) {
         is AvatarModel -> {
             characterManager.updateAvatar(model)
-            if (model.isInspired) view.showHasInspiration(model)
+            view.showHasInspiration(model)
             true
         }
         is StatusModel -> {
@@ -171,21 +134,21 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
         else -> false
     }
 
-    fun menuClick(menuItem: MenuItem) {
-        when (menuItem.itemId) {
+    fun onModelMenuClick(model: BaseViewModel, itemId: Int) {
+        when (itemId) {
             R.id.action_avatar_edit_character -> view.showEditCharacter(character)
-            R.id.action_avatar_select_picture -> view.showImageSelect(AvatarModel(character))
+            R.id.action_avatar_select_picture -> view.showImageSelect(model as AvatarModel)
             R.id.action_avatar_toggle_inspiration -> {
-                val avatar = AvatarModel(character).apply { isInspired = !isInspired }
+                val avatar = (model as AvatarModel).toggleInspiration()
                 characterManager.updateAvatar(avatar)
-                if (avatar.isInspired) view.showHasInspiration(avatar)
+                view.showHasInspiration(avatar)
             }
             R.id.action_notes_create -> view.showCreateNote()
             R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
             R.id.action_death_save_reset -> characterManager.updateDeathSaves(DeathSaveModel())
             R.id.action_death_save_stabilize -> {
-                characterManager.updateDeathSaves(DeathSaveModel(successes = 3))
+                characterManager.updateDeathSaves((model as DeathSaveModel).setSuccess(3))
                 view.showIsStabilized()
             }
             R.id.action_status_short_rest -> null
@@ -196,6 +159,45 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
             R.id.action_spells_add -> view.showSpellsFor(character)
             R.id.action_spells_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_SPELLS)
             R.id.action_equipment_add -> view.showCreateEquipment()
+        }
+    }
+
+    fun create(model: BaseViewModel) {
+        when (model) {
+            is NoteModel -> characterManager.createNote(model)
+            is WeaponModel -> characterManager.addWeapon(model.name)
+            is EquipmentModel -> characterManager.createEquipment(model)
+        }
+    }
+
+    fun update(model: BaseViewModel) {
+        when (model) {
+            is AvatarModel -> characterManager.updateAvatar(model)
+            is ExpModel -> characterManager.updateExp(model)
+            is LevelUpModel -> characterManager.updateLevel(model)
+            is NoteModel -> characterManager.updateNote(model)
+            is DeathSaveModel -> {
+                characterManager.updateDeathSaves(model)
+                if (model.successes == 3) view.showIsStabilized()
+            }
+            is StatusModel -> characterManager.updateStatus(model)
+            is HpModel -> characterManager.updateHp(model)
+            is MaxHpModel -> characterManager.updateMaxHp(model)
+            is AbilitiesModel -> characterManager.updateAbilities(model)
+            is SavingThrowsModel -> characterManager.updateSaves(model)
+            is SkillModel -> characterManager.updateSkill(model)
+            is SpellModel -> characterManager.updateSpell(model)
+            is CoinModel -> characterManager.updateCoin(model)
+            is EquipmentModel -> characterManager.updateEquipment(model)
+        }
+    }
+
+    fun delete(model: BaseViewModel) {
+        when (model) {
+            is NoteModel -> characterManager.deleteNote(model)
+            is WeaponModel -> characterManager.removeWeapon(model.name)
+            is SpellModel -> characterManager.forgetSpell(model.name)
+            is EquipmentModel -> characterManager.deleteEquipment(model)
         }
     }
 }

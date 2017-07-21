@@ -35,7 +35,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateExp(experience: ExpModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.exp = experience.total
+            character.exp = experience.current
             character.updated = Date()
         }
     }
@@ -73,7 +73,6 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             character.initiative = status.initiative - character.dexterity.modifier()
             character.speed = status.speed
             character.primary.dice = status.dice
-            character.preferences.dcAbility = status.dcAbility.name
             character.updated = Date()
         }
     }

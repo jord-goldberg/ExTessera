@@ -11,10 +11,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Gravity
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 
@@ -59,7 +56,7 @@ class CharacterFragment : Fragment(), CharacterView {
 
     @Inject lateinit var presenter: CharacterPresenter
 
-    @Inject lateinit var adapter: CharacterAdapter
+    val adapter = CharacterAdapter(this)
 
     val swipeToRemoveHelper: ItemTouchHelper =
             ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
@@ -76,7 +73,7 @@ class CharacterFragment : Fragment(), CharacterView {
                         else -> "note"
                     }
                     val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("undo") { _ -> presenter.save(model) }
+                            .setAction("undo") { _ -> presenter.create(model) }
 
                     adapter.notifyItemRemoved(position)
                     presenter.delete(model)
@@ -143,6 +140,20 @@ class CharacterFragment : Fragment(), CharacterView {
         presenter.detachView()
     }
 
+    override fun onClick(v: View, viewModel: BaseViewModel) {
+        if (viewModel.action == BaseViewModel.Action.CONTEXT_MENU) {
+            showPopupMenu(v, viewModel)
+        }
+        else presenter.routeOnClick(viewModel)
+    }
+
+    override fun onLongClick(v: View, viewModel: BaseViewModel): Boolean {
+        if (viewModel.action == BaseViewModel.Action.CONTEXT_MENU) {
+            showPopupMenu(v, viewModel)
+        }
+        return presenter.routeOnLongClick(viewModel)
+    }
+
     override fun showCharacter(feed: MutableList<BaseViewModel>) {
         adapter.feed = feed
     }
@@ -166,8 +177,8 @@ class CharacterFragment : Fragment(), CharacterView {
     }
 
     override fun showHasInspiration(avatar: AvatarModel) {
-        Toast.makeText(activity, "${avatar.name.substringBefore(" ")} has gained inspiration!" +
-                "\n+1 to role-playing", Toast.LENGTH_SHORT)
+        if (avatar.isInspired) Toast.makeText(activity, "${avatar.name.substringBefore(" ")} " +
+                "has gained inspiration!\n+1 to role-playing", Toast.LENGTH_SHORT)
                 .apply {
                     (view.findViewById(android.R.id.message) as TextView).gravity = Gravity.CENTER
                     show()
@@ -213,10 +224,6 @@ class CharacterFragment : Fragment(), CharacterView {
         showBottomSheet(maxHp, R.layout.bottom_sheet_character_max_hp)
     }
 
-    override fun showSelectDcAbility(status: StatusModel) {
-        showBottomSheet(status, R.layout.bottom_sheet_character_dc_ability)
-    }
-
     override fun showSelectSkillProficiency(skill: SkillModel) {
         showBottomSheet(skill, R.layout.bottom_sheet_character_skill)
     }
@@ -249,13 +256,32 @@ class CharacterFragment : Fragment(), CharacterView {
         showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
     }
 
-    override fun showPopupMenu(view: View, menuRes: Int) {
+    private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {
+        val binding: ViewDataBinding =
+                DataBindingUtil.inflate(activity.layoutInflater, layoutRes, null, false)
+        binding.apply {
+            setVariable(BR.viewModel, model)
+            setVariable(BR.parent, this@CharacterFragment)
+            setVariable(BR.sheet, sheet)
+        }
+        sheet.setContentView(binding.root)
+        sheet.show()
+    }
+
+    private fun showPopupMenu(view: View, model: BaseViewModel) {
+        val menuRes = when (model) {
+            is HeaderModel -> model.menuRes
+            is AvatarModel -> R.menu.menu_character_avatar
+            is DeathSaveModel -> R.menu.menu_character_death_saves
+            is StatusModel -> R.menu.menu_character_status
+            else -> 0
+        }
         val isSkillMenu = menuRes == R.menu.menu_character_skills
         val isSortedByAbility = presenter.character.preferences.sortSkillsByAbility
 
         PopupMenu(activity, view).apply {
             menuInflater.inflate(menuRes, menu)
-            setOnMenuItemClickListener { presenter.menuClick(it); true }
+            setOnMenuItemClickListener { presenter.onModelMenuClick(model, it.itemId); true }
             if (isSkillMenu) {
                 menu.findItem(R.id.action_skills_toggle_sort).title =
                         if (isSortedByAbility) "Sort by Name"
@@ -263,17 +289,5 @@ class CharacterFragment : Fragment(), CharacterView {
             }
             show()
         }
-    }
-
-    private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {
-        val binding: ViewDataBinding =
-                DataBindingUtil.inflate(activity.layoutInflater, layoutRes, null, false)
-        binding.apply {
-            setVariable(BR.viewModel, model)
-            setVariable(BR.presenter, presenter)
-            setVariable(BR.sheet, sheet)
-        }
-        sheet.setContentView(binding.root)
-        sheet.show()
     }
 }

@@ -2,6 +2,7 @@ package ny.gelato.extessera.feature.character_sheet.view_model
 
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.data.model.character.Note
 
 /**
  * Created by jord.goldberg on 6/7/17.
@@ -13,6 +14,10 @@ data class NoteModel(
         var isDone: Boolean = false
 
 ) : BaseViewModel() {
+
+    constructor(note: Note) : this(note.id, note.text, note.isDone) {
+        action = Action.UPDATE
+    }
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is NoteModel) model.id == id
@@ -31,7 +36,8 @@ data class NoteModel(
 
     fun validateText(): Boolean = text.isNotBlank()
 
-    fun createNote(sheet: BottomSheetDialog): NoteModel {
+    fun createAndDismiss(sheet: BottomSheetDialog): NoteModel {
+        action = Action.CREATE
         sheet.dismiss()
         return this
     }

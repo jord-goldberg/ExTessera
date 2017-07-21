@@ -12,8 +12,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.StatusModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
         <import type="com.robinhood.ticker.TickerUtils"/>
@@ -39,8 +39,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.showEditHp())}"
-                    android:onLongClick="@{() -> presenter.longClick(viewModel.showEditMaxHp())}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.showEditHp())}"
+                    android:onLongClick="@{(v) -> parent.onLongClick(v, viewModel.showEditMaxHp())}"
                     android:foreground="?selectableItemBackground">
 
                     <ny.gelato.extessera.common.AvatarView
@@ -49,8 +49,8 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="8dp"
-                        android:onClick="@{(v) -> presenter.click(v, viewModel.avatar)}"
-                        android:onLongClick="@{() -> presenter.longClick(viewModel.avatar.toggleInspiration())}"
+                        android:onClick="@{(v) -> parent.onClick(v, viewModel.avatar)}"
+                        android:onLongClick="@{(v) -> parent.onLongClick(v, viewModel.avatar.toggleInspiration())}"
                         bind:viewModel="@{viewModel.avatar}"/>
 
                     <com.robinhood.ticker.TickerView
@@ -115,7 +115,7 @@
                         android:alpha=".87"
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
-                        android:onClick="@{(v) -> viewModel.isEditable() ? presenter.save(viewModel.update()) : presenter.click(v, viewModel)}"
+                        android:onClick="@{(v) -> viewModel.isEditable() ? parent.onClick(v, viewModel.update()) : parent.onClick(v, viewModel.menu())}"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingStart="@dimen/activity_horizontal_margin"
                         android:src="@{viewModel.isEditable() ? @drawable/ic_save_white : @drawable/ic_more_vert}"
@@ -150,7 +150,7 @@
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
                         android:gravity="center"
-                        android:onLongClick="@{() -> viewModel.isArmorEditable ? presenter.longClick(viewModel.update()) : viewModel.editArmor()}"
+                        android:onLongClick="@{(v) -> viewModel.isArmorEditable ? parent.onLongClick(v, viewModel.update()) : viewModel.editArmor()}"
                         android:orientation="vertical"
                         android:paddingBottom="8dp"
                         android:paddingStart="@dimen/activity_horizontal_margin"
@@ -250,7 +250,7 @@
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
                         android:gravity="center"
-                        android:onLongClick="@{() -> viewModel.isInitiativeEditable ? presenter.longClick(viewModel.update()) : viewModel.editInitiative()}"
+                        android:onLongClick="@{(v) -> viewModel.isInitiativeEditable ? parent.onLongClick(v, viewModel.update()) : viewModel.editInitiative()}"
                         android:orientation="vertical"
                         android:paddingBottom="8dp"
                         android:paddingTop="@dimen/activity_vertical_margin">
@@ -350,7 +350,7 @@
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
                         android:gravity="center"
-                        android:onLongClick="@{() -> viewModel.isSpeedEditable ? presenter.longClick(viewModel.update()) : viewModel.editSpeed()}"
+                        android:onLongClick="@{(v) -> viewModel.isSpeedEditable ? parent.onLongClick(v, viewModel.update()) : viewModel.editSpeed()}"
                         android:orientation="vertical"
                         android:paddingBottom="8dp"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
@@ -411,7 +411,7 @@
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
                         android:gravity="center"
-                        android:onLongClick="@{() -> viewModel.isHitDiceEditable ? presenter.longClick(viewModel.update()) : viewModel.editHitDice()}"
+                        android:onLongClick="@{(v) -> viewModel.isHitDiceEditable ? parent.onLongClick(v, viewModel.update()) : viewModel.editHitDice()}"
                         android:orientation="vertical"
                         android:paddingBottom="@dimen/activity_vertical_margin"
                         android:paddingEnd="@dimen/activity_horizontal_margin"

@@ -14,20 +14,22 @@ data class MaxHpModel(
 
 ) : BaseViewModel() {
 
-    constructor(character: Character) : this(character.maxHp)
+    constructor(character: Character) : this(character.maxHp) {
+        action = Action.UPDATE
+    }
 
     fun setChange(maxHp: CharSequence) {
         if (maxHp.isEmpty()) change = 0
         else change = maxHp.toString().toInt()
     }
 
-    fun plusToMax(sheet: BottomSheetDialog): MaxHpModel {
+    fun plusMaxAndDismiss(sheet: BottomSheetDialog): MaxHpModel {
         sheet.dismiss()
         current += change
         return this
     }
 
-    fun setNewMax(sheet: BottomSheetDialog): MaxHpModel {
+    fun setMaxAndDismiss(sheet: BottomSheetDialog): MaxHpModel {
         sheet.dismiss()
         current = change
         return this

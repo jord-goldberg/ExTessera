@@ -30,21 +30,23 @@ data class AbilitiesModel(
                     char.charisma.score,
                     AvatarModel(char))
 
+    fun isEditable(): Boolean = action == Action.EDIT
+
     fun edit() {
-        editable = true
+        action = Action.EDIT
         notifyChange()
     }
 
     fun longEdit(): Boolean {
-        editable = true
+        action = Action.EDIT
         notifyChange()
         return true
     }
 
     fun update(): AbilitiesModel {
-        editable = false
+        action = Action.VIEW
         notifyChange()
-        return this
+        return this.copy().apply { action = Action.UPDATE }
     }
 
     fun strUp() {
@@ -107,32 +109,32 @@ data class AbilitiesModel(
         notifyChange()
     }
 
-    fun showStr(): String = when (editable) {
+    fun showStr(): String = when (this.isEditable()) {
         true -> "$strength"
         false -> Ability.modifyAndFormat(strength)
     }
 
-    fun showDex(): String = when (editable) {
+    fun showDex(): String = when (this.isEditable()) {
         true -> "$dexterity"
         false -> Ability.modifyAndFormat(dexterity)
     }
 
-    fun showCon(): String = when (editable) {
+    fun showCon(): String = when (this.isEditable()) {
         true -> "$constitution"
         false -> Ability.modifyAndFormat(constitution)
     }
 
-    fun showInt(): String = when (editable) {
+    fun showInt(): String = when (this.isEditable()) {
         true -> "$intelligence"
         false -> Ability.modifyAndFormat(intelligence)
     }
 
-    fun showWis(): String = when (editable) {
+    fun showWis(): String = when (this.isEditable()) {
         true -> "$wisdom"
         false -> Ability.modifyAndFormat(wisdom)
     }
 
-    fun showCha(): String = when (editable) {
+    fun showCha(): String = when (this.isEditable()) {
         true -> "$charisma"
         false -> Ability.modifyAndFormat(charisma)
     }

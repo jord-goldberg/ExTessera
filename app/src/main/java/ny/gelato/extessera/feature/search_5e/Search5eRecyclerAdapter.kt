@@ -4,13 +4,12 @@ import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModelAdapter
 import ny.gelato.extessera.data.model.Spell
 import ny.gelato.extessera.data.model.Weapon
-import javax.inject.Inject
 
 /**
  * Created by jord.goldberg on 5/15/17.
  */
 
-class Search5eRecyclerAdapter @Inject constructor(override val presenter: Search5ePresenter<*>) : BaseViewModelAdapter(presenter) {
+class Search5eRecyclerAdapter constructor(override val parent: Search5eView) : BaseViewModelAdapter(parent) {
 
     var feed: List<Any> = emptyList()
         set(value) {

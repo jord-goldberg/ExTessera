@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -14,8 +13,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.MaxHpModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -98,7 +97,7 @@
                     android:clickable="true"
                     android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.plusToMax(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.plusMaxAndDismiss(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="+ max hp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
@@ -109,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change != 0 ? presenter.save(viewModel.setNewMax(sheet)) : sheet.dismiss()}"
+                    android:onClick="@{(v) -> viewModel.change != 0 ? parent.onClick(v, viewModel.setMaxAndDismiss(sheet)) : sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Set Max Hp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

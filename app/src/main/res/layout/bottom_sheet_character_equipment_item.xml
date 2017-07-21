@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -14,8 +13,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.EquipmentModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -81,8 +80,7 @@
                 android:inputType="number"
                 android:maxLength="9"
                 android:onTextChanged="@{(amount, i, x, y) -> viewModel.setChange(amount)}"
-                android:textColor="@android:color/secondary_text_light"
-                android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                android:textColor="@android:color/secondary_text_light"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,8 +88,7 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:alpha=".87"
-                android:layoutDirection="rtl"
-                android:visibility="@{viewModel.editable ? View.INVISIBLE : View.VISIBLE}">
+                android:layoutDirection="rtl">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,7 +96,7 @@
                     android:clickable="true"
                     android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.add(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.addAndDismiss(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="+ Add"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
@@ -110,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.remove(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.removeAndDismiss(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Remove"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

@@ -12,8 +12,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.AbilitiesModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -25,7 +25,7 @@
         android:clickable="true"
         android:clipToPadding="false"
         android:foreground="?selectableItemBackground"
-        android:onLongClick="@{() -> viewModel.editable ? presenter.longClick(viewModel.update()) : viewModel.longEdit()}"
+        android:onLongClick="@{(v) -> viewModel.isEditable() ? parent.onLongClick(v, viewModel.update()) : viewModel.longEdit()}"
         app:cardCornerRadius="0px"
         app:contentPaddingBottom="4dp">
 
@@ -48,8 +48,8 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="8dp"
-                        android:onClick="@{(v) -> presenter.click(v, viewModel.avatar)}"
-                        android:onLongClick="@{() -> presenter.longClick(viewModel.avatar.toggleInspiration())}"
+                        android:onClick="@{(v) -> parent.onClick(v, viewModel.avatar)}"
+                        android:onLongClick="@{(v) -> parent.onLongClick(v, viewModel.avatar.toggleInspiration())}"
                         bind:viewModel="@{viewModel.avatar}"/>
 
                     <TextView
@@ -61,7 +61,7 @@
                         android:layout_weight="1"
                         android:alpha=".87"
                         android:fontFamily="sans-serif-smallcaps"
-                        android:text="@{viewModel.editable ? @string/ability_scores : @string/ability_modifiers}"
+                        android:text="@{viewModel.isEditable() ? @string/ability_scores : @string/ability_modifiers}"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                         tools:text="@string/ability_scores"/>
 
@@ -71,11 +71,11 @@
                         android:alpha=".87"
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
-                        android:onClick="@{() -> viewModel.editable ? presenter.save(viewModel.update()) : viewModel.edit()}"
+                        android:onClick="@{(v) -> viewModel.isEditable() ? parent.onClick(v, viewModel.update()) : viewModel.edit()}"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:src="@{!viewModel.editable ? @drawable/ic_edit_black : @drawable/ic_save_white}"
-                        android:tint="@{viewModel.editable ? @color/colorAccent : @color/black}"
+                        android:src="@{!viewModel.isEditable() ? @drawable/ic_edit_black : @drawable/ic_save_white}"
+                        android:tint="@{viewModel.isEditable() ? @color/colorAccent : @color/black}"
                         tools:src="@drawable/ic_edit_black"/>
 
                 </LinearLayout>
@@ -119,7 +119,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_down"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                         <TextView
                             android:id="@+id/stat_str"
@@ -142,7 +142,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_up"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                     </FrameLayout>
 
@@ -167,7 +167,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_down"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                         <TextView
                             android:id="@+id/stat_int"
@@ -190,7 +190,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_up"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                     </FrameLayout>
 
@@ -223,7 +223,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_down"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                         <TextView
                             android:id="@+id/stat_dex"
@@ -246,7 +246,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_up"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                     </FrameLayout>
 
@@ -271,7 +271,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_down"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                         <TextView
                             android:id="@+id/stat_wis"
@@ -294,7 +294,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_up"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                     </FrameLayout>
 
@@ -327,7 +327,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_down"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                         <TextView
                             android:id="@+id/stat_con"
@@ -350,7 +350,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_up"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                     </FrameLayout>
 
@@ -375,7 +375,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_down"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                         <TextView
                             android:id="@+id/stat_cha"
@@ -398,7 +398,7 @@
                             android:paddingLeft="6dp"
                             android:paddingRight="6dp"
                             android:src="@drawable/ic_arrow_drop_up"
-                            android:visibility="@{viewModel.editable ? View.VISIBLE : View.GONE}"/>
+                            android:visibility="@{viewModel.isEditable() ? View.VISIBLE : View.GONE}"/>
 
                     </FrameLayout>
 

@@ -15,8 +15,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.EquipmentModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -129,7 +129,7 @@
                     android:layout_gravity="end"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> presenter.save(viewModel.update(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.createAndDismiss(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

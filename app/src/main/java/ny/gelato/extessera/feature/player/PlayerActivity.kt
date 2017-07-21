@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
+import android.view.View
 import kotlinx.android.synthetic.main.activity_player.*
 import ny.gelato.extessera.App
 
@@ -68,7 +69,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
 
     @Inject lateinit var presenter: PlayerPresenter
 
-    @Inject lateinit var adapter: PlayerAdapter
+    val adapter = PlayerAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,10 +112,16 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
         presenter.stop()
     }
 
+    override fun onClick(v: View, viewModel: BaseViewModel) {
+        if (viewModel.action == BaseViewModel.Action.CONTEXT_MENU) {
+
+        }
+        else presenter.routeOnClick(viewModel)
+    }
+
     override fun showPlayer(feed: MutableList<BaseViewModel>) {
         adapter.feed = feed
     }
-
 
     override fun showCreateCharacter(newCharacter: NewCharacterModel?) {
         EditCharacterActivity.show(this)

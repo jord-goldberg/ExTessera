@@ -111,12 +111,6 @@ class SpellSearchPresenter() : Search5ePresenter<SpellSearchView>() {
         subscriptions.clear()
     }
 
-    override fun click(v: View, clicked: Any?) {
-        when (clicked) {
-            is Spell -> view.showSpellDetail(clicked)
-        }
-    }
-
     fun toggleJobFilter(job: String) {
         filters.toggleJob(job)
         publishFilters.onNext(filters)

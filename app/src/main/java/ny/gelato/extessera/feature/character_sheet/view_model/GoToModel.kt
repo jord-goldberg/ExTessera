@@ -8,7 +8,7 @@ import ny.gelato.extessera.base.BaseViewModel
  */
 
 data class GoToModel(
-        val destination: Destination = GoToModel.Destination.NONE
+        var destination: Destination = GoToModel.Destination.NONE
 
 ) : BaseViewModel() {
 
@@ -24,7 +24,8 @@ data class GoToModel(
     }
 
     fun goTo(destination: Destination, sheet: BottomSheetDialog): GoToModel {
+        this.destination = destination
         sheet.dismiss()
-        return copy(destination = destination)
+        return this
     }
 }

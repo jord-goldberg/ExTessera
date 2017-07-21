@@ -10,4 +10,4 @@ data class HeaderModel(
         val title: String,
         val menuRes: Int = 0
 
-) : BaseViewModel()
+) : BaseViewModel(Action.CONTEXT_MENU)

@@ -42,21 +42,23 @@ data class SavingThrowsModel(
                     char.charisma.save,
                     AvatarModel(char))
 
+    fun isEditable(): Boolean = action == Action.EDIT
+
     fun edit() {
-        editable = true
+        action = Action.EDIT
         notifyChange()
     }
 
     fun longEdit(): Boolean {
-        editable = true
+        action = Action.EDIT
         notifyChange()
         return true
     }
 
     fun update(): SavingThrowsModel {
-        editable = false
+        action = Action.VIEW
         notifyChange()
-        return this
+        return this.copy().apply { action = Action.UPDATE }
     }
 
     fun toggleStrSave(isProficient: Boolean) {

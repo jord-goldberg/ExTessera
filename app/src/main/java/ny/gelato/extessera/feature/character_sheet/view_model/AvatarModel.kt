@@ -27,9 +27,7 @@ data class AvatarModel(
                     char.imagePath,
                     char.imageUrl)
 
-    fun edit(): AvatarModel {
-        return copy().apply { editable = true }
-    }
+    fun menu(): AvatarModel = copy().apply { action = Action.CONTEXT_MENU }
 
     fun toggleInspiration(): AvatarModel = copy(isInspired = !isInspired)
 
@@ -45,18 +43,18 @@ data class AvatarModel(
         newImageUrl = null
         notifyChange()
         sheet.dismiss()
-        return this
+        return this.copy().apply { action = Action.UPDATE }
 
     }
 
     fun updateImage(sheet: BottomSheetDialog): AvatarModel {
         sheet.dismiss()
-        return this
+        return this.copy().apply { action = Action.UPDATE }
     }
 
     fun about(): AboutModel = AboutModel()
 
-    fun addExp(): ExpModel = ExpModel()
+    fun experience(): ExpModel = ExpModel()
 
     fun goTo(): GoToModel = GoToModel()
 }

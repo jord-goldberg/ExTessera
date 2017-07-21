@@ -7,7 +7,6 @@
     app:layout_anchorGravity="bottom">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -17,8 +16,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.CoinModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -112,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change != 0 ? presenter.save(viewModel.addCoin(sheet)) : sheet.dismiss()}"
+                    android:onClick="@{(v) -> viewModel.change != 0 ? parent.onClick(v, viewModel.addCoin(sheet)) : sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="@{viewModel.showAddCoin()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
@@ -125,7 +124,7 @@
                     android:layout_gravity="end"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change > viewModel.amount ? viewModel.notifyError() : presenter.save(viewModel.spendCoin(sheet))}"
+                    android:onClick="@{(v) -> viewModel.change > viewModel.amount ? viewModel.notifyError() : parent.onClick(v, viewModel.spendCoin(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Spend"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

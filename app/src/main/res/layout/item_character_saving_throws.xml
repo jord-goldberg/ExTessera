@@ -12,8 +12,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.SavingThrowsModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -26,7 +26,7 @@
         android:clipToPadding="false"
         app:contentPaddingBottom="4dp"
         android:foreground="?selectableItemBackground"
-        android:onLongClick="@{() -> viewModel.editable ? presenter.longClick(viewModel.update()) : viewModel.longEdit()}"
+        android:onLongClick="@{(v) -> viewModel.isEditable() ? parent.onLongClick(v, viewModel.update()) : viewModel.longEdit()}"
         app:cardCornerRadius="0px">
 
         <LinearLayout
@@ -48,8 +48,8 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="8dp"
-                        android:onClick="@{(v) -> presenter.click(v, viewModel.avatar)}"
-                        android:onLongClick="@{() -> presenter.longClick(viewModel.avatar.toggleInspiration())}"
+                        android:onClick="@{(v) -> parent.onClick(v, viewModel.avatar)}"
+                        android:onLongClick="@{(v) -> parent.onLongClick(v, viewModel.avatar.toggleInspiration())}"
                         bind:viewModel="@{viewModel.avatar}"/>
 
                     <TextView
@@ -60,7 +60,7 @@
                         android:layout_weight="1"
                         android:alpha=".87"
                         android:fontFamily="sans-serif-smallcaps"
-                        android:text="@{viewModel.editable ? @string/save_proficiencies : @string/saving_throws}"
+                        android:text="@{viewModel.isEditable() ? @string/save_proficiencies : @string/saving_throws}"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                         tools:text="@string/saving_throws"/>
 
@@ -70,11 +70,11 @@
                         android:alpha=".87"
                         android:clickable="true"
                         android:foreground="?selectableItemBackground"
-                        android:onClick="@{() -> viewModel.editable ? presenter.save(viewModel.update()) : viewModel.edit()}"
+                        android:onClick="@{(v) -> viewModel.isEditable() ? parent.onClick(v, viewModel.update()) : viewModel.edit()}"
                         android:paddingEnd="@dimen/activity_horizontal_margin"
                         android:paddingStart="@dimen/activity_horizontal_margin"
-                        android:src="@{!viewModel.editable ? @drawable/ic_edit_black : @drawable/ic_save_white}"
-                        android:tint="@{viewModel.editable ? @color/colorAccent : @color/black}"
+                        android:src="@{!viewModel.isEditable() ? @drawable/ic_edit_black : @drawable/ic_save_white}"
+                        android:tint="@{viewModel.isEditable() ? @color/colorAccent : @color/black}"
                         tools:src="@drawable/ic_edit_black"/>
 
                 </LinearLayout>
@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:checked="@{viewModel.strSave}"
                         android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleStrSave(isChecked)}"
-                        android:visibility="@{!viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                        android:visibility="@{!viewModel.isEditable() ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:id="@+id/stat_str"
@@ -122,7 +122,7 @@
                         android:text="@{viewModel.showStrSave()}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@{viewModel.strSave ? @color/colorAccent : @android:color/primary_text_light}"
-                        android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.isEditable() ? View.GONE : View.VISIBLE}"
                         tools:text="10"/>
 
                     <TextView
@@ -138,7 +138,7 @@
                         android:layout_marginTop="12dp"
                         android:checked="@{viewModel.intSave}"
                         android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleIntSave(isChecked)}"
-                        android:visibility="@{!viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                        android:visibility="@{!viewModel.isEditable() ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:id="@+id/stat_int"
@@ -152,7 +152,7 @@
                         android:text="@{viewModel.showIntSave()}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@{viewModel.intSave ? @color/colorAccent : @android:color/primary_text_light}"
-                        android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.isEditable() ? View.GONE : View.VISIBLE}"
                         tools:text="10"/>
 
                     <TextView
@@ -176,7 +176,7 @@
                         android:layout_height="wrap_content"
                         android:checked="@{viewModel.dexSave}"
                         android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleDexSave(isChecked)}"
-                        android:visibility="@{!viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                        android:visibility="@{!viewModel.isEditable() ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:id="@+id/stat_dex"
@@ -189,7 +189,7 @@
                         android:text="@{viewModel.showDexSave()}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@{viewModel.dexSave ? @color/colorAccent : @android:color/primary_text_light}"
-                        android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.isEditable() ? View.GONE : View.VISIBLE}"
                         tools:text="10"/>
 
                     <TextView
@@ -205,7 +205,7 @@
                         android:layout_marginTop="12dp"
                         android:checked="@{viewModel.wisSave}"
                         android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleWisSave(isChecked)}"
-                        android:visibility="@{!viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                        android:visibility="@{!viewModel.isEditable() ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:id="@+id/stat_wis"
@@ -219,7 +219,7 @@
                         android:text="@{viewModel.showWisSave()}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@{viewModel.wisSave ? @color/colorAccent : @android:color/primary_text_light}"
-                        android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.isEditable() ? View.GONE : View.VISIBLE}"
                         tools:text="10"/>
 
                     <TextView
@@ -243,7 +243,7 @@
                         android:layout_height="wrap_content"
                         android:checked="@{viewModel.conSave}"
                         android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleConSave(isChecked)}"
-                        android:visibility="@{!viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                        android:visibility="@{!viewModel.isEditable() ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:id="@+id/stat_con"
@@ -256,7 +256,7 @@
                         android:text="@{viewModel.showConSave()}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@{viewModel.conSave ? @color/colorAccent : @android:color/primary_text_light}"
-                        android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.isEditable() ? View.GONE : View.VISIBLE}"
                         tools:text="10"/>
 
                     <TextView
@@ -272,7 +272,7 @@
                         android:layout_marginTop="12dp"
                         android:checked="@{viewModel.chaSave}"
                         android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleChaSave(isChecked)}"
-                        android:visibility="@{!viewModel.editable ? View.GONE : View.VISIBLE}"/>
+                        android:visibility="@{!viewModel.isEditable() ? View.GONE : View.VISIBLE}"/>
 
                     <TextView
                         android:id="@+id/stat_cha"
@@ -286,7 +286,7 @@
                         android:text="@{viewModel.showChaSave()}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@{viewModel.chaSave ? @color/colorAccent : @android:color/primary_text_light}"
-                        android:visibility="@{viewModel.editable ? View.GONE : View.VISIBLE}"
+                        android:visibility="@{viewModel.isEditable() ? View.GONE : View.VISIBLE}"
                         tools:text="10"/>
 
                     <TextView

@@ -1,19 +1,17 @@
 package ny.gelato.extessera.feature.character_sheet
 
 import android.support.v7.util.DiffUtil
-import android.support.v7.widget.StaggeredGridLayoutManager
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.base.BaseViewModelAdapter
 import ny.gelato.extessera.feature.character_sheet.view_model.*
-import javax.inject.Inject
 
 
 /**
  * Created by jord.goldberg on 4/30/17.
  */
 
-class CharacterAdapter @Inject constructor(override val presenter: CharacterPresenter) : BaseViewModelAdapter(presenter) {
+class CharacterAdapter constructor(override val parent: CharacterView) : BaseViewModelAdapter(parent) {
 
     var feed: MutableList<BaseViewModel> = mutableListOf()
         set(value) {

@@ -3,6 +3,7 @@ package ny.gelato.extessera.feature.character_sheet.view_model
 import android.os.Handler
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.data.model.character.Character
 import java.text.NumberFormat
 
 /**
@@ -10,31 +11,35 @@ import java.text.NumberFormat
  */
 
 data class ExpModel(
-        var total: Int = 0,
-        val toNextLevel: Int = 0,
-        var additional: Int = 0
+        var current: Int = 0,
+        var toNextLevel: Int = 0,
+        var change: Int = 0
 
 ) : BaseViewModel() {
 
+    constructor(character: Character) : this(character.exp, character.expToNextLevel()) {
+        action = Action.UPDATE
+    }
+
     fun hint(): String = "+$toNextLevel exp to next level"
 
-    fun showExp(): String = NumberFormat.getInstance().format(total)
+    fun showExp(): String = NumberFormat.getInstance().format(current)
 
-    fun setAdditional(exp: CharSequence) {
-        if (exp.isEmpty()) additional = 0
-        else additional = exp.toString().toInt()
+    fun setChange(exp: CharSequence) {
+        if (exp.isEmpty()) change = 0
+        else change = exp.toString().toInt()
         notifyChange()
     }
 
-    fun addExp(sheet: BottomSheetDialog): ExpModel {
-        total += additional
+    fun addExpAndDismiss(sheet: BottomSheetDialog): ExpModel {
+        current += change
         notifyChange()
         Handler().postDelayed({ sheet.dismiss() }, 1000)
         return this
     }
 
-    fun setExp(sheet: BottomSheetDialog): ExpModel {
-        total = additional
+    fun setExpAndDismiss(sheet: BottomSheetDialog): ExpModel {
+        current = change
         notifyChange()
         Handler().postDelayed({ sheet.dismiss() }, 1000)
         return this

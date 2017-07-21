@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="ny.gelato.extessera.data.model.Spell"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.search_5e.spell_search.SpellSearchPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.search_5e.spell_search.SpellSearchView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -22,7 +21,7 @@
         android:clickable="true"
         android:clipToPadding="false"
         android:foreground="?selectableItemBackground"
-        android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+        android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
         app:cardCornerRadius="0px">
 
         <LinearLayout

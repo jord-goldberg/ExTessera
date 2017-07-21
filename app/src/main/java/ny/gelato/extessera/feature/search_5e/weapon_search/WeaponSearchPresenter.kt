@@ -85,12 +85,6 @@ class WeaponSearchPresenter : Search5ePresenter<WeaponSearchView>() {
         subscriptions.clear()
     }
 
-    override fun click(v: View, clicked: Any?) {
-        when (clicked) {
-            is Weapon -> view.showAddWeapon(v, clicked)
-        }
-    }
-
     fun clearFilters() {
         filters.clear()
         publishFilters.onNext(filters)

@@ -36,22 +36,23 @@ data class EquipmentModel(
         else change = amount.toString().toInt()
     }
 
-    fun update(sheet: BottomSheetDialog): EquipmentModel {
+    fun createAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
+        action = Action.CREATE
         sheet.dismiss()
         return this
     }
 
-    fun add(sheet: BottomSheetDialog): EquipmentModel {
+    fun addAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
         sheet.dismiss()
         amount += change
         notifyChange()
-        return this.copy().apply { editable = true }
+        return this.copy().apply { action = Action.UPDATE }
     }
 
-    fun remove(sheet: BottomSheetDialog): EquipmentModel {
+    fun removeAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
         sheet.dismiss()
         amount -= change
         notifyChange()
-        return this.copy().apply { editable = true }
+        return this.copy().apply { action = Action.UPDATE }
     }
 }

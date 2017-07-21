@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.mvp_view_wait_error_empty.*
 import ny.gelato.extessera.App
 import ny.gelato.extessera.R
+import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.source.CharacterManager
@@ -56,7 +57,7 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
     lateinit var filterBinding: BottomSheetSearchWeaponFiltersBinding
 
     val presenter = WeaponSearchPresenter()
-    val adapter = Search5eRecyclerAdapter(presenter)
+    val adapter = Search5eRecyclerAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,6 +102,12 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isCreated) search5eView.showFiltering(presenter.filters.filtering())
+    }
+
+    override fun onClick(v: View, any: Any) {
+        when (any) {
+            is Weapon -> showAddWeapon(v, any)
+        }
     }
 
     override fun queryText(): Observable<String> = search5eView.queryText()

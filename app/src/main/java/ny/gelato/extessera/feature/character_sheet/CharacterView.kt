@@ -41,8 +41,6 @@ interface CharacterView : BaseView {
 
     fun showEditMaxHp(maxHp: MaxHpModel)
 
-    fun showSelectDcAbility(status: StatusModel)
-
     fun showSelectSkillProficiency(skill: SkillModel)
 
     fun showWeaponDetail(weapon: WeaponModel)
@@ -58,6 +56,4 @@ interface CharacterView : BaseView {
     fun showCreateEquipment()
 
     fun showEquipmentItem(equipment: EquipmentModel)
-
-    fun showPopupMenu(view: View, menuRes: Int)
 }

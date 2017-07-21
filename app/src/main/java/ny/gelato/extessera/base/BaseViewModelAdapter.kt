@@ -14,7 +14,7 @@ import ny.gelato.extessera.BR
  * Created by jord.goldberg on 4/30/17.
  */
 
-abstract class BaseViewModelAdapter(open val presenter: BasePresenter<*>? = null) :
+abstract class BaseViewModelAdapter(open val parent: BaseView? = null) :
         RecyclerView.Adapter<BaseViewModelAdapter.ViewModelHolder>() {
 
     protected abstract fun getViewModelForPosition(position: Int): Any
@@ -29,17 +29,15 @@ abstract class BaseViewModelAdapter(open val presenter: BasePresenter<*>? = null
 
     override fun onBindViewHolder(holder: ViewModelHolder, position: Int) {
         val viewModel = getViewModelForPosition(position)
-        holder.bind(viewModel, presenter)
+        holder.bind(viewModel, parent)
     }
 
     override fun getItemViewType(position: Int): Int = getLayoutIdForPosition(position)
 
     class ViewModelHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(viewModel: Any, presenter: BasePresenter<*>?) {
+        fun bind(viewModel: Any, parent: BaseView?) {
             binding.setVariable(BR.viewModel, viewModel)
-            presenter.let {
-                binding.setVariable(BR.presenter, it)
-            }
+            parent.let { binding.setVariable(BR.parent, it) }
             binding.executePendingBindings()
         }
     }

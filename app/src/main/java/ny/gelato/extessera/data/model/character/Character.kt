@@ -152,7 +152,7 @@ open class Character(
     }
 
     fun noteModels(): List<BaseViewModel> =
-            notes.map { NoteModel(it.id, it.text, it.isDone) }
+            notes.map { NoteModel(it) }
                     .toMutableList<BaseViewModel>()
                     .apply {
                         if (hasToLevelUp()) add(LevelUpModel(this@Character))

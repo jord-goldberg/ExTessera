@@ -41,17 +41,17 @@ data class SkillModel(
 
     fun none(sheet: BottomSheetDialog): SkillModel {
         sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.NONE)
+        return copy(proficiency = Skill.Proficiency.NONE).apply { action = Action.UPDATE }
     }
 
     fun full(sheet: BottomSheetDialog): SkillModel {
         sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.FULL)
+        return copy(proficiency = Skill.Proficiency.FULL).apply { action = Action.UPDATE }
     }
 
     fun expert(sheet: BottomSheetDialog): SkillModel {
         sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.EXPERT)
+        return copy(proficiency = Skill.Proficiency.EXPERT).apply { action = Action.UPDATE }
     }
 
     fun showModifier(): String = Ability.format(modifier + when (proficiency) {

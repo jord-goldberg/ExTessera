@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -14,13 +13,11 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.SkillModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
-
         <import type="ny.gelato.extessera.data.model.character.Skill.Type"/>
-
         <import type="ny.gelato.extessera.data.model.character.Skill.Proficiency"/>
     </data>
 
@@ -78,7 +75,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{() -> presenter.save(viewModel.none(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.none(sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:visibility="@{viewModel.jackOfAllTrades ? View.GONE : View.VISIBLE}">
@@ -106,7 +103,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{() -> presenter.save(viewModel.none(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.none(sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:visibility="@{viewModel.jackOfAllTrades ? View.VISIBLE : View.GONE}">
@@ -133,7 +130,7 @@
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{() -> presenter.save(viewModel.full(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.full(sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin">
 
@@ -159,7 +156,7 @@
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{() -> presenter.save(viewModel.expert(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.expert(sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin">
 

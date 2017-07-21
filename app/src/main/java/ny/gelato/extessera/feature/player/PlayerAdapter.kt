@@ -13,7 +13,7 @@ import javax.inject.Inject
  * Created by jord.goldberg on 7/11/17.
  */
 
-class PlayerAdapter @Inject constructor(override val presenter: PlayerPresenter) : BaseViewModelAdapter(presenter) {
+class PlayerAdapter constructor(override val parent: PlayerView) : BaseViewModelAdapter(parent) {
 
     var feed: MutableList<BaseViewModel> = mutableListOf()
         set(value) {

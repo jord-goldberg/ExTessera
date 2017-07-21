@@ -36,7 +36,7 @@ data class SpellModel(
     fun updatePrepared(): SpellModel {
         prepared = !prepared
         notifyChange()
-        return this
+        return this.copy().apply { action = Action.UPDATE }
     }
 
     fun isEmpty(): Boolean = requirements.isEmpty()

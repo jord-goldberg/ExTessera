@@ -10,10 +10,6 @@
             name="viewModel"
             type="ny.gelato.extessera.feature.character_sheet.view_model.SkillSubheaderModel"/>
 
-        <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
-
         <import type="android.view.View"/>
 
         <import type="android.graphics.Paint"/>

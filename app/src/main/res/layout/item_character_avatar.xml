@@ -12,8 +12,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.AvatarModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
     </data>
 
     <android.support.v7.widget.CardView
@@ -29,7 +29,7 @@
             android:alpha=".87"
             android:clickable="true"
             android:foreground="?selectableItemBackground"
-            android:onClick="@{(v) -> presenter.click(v, viewModel.edit())}"
+            android:onClick="@{(v) -> parent.onClick(v, viewModel.menu())}"
             android:paddingBottom="12dp"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -49,8 +49,8 @@
                 android:layout_gravity="center_horizontal"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> presenter.click(v, viewModel)}"
-                android:onLongClick="@{() -> presenter.longClick(viewModel.toggleInspiration())}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
+                android:onLongClick="@{(v) -> parent.onLongClick(v, viewModel.toggleInspiration())}"
                 app:contentPadding="4dp">
 
                 <ny.gelato.extessera.common.AvatarView
@@ -104,7 +104,7 @@
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
                     android:gravity="center"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.about())}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.about())}"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:text="about"
@@ -120,7 +120,7 @@
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
                     android:gravity="center"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.addExp())}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.experience())}"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:text="experience"
@@ -136,7 +136,7 @@
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
                     android:gravity="center"
-                    android:onClick="@{(v) -> presenter.click(v, viewModel.goTo())}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo())}"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:text="go to"

@@ -15,11 +15,11 @@ data class DeathSaveModel(
 ) : BaseViewModel() {
 
     constructor(character: Character) :
-            this(character.successes,
-                    character.failures,
-                    AvatarModel(character))
+            this(character.successes, character.failures, AvatarModel(character)) {
+        action = Action.UPDATE
+    }
 
-    fun edit(): DeathSaveModel = copy().apply { editable = true }
+    fun menu(): DeathSaveModel = copy().apply { action = Action.CONTEXT_MENU }
 
     fun setSuccess(number: Int): DeathSaveModel {
         successes = number

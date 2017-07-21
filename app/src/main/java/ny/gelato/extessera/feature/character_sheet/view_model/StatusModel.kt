@@ -19,9 +19,6 @@ data class StatusModel(
         val passiveWisdom: Int,
         var dice: Int,
         val hitDie: String,
-        val dc: Int,
-        val dcAbility: Ability.Type,
-        val isDcEditable: Boolean = false,
         val avatar: AvatarModel
 
 ) : BaseViewModel() {
@@ -38,32 +35,24 @@ data class StatusModel(
                     passiveWisdom = 10 + character.wisdom.modifier(),
                     dice = character.primary.dice,
                     hitDie = character.primary.hitDieMaxFormatted(),
-                    avatar = AvatarModel(character),
-                    dcAbility = Ability.Type.valueOf(character.preferences.dcAbility),
-                    dc = 8 + when (Ability.Type.valueOf(character.preferences.dcAbility)) {
-                        Ability.Type.STR -> character.strength.modifier()
-                        Ability.Type.DEX -> character.dexterity.modifier()
-                        Ability.Type.CON -> character.constitution.modifier()
-                        Ability.Type.INT -> character.intelligence.modifier()
-                        Ability.Type.WIS -> character.wisdom.modifier()
-                        Ability.Type.CHA -> character.charisma.modifier()
-                    } + character.proficiencyBonus())
+                    avatar = AvatarModel(character))
 
     var isHpChanged: Boolean = false
 
     var isArmorEditable: Boolean = false
-        get() = field || editable
+        get() = field || action == Action.EDIT
 
     var isInitiativeEditable: Boolean = false
-        get() = field || editable
+        get() = field || action == Action.EDIT
 
     var isSpeedEditable: Boolean = false
-        get() = field || editable
+        get() = field || action == Action.EDIT
 
     var isHitDiceEditable: Boolean = false
-        get() = field || editable
+        get() = field || action == Action.EDIT
 
-    fun isEditable(): Boolean = isHpChanged || isArmorEditable || isInitiativeEditable || isSpeedEditable || isHitDiceEditable || editable
+    fun isEditable(): Boolean = isHpChanged || isArmorEditable || isInitiativeEditable
+            || isSpeedEditable || isHitDiceEditable || action == Action.EDIT
 
     fun editArmor(): Boolean {
         isArmorEditable = true
@@ -89,30 +78,17 @@ data class StatusModel(
         return true
     }
 
-    fun editDc(): StatusModel {
-        return copy(isDcEditable = true)
-    }
+    fun menu(): StatusModel = this.copy().apply { action = Action.CONTEXT_MENU }
 
     fun update(): StatusModel {
-        editable = false
+        action = Action.VIEW
         isHpChanged = false
         isArmorEditable = false
         isInitiativeEditable = false
         isSpeedEditable = false
         isHitDiceEditable = false
         notifyChange()
-        return this
-    }
-
-    fun update(dcAbility: Ability.Type, sheet: BottomSheetDialog): StatusModel {
-        editable = false
-        isHpChanged = false
-        isArmorEditable = false
-        isInitiativeEditable = false
-        isSpeedEditable = false
-        notifyChange()
-        sheet.dismiss()
-        return copy(dcAbility = dcAbility)
+        return this.copy().apply { action = Action.UPDATE }
     }
 
     fun hpUp() {
@@ -188,8 +164,6 @@ data class StatusModel(
     fun showDiceNum(): String = dice.toString()
 
     fun showHitDice(): String = "Hit Dice\n($hitDie)"
-
-    fun showDc(): String = "$dc"
 
     fun showEditHp(): HpModel = HpModel()
 

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -14,8 +13,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.NoteModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -75,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.validateText() ? presenter.save(viewModel.createNote(sheet)) : null}"
+                    android:onClick="@{(v) -> viewModel.validateText() ? parent.onClick(v, viewModel.createAndDismiss(sheet)) : null}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

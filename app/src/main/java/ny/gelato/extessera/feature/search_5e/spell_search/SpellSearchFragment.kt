@@ -63,7 +63,7 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
         super.onCreate(savedInstanceState)
         search5eView = activity as Search5eView
         component.inject(this)
-        adapter = Search5eRecyclerAdapter(presenter)
+        adapter = Search5eRecyclerAdapter(this)
         isCreated = true
     }
 
@@ -104,6 +104,12 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
         if (isCreated) search5eView.showFiltering(presenter.filters.filtering())
+    }
+
+    override fun onClick(v: View, any: Any) {
+        when (any) {
+            is Spell -> showSpellDetail(any)
+        }
     }
 
     override fun queryText(): Observable<String> = search5eView.queryText()

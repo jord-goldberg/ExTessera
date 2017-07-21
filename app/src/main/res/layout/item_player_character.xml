@@ -12,8 +12,8 @@
             type="ny.gelato.extessera.feature.player.view_model.CharacterModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.player.PlayerPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.player.PlayerView"/>
 
         <import type="android.view.View"/>
 
@@ -26,7 +26,7 @@
         android:clickable="true"
         android:clipToPadding="false"
         android:foreground="?selectableItemBackground"
-        android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+        android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
         app:cardCornerRadius="0px">
 
         <LinearLayout

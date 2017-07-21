@@ -49,13 +49,13 @@ data class CoinModel(
     fun addCoin(sheet: BottomSheetDialog): CoinModel {
         sheet.dismiss()
         amount += change
-        return this
+        return this.copy().apply { action = Action.UPDATE }
     }
 
     fun spendCoin(sheet: BottomSheetDialog): CoinModel {
         sheet.dismiss()
         amount -= change
-        return this
+        return this.apply { action = Action.UPDATE }
     }
 
     fun showAmount(): String = NumberFormat.getInstance().format(amount)

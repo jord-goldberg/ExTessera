@@ -11,8 +11,8 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.NoteModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -23,7 +23,7 @@
         android:clickable="@{viewModel.isEmpty() ? true : false}"
         android:clipToPadding="false"
         android:foreground="?selectableItemBackground"
-        android:onClick="@{(v) -> presenter.click(v, viewModel)}"
+        android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
         app:cardCornerRadius="0px">
 
         <LinearLayout
@@ -49,7 +49,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginStart="4dp"
                 android:checked="@{viewModel.done}"
-                android:onCheckedChanged="@{(cb, isChecked) -> viewModel.isEmpty() ? null : presenter.click(cb, viewModel.toggleDone(isChecked))}"
+                android:onCheckedChanged="@{(cb, isChecked) -> viewModel.isEmpty() ? null : parent.onClick(cb, viewModel.toggleDone(isChecked))}"
                 android:visibility="@{viewModel.isEmpty() ? View.GONE : View.VISIBLE}"/>
 
             <TextView

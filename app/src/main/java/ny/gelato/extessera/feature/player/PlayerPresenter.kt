@@ -48,7 +48,7 @@ class PlayerPresenter @Inject constructor(val playerManager: PlayerManager) : Ba
 
     fun stop() = subscriptions.clear()
 
-    fun click(v: View, model: BaseViewModel) {
+    fun routeOnClick(model: BaseViewModel) {
         when (model) {
             is CharacterModel -> view.showCharacter(model)
             is NewCharacterModel -> view.showCreateCharacter(model)

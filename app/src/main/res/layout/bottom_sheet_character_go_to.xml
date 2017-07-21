@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -14,11 +13,10 @@
             type="ny.gelato.extessera.feature.character_sheet.view_model.GoToModel"/>
 
         <variable
-            name="presenter"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterPresenter"/>
+            name="parent"
+            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
         <import type="android.view.View"/>
-
         <import type="ny.gelato.extessera.feature.character_sheet.view_model.GoToModel.Destination"/>
     </data>
 
@@ -58,7 +56,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.NOTES, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.NOTES, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Notes"/>
 
@@ -68,7 +66,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.ABILITIES, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.ABILITIES, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Abilities"/>
 
@@ -78,7 +76,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.SAVES, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.SAVES, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Saves"/>
 
@@ -88,7 +86,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.SKILLS, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.SKILLS, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Skills"/>
 
@@ -98,7 +96,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.EQUIPMENT, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.EQUIPMENT, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Equipment"/>
 
@@ -108,7 +106,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.WEAPONS, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.WEAPONS, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Weapons"/>
 
@@ -118,7 +116,7 @@
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
                 android:gravity="center_vertical"
-                android:onClick="@{(v) -> presenter.click(v, viewModel.goTo(Destination.SPELLS, sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.goTo(Destination.SPELLS, sheet))}"
                 android:paddingStart="32dp"
                 android:text="Spells"/>
 
