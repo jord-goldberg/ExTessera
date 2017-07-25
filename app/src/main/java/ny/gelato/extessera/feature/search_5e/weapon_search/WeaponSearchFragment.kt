@@ -2,7 +2,6 @@ package ny.gelato.extessera.feature.search_5e.weapon_search
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.BottomSheetDialog
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -17,14 +16,14 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.mvp_view_wait_error_empty.*
 import ny.gelato.extessera.App
 import ny.gelato.extessera.R
-import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.data.source.CharacterManager
+import ny.gelato.extessera.data.model.character.HeldWeapon
 import ny.gelato.extessera.databinding.BottomSheetSearchWeaponFiltersBinding
 import ny.gelato.extessera.feature.search_5e.Search5eRecyclerAdapter
 import ny.gelato.extessera.feature.search_5e.Search5eView
 import rx.Observable
+import java.util.*
 
 /**
  * Created by jord.goldberg on 6/14/17.
@@ -139,8 +138,17 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
                     menu.add(0, index, index, "Add to $name")
                 }
                 setOnMenuItemClickListener {
-                    CharacterManager(App.component.realm(), characters[it.itemId].id).addWeapon(weapon.name)
-                    Handler().postDelayed({ dismiss(); activity.finish() }, 200)
+                    val characterId = characters[it.itemId].id
+                    App.component.realm().executeTransaction { realm ->
+                        val character = realm.where(Character::class.java)
+                                .equalTo("id", characterId)
+                                .findFirst()
+                        character.weapons.add(HeldWeapon(weapon))
+                        character.updated = Date()
+
+                        dismiss()
+                        activity.finish()
+                    }
                     true
                 }
                 show()

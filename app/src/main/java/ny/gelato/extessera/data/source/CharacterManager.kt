@@ -220,34 +220,23 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
-    override fun addWeapon(weaponName: String) {
-        realm.executeTransaction { realm ->
+    override fun createWeapon(weaponCreate: WeaponCreateModel) {
+        realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            val newWeapon = realm.where(Weapon::class.java).equalTo("name", weaponName).findFirst()
-            if (character.weapons.where().equalTo("name", newWeapon.name).findFirst()?.name != newWeapon.name) {
-                character.weapons.add(newWeapon)
-                character.updated = Date()
-            }
-        }
-    }
-
-    override fun removeWeapon(weaponName: String) {
-        realm.executeTransaction { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            val removeWeapon = character.weapons.where().equalTo("name", weaponName).findFirst()
-            character.weapons.remove(removeWeapon)
+            val weaponType = realm.where(Weapon::class.java).equalTo("name", weaponCreate.type.formatted)
+                    .findFirst()
+            character.weapons.add(HeldWeapon(weaponCreate, weaponType))
             character.updated = Date()
         }
     }
 
-    override fun learnSpell(spellName: String) {
+    override fun deleteWeapon(weaponId: String) {
         realm.executeTransaction { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            val newSpell = realm.where(Spell::class.java).equalTo("name", spellName).findFirst().toSpellbook()
-            if (character.spells.where().equalTo("name", newSpell.name).findFirst()?.name != newSpell.name) {
-                character.spells.add(newSpell)
-                character.updated = Date()
-            }
+            val deleteWeapon = character.weapons.where().equalTo("id", weaponId).findFirst()
+            character.weapons.remove(deleteWeapon)
+            character.updated = Date()
+            deleteWeapon.deleteFromRealm()
         }
     }
 
@@ -261,7 +250,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
-    override fun forgetSpell(spellName: String) {
+    override fun deleteSpell(spellName: String) {
         realm.executeTransaction { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val deleteSpell = character.spells.where().equalTo("name", spellName).findFirst()
@@ -280,14 +269,6 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
                 Preferences.Toggle.SHOW_NOTES -> preferences.showNotes = !preferences.showNotes
                 Preferences.Toggle.SHOW_SPELLS -> preferences.showSpells = !preferences.showSpells
             }
-            character.updated = Date()
-        }
-    }
-
-    override fun fullRest() {
-        realm.executeTransactionAsync { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.spellSlots.longRest(character)
             character.updated = Date()
         }
     }

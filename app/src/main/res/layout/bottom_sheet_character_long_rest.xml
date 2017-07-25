@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.EquipmentModel"/>
+            type="ny.gelato.extessera.feature.character_sheet.view_model.StatusModel"/>
 
         <variable
             name="parent"
@@ -29,57 +29,36 @@
             android:orientation="vertical"
             android:paddingBottom="8dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="47dp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="32dp"
-                    android:layout_weight="1"
-                    android:alpha=".87"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:text="@{viewModel.name}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Arrows"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="46dp"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:layout_marginTop="1dp"
-                    android:alpha=".87"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center"
-                    android:text="@{viewModel.showAmount()}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    tools:text="348"/>
-
-            </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="1dp"
+                android:alpha=".87"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_vertical"
+                android:text="Long Rest"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="32dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
                 android:background="@color/grey_300"/>
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
+                android:fontFamily="sans-serif"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Amount"
-                android:inputType="number"
-                android:maxLength="9"
-                android:onTextChanged="@{(amount, i, x, y) -> viewModel.setChange(amount)}"
+                android:text="Does your Dungeon Master approve?"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                 android:textColor="@android:color/secondary_text_light"/>
 
             <LinearLayout
@@ -94,11 +73,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:layout_gravity="end"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel.addAndDismiss(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.longRestAndDismiss(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="+ Add"
+                    android:text="Rest"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
                     android:textColor="@color/colorPrimaryDark"/>
 
@@ -107,11 +85,12 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel.removeAndDismiss(sheet))}"
+                    android:onClick="@{(v) -> sheet.dismiss()}"
                     android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Remove"
+                    android:text="Cancel"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimaryDark"
+                    tools:visibility="visible"/>
 
             </LinearLayout>
 

@@ -3,7 +3,8 @@
 
     <item
         android:id="@+id/action_status_short_rest"
-        android:title="Short Rest"/>
+        android:title="Short Rest"
+        android:visible="false"/>
 
     <item
         android:id="@+id/action_status_long_rest"

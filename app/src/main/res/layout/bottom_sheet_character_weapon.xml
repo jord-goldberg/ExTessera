@@ -13,13 +13,15 @@
             name="parent"
             type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
 
+        <import type="java.lang.String"/>
         <import type="android.view.View"/>
     </data>
 
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_vertical_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +45,7 @@
                     android:maxLines="1"
                     android:text="@{viewModel.name}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Crossbow, heavy"/>
+                    tools:text="Wound Bow of the Gods"/>
 
                 <ImageView
                     android:layout_width="48dp"
@@ -75,10 +77,10 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="32dp"
                 android:fontFamily="sans-serif"
-                android:text="@{viewModel.properties}"
+                android:text="@{viewModel.properties()}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                android:visibility="@{viewModel.properties.isEmpty() ? View.GONE : View.VISIBLE}"
-                tools:text="Ammunition (range 100/400), heavy, loading, two-handed"/>
+                android:visibility="@{viewModel.properties().isEmpty() ? View.GONE : View.VISIBLE}"
+                tools:text="Bonus (+1), ammunition (range 100/400), heavy, loading, two-handed"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -126,7 +128,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="4dp">
 
@@ -151,6 +152,48 @@
                     tools:text="1d10 + 3 (Piercing)"/>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="4dp"
+                android:visibility="@{viewModel.custom ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="Type:"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:alpha=".87"
+                    android:fontFamily="sans-serif"
+                    android:text="@{viewModel.type}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+                    tools:text="Crossbow, Heavy"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:alpha=".87"
+                android:fontFamily="sans-serif"
+                android:text="@{viewModel.description}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                tools:text="Blessed by the Huntress God to never miss. Roll with advantage."
+                android:visibility="@{viewModel.description.isEmpty() ? View.GONE : View.VISIBLE}"/>
 
         </LinearLayout>
 

@@ -49,6 +49,7 @@ open class Character(
         var speed: Int = 30,
         var hp: Int = 1,
         var maxHp: Int = 1,
+        var tempHp: Int = 0,
         var successes: Int = 0,
         var failures: Int = 0,
 
@@ -65,9 +66,9 @@ open class Character(
         var traits: RealmList<Trait> = RealmList(),
         var proficiencies: RealmList<Proficiency> = RealmList(),
         var skills: RealmList<Skill> = RealmList(*Skill.Type.values().map { Skill(it.name) }.toTypedArray()),
-        var weapons: RealmList<Weapon> = RealmList(),
-        var spells: RealmList<KnownSpell> = RealmList(),
         var equipment: RealmList<Equipment> = RealmList(),
+        var weapons: RealmList<HeldWeapon> = RealmList(),
+        var spells: RealmList<KnownSpell> = RealmList(),
 
         var spellSlots: SpellSlots = SpellSlots(),
 

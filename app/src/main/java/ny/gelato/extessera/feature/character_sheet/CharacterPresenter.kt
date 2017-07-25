@@ -151,11 +151,11 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
                 characterManager.updateDeathSaves((model as DeathSaveModel).setSuccess(3))
                 view.showIsStabilized()
             }
-            R.id.action_status_short_rest -> null
-            R.id.action_status_long_rest -> null
+            R.id.action_status_long_rest -> view.showConfirmLongRest(model as StatusModel)
             R.id.action_status_edit_max_hp -> view.showEditMaxHp(MaxHpModel(character))
             R.id.action_skills_toggle_sort -> characterManager.updatePreference(Preferences.Toggle.SORT_SKILLS)
             R.id.action_weapons_add -> view.showWeaponsFor(character)
+            R.id.action_weapons_add_custom -> view.showCreateWeapon()
             R.id.action_spells_add -> view.showSpellsFor(character)
             R.id.action_spells_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_SPELLS)
             R.id.action_equipment_add -> view.showCreateEquipment()
@@ -165,7 +165,7 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
     fun create(model: BaseViewModel) {
         when (model) {
             is NoteModel -> characterManager.createNote(model)
-            is WeaponModel -> characterManager.addWeapon(model.name)
+            is WeaponCreateModel -> characterManager.createWeapon(model)
             is EquipmentModel -> characterManager.createEquipment(model)
         }
     }
@@ -195,8 +195,8 @@ class CharacterPresenter @Inject constructor(val characterManager: CharacterMana
     fun delete(model: BaseViewModel) {
         when (model) {
             is NoteModel -> characterManager.deleteNote(model)
-            is WeaponModel -> characterManager.removeWeapon(model.name)
-            is SpellModel -> characterManager.forgetSpell(model.name)
+            is WeaponModel -> characterManager.deleteWeapon(model.id)
+            is SpellModel -> characterManager.deleteSpell(model.name)
             is EquipmentModel -> characterManager.deleteEquipment(model)
         }
     }

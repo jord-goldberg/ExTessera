@@ -51,7 +51,7 @@
                     android:alpha=".87"
                     android:clickable="true"
                     android:visibility="@{viewModel.inSpellBook ? View.GONE : View.VISIBLE}"
-                    android:onClick="@{(v) -> presenter.showAddSpell(v, viewModel)}"
+                    android:onClick="@{(v) -> presenter.showAddSpell(v)}"
                     android:foreground="?selectableItemBackground"
                     android:scaleType="center"
                     android:src="@drawable/ic_add_black"

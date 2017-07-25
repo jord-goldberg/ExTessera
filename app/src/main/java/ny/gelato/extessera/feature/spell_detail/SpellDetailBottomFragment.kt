@@ -17,6 +17,7 @@ import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.source.CharacterManager
 import ny.gelato.extessera.databinding.BottomSheetSpellDetailBinding
 import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
+import java.util.*
 
 /**
  * Created by jord.goldberg on 5/15/17.
@@ -65,7 +66,7 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = sheet
 
-    fun showAddSpell(v: View, spell: SpellDetailModel) {
+    fun showAddSpell(v: View) {
         if (characters.isNotEmpty())
             PopupMenu(activity, v).apply {
                 if (characters.isNotEmpty()) characters.forEachIndexed { index, character ->
@@ -73,8 +74,19 @@ class SpellDetailBottomFragment : BottomSheetDialogFragment() {
                     menu.add(0, index, index, "Add to $name")
                 }
                 setOnMenuItemClickListener {
-                    CharacterManager(App.component.realm(), characters[it.itemId].id).learnSpell(spell.name)
-                    Handler().postDelayed({ dismiss(); activity.finish() }, 200)
+                    val characterId = characters[it.itemId].id
+                    App.component.realm().executeTransaction { realm ->
+                        val character = realm.where(Character::class.java)
+                                .equalTo("id", characterId)
+                                .findFirst()
+                        if (character.spells.where().equalTo("name", spell.name).findFirst() == null) {
+                            character.spells.add(spell.toSpellbook())
+                            character.updated = Date()
+                        }
+
+                        dismiss()
+                        activity.finish()
+                    }
                     true
                 }
                 show()

@@ -15,9 +15,10 @@ open class Weapon(
         var damage: String = "",
         var damageType: String = DamageType.BLUDGEONING,
         @Index var properties: String = "",
+        @Index var type: String = name,
         @Index var isCustom: Boolean = false,
-        var type: String = name,
-        var customProperties: String = ""
+        var description: String = "",
+        var bonus: Int = 0
 
 ) : RealmObject() {
 

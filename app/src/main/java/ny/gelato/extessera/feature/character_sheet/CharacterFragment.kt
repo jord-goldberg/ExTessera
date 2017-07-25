@@ -65,18 +65,25 @@ class CharacterFragment : Fragment(), CharacterView {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
-                    val model = adapter.feed.removeAt(position)
-                    val snackBarText = "Removed " + when (model) {
+                    val model = adapter.feed[position]
+                    val snackBarText = "Remove " + when (model) {
                         is WeaponModel -> model.name
                         is SpellModel -> model.name
                         is EquipmentModel -> model.name
                         else -> "note"
-                    }
+                    } + "?"
                     val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("undo") { _ -> presenter.create(model) }
-
-                    adapter.notifyItemRemoved(position)
-                    presenter.delete(model)
+                            .setAction("confirm") { _ ->
+                                adapter.feed.removeAt(position)
+                                adapter.notifyItemRemoved(position)
+                                presenter.delete(model)
+                            }
+                            .addCallback(object : Snackbar.Callback() {
+                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
+                                        adapter.notifyItemChanged(position)
+                                }
+                            })
                     snackBar.show()
                 }
 
@@ -224,6 +231,10 @@ class CharacterFragment : Fragment(), CharacterView {
         showBottomSheet(maxHp, R.layout.bottom_sheet_character_max_hp)
     }
 
+    override fun showConfirmLongRest(status: StatusModel) {
+        showBottomSheet(status, R.layout.bottom_sheet_character_long_rest)
+    }
+
     override fun showSelectSkillProficiency(skill: SkillModel) {
         showBottomSheet(skill, R.layout.bottom_sheet_character_skill)
     }
@@ -234,6 +245,10 @@ class CharacterFragment : Fragment(), CharacterView {
 
     override fun showWeaponsFor(character: Character) {
         Search5eActivity.showWeaponSearch(activity)
+    }
+
+    override fun showCreateWeapon() {
+        showBottomSheet(WeaponCreateModel(), R.layout.bottom_sheet_character_weapon_create)
     }
 
     override fun showSpellDetail(spell: SpellModel) {

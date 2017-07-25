@@ -12,11 +12,11 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.EquipmentModel"/>
+            type="ny.gelato.extessera.feature.character_sheet.view_model.WeaponCreateModel"/>
 
         <variable
             name="parent"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
+            type="ny.gelato.extessera.base.BaseView"/>
 
         <import type="android.view.View"/>
     </data>
@@ -45,13 +45,6 @@
                     android:fontFamily="sans-serif-smallcaps"
                     android:text="Custom Weapon"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
-
-                <CheckBox
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:paddingTop="1dp"/>
 
             </LinearLayout>
 
@@ -83,16 +76,14 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:hint="Weapon description"
+                android:hint="Description (optional)"
                 android:inputType="textCapSentences"
-                android:maxLines="1"
-                android:onTextChanged="@{(text, i, x, y) -> viewModel.setName(text)}"
+                android:onTextChanged="@{(text, i, x, y) -> viewModel.setDescription(text)}"
                 android:textColor="@android:color/secondary_text_light"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin">
@@ -101,17 +92,52 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="Weapon Type"/>
+                    android:text=" +"/>
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:hint="0"
+                    android:inputType="number"
+                    android:maxLength="1"
+                    android:onTextChanged="@{(input, i, x, y) -> viewModel.setBonus(input)}"
+                    android:textColor="@android:color/secondary_text_light"/>
 
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:backgroundTint="@color/colorAccent"
-                    android:entries="@{null}"
-                    android:onItemSelected="@{(p, v, position, id) -> null}"
-                    android:selectedItemPosition="@{0}"
+                    android:entries="@{viewModel.weaponTypes()}"
+                    android:onItemSelected="@{(p, v, position, id) -> viewModel.selectType(position)}"
+                    android:selectedItemPosition="@{viewModel.selectedTypePosition()}"
+                    android:spinnerMode="dialog"
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleIsProficient(isChecked)}"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Proficient"
+                    android:textColor="@{viewModel.proficient ? @color/colorAccent : @android:color/tertiary_text_light}"/>
 
             </LinearLayout>
 
@@ -129,7 +155,7 @@
                     android:layout_gravity="end"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel.createAndDismiss(sheet))}"
+                    android:onClick="@{(v) -> viewModel.validateInput() ? parent.onClick(v, viewModel.createAndDismiss(sheet)) : null}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Create"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

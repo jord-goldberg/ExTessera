@@ -41,11 +41,15 @@ interface CharacterView : BaseView {
 
     fun showEditMaxHp(maxHp: MaxHpModel)
 
+    fun showConfirmLongRest(status: StatusModel)
+
     fun showSelectSkillProficiency(skill: SkillModel)
 
     fun showWeaponDetail(weapon: WeaponModel)
 
     fun showWeaponsFor(character: Character)
+
+    fun showCreateWeapon()
 
     fun showSpellDetail(spell: SpellModel)
 

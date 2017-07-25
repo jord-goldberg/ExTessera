@@ -28,9 +28,9 @@ data class EditBasicsModel(
                     if (character.subrace == null) null
                     else Trait.Subrace.valueOf(character.subrace!!))
 
-    private val jobs: Array<Job.Type> = Job.Type.values()
-    private val races: Array<Trait.Race> = Trait.Race.values()
-    private val subraces: Array<Trait.Subrace> = Trait.Subrace.values()
+    private val jobs = Job.Type.values()
+    private val races = Trait.Race.values()
+    private val subraces = Trait.Subrace.values()
 
     fun jobOptions(): Array<String> = jobs.map { it.formatted }.toTypedArray()
 

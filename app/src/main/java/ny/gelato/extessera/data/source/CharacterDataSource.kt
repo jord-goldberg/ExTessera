@@ -53,19 +53,15 @@ interface CharacterDataSource {
     fun deleteEquipment(equipment: EquipmentModel)
 
 
-    fun addWeapon(weaponName: String)
+    fun createWeapon(weaponCreate: WeaponCreateModel)
 
-    fun removeWeapon(weaponName: String)
+    fun deleteWeapon(weaponId: String)
 
-
-    fun learnSpell(spellName: String)
 
     fun updateSpell(spell: SpellModel)
 
-    fun forgetSpell(spellName: String)
+    fun deleteSpell(spellName: String)
 
 
     fun updatePreference(preference: Preferences.Toggle)
-
-    fun fullRest()
 }

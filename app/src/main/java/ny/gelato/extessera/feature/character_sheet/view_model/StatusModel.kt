@@ -20,6 +20,7 @@ data class StatusModel(
         val proficiencyBonus: Int,
         val passiveWisdom: Int,
         var dice: Int,
+        val maxDice: Int,
         val hitDie: String,
         val avatar: AvatarModel
 
@@ -36,6 +37,7 @@ data class StatusModel(
                     proficiencyBonus = character.proficiencyBonus(),
                     passiveWisdom = 10 + character.wisdom.modifier(),
                     dice = character.primary.dice,
+                    maxDice = character.primary.level,
                     hitDie = character.primary.hitDieMaxFormatted(),
                     avatar = AvatarModel(character))
 
@@ -93,6 +95,14 @@ data class StatusModel(
         return this.copy().apply { action = Action.UPDATE }
     }
 
+    fun longRestAndDismiss(sheet: BottomSheetDialog): StatusModel {
+        sheet.dismiss()
+        hp = maxHp
+        dice = minOf(dice + 2, maxDice)
+        action = Action.UPDATE
+        return this
+    }
+
     fun hpUp() {
         hp += 1
         isHpChanged = true
@@ -100,13 +110,11 @@ data class StatusModel(
     }
 
     fun hpDown() {
-        hp -= 1
-        if (hp < 0) {
-            hp = 0
-            return
+        if (hp > 0) {
+            hp -= 1
+            isHpChanged = true
+            notifyChange()
         }
-        isHpChanged = true
-        notifyChange()
     }
 
     fun armorUp() {
@@ -140,13 +148,17 @@ data class StatusModel(
     }
 
     fun hitDiceUp() {
-        dice += 1
-        notifyChange()
+        if (dice < maxDice) {
+            dice += 1
+            notifyChange()
+        }
     }
 
     fun hitDiceDown() {
-        dice -= 1
-        notifyChange()
+        if (dice > 0) {
+            dice -= 1
+            notifyChange()
+        }
     }
 
     fun showHp(): String = "$hp"
