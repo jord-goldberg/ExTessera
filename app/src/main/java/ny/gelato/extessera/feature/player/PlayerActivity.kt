@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_player.*
 import ny.gelato.extessera.App
@@ -100,6 +101,11 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
             }
         }
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_search_also) Search5eActivity.showSearchAll(this)
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onStart() {
