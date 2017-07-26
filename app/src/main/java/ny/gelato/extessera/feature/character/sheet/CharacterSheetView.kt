@@ -1,17 +1,16 @@
-package ny.gelato.extessera.feature.character_sheet
+package ny.gelato.extessera.feature.character.sheet
 
-import android.view.View
 import ny.gelato.extessera.base.BaseView
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 
 
 /**
  * Created by jord.goldberg on 4/30/17.
  */
 
-interface CharacterView : BaseView {
+interface CharacterSheetView : BaseView {
 
     fun showCharacter(feed: MutableList<BaseViewModel>)
 

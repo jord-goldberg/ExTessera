@@ -1,17 +1,17 @@
-package ny.gelato.extessera.feature.character_sheet
+package ny.gelato.extessera.feature.character.sheet
 
 import android.support.v7.util.DiffUtil
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.base.BaseViewModelAdapter
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 
 
 /**
  * Created by jord.goldberg on 4/30/17.
  */
 
-class CharacterAdapter constructor(override val parent: CharacterView) : BaseViewModelAdapter(parent) {
+class CharacterSheetAdapter constructor(override val parent: CharacterSheetView) : BaseViewModelAdapter(parent) {
 
     var feed: MutableList<BaseViewModel> = mutableListOf()
         set(value) {

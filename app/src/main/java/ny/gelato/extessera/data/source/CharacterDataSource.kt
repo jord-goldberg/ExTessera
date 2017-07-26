@@ -2,7 +2,7 @@ package ny.gelato.extessera.data.source
 
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Preferences
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 import rx.Observable
 
 

@@ -1,4 +1,4 @@
-package ny.gelato.extessera.feature.character_sheet
+package ny.gelato.extessera.feature.character.sheet
 
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BasePresenter
@@ -6,7 +6,7 @@ import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Preferences
 import ny.gelato.extessera.data.source.CharacterManager
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription
@@ -17,7 +17,7 @@ import javax.inject.Inject
  * Created by jord.goldberg on 4/30/17.
  */
 
-class CharacterPresenter @Inject constructor(val characterManager: CharacterManager) : BasePresenter<CharacterView>() {
+class CharacterSheetPresenter @Inject constructor(val characterManager: CharacterManager) : BasePresenter<CharacterSheetView>() {
 
     val subscriptions = CompositeSubscription()
 

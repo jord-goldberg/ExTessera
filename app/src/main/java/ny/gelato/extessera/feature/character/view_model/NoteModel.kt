@@ -1,4 +1,4 @@
-package ny.gelato.extessera.feature.character_sheet.view_model
+package ny.gelato.extessera.feature.character.view_model
 
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel

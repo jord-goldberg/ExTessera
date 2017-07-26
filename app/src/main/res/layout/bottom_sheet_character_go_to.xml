@@ -10,14 +10,14 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.GoToModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.GoToModel"/>
 
         <variable
             name="parent"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
+            type="ny.gelato.extessera.base.BaseView"/>
 
         <import type="android.view.View"/>
-        <import type="ny.gelato.extessera.feature.character_sheet.view_model.GoToModel.Destination"/>
+        <import type="ny.gelato.extessera.feature.character.view_model.GoToModel.Destination"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView

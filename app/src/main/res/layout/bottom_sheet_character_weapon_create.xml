@@ -12,7 +12,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.WeaponCreateModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.WeaponCreateModel"/>
 
         <variable
             name="parent"
@@ -77,7 +77,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:hint="Description (optional)"
-                android:inputType="textCapSentences"
+                android:inputType="textMultiLine|textCapSentences"
                 android:onTextChanged="@{(text, i, x, y) -> viewModel.setDescription(text)}"
                 android:textColor="@android:color/secondary_text_light"/>
 

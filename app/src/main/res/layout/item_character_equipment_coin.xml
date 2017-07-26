@@ -9,11 +9,11 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.CoinModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.CoinModel"/>
 
         <variable
             name="parent"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
+            type="ny.gelato.extessera.base.BaseView"/>
 
         <import type="com.robinhood.ticker.TickerUtils"/>
     </data>

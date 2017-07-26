@@ -1,7 +1,8 @@
-package ny.gelato.extessera.feature.character_sheet
+package ny.gelato.extessera.feature.character
 
 import dagger.Component
 import ny.gelato.extessera.AppComponent
+import ny.gelato.extessera.feature.character.sheet.CharacterSheetFragment
 import ny.gelato.extessera.injection.ForView
 
 
@@ -13,5 +14,5 @@ import ny.gelato.extessera.injection.ForView
 @Component(dependencies = arrayOf(AppComponent::class), modules = arrayOf(CharacterModule::class))
 interface CharacterComponent {
 
-    fun inject(view: CharacterFragment)
+    fun inject(view: CharacterSheetFragment)
 }

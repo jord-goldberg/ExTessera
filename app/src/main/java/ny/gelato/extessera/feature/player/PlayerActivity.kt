@@ -16,7 +16,7 @@ import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
-import ny.gelato.extessera.feature.character_sheet.CharacterActivity
+import ny.gelato.extessera.feature.character.CharacterActivity
 import ny.gelato.extessera.feature.player.view_model.CharacterModel
 import ny.gelato.extessera.feature.player.view_model.NewCharacterModel
 import ny.gelato.extessera.feature.search_5e.Search5eActivity

@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.SkillSubheaderModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.SkillSubheaderModel"/>
 
         <import type="android.view.View"/>
 

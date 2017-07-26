@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.AboutModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.AboutModel"/>
 
         <import type="android.view.View"/>
         <import type="java.lang.String"/>

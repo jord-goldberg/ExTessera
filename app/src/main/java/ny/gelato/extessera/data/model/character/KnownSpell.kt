@@ -3,7 +3,7 @@ package ny.gelato.extessera.data.model.character
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import ny.gelato.extessera.data.model.Spell
-import ny.gelato.extessera.feature.character_sheet.view_model.SpellModel
+import ny.gelato.extessera.feature.character.view_model.SpellModel
 
 /**
  * Created by jord.goldberg on 5/22/17.

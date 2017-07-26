@@ -1,4 +1,4 @@
-package ny.gelato.extessera.feature.character_sheet
+package ny.gelato.extessera.feature.character
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.view.MenuItem
 
 import ny.gelato.extessera.R
 import kotlinx.android.synthetic.main.activity_main.*
+import ny.gelato.extessera.feature.character.sheet.CharacterSheetFragment
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
 
 
@@ -25,7 +26,7 @@ class CharacterActivity : AppCompatActivity() {
 
     val id: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("id") }
 
-    val characterFragment: CharacterFragment by lazy { CharacterFragment.newInstance(id) }
+    val characterSheetFragment: CharacterSheetFragment by lazy { CharacterSheetFragment.newInstance(id) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +35,7 @@ class CharacterActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .replace(R.id.container, characterFragment)
+                .replace(R.id.container, characterSheetFragment)
                 .commit()
     }
 

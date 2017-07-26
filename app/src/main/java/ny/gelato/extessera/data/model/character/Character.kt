@@ -9,7 +9,7 @@ import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.Armor
 import ny.gelato.extessera.data.model.Weapon
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 import java.util.*
 
 /**

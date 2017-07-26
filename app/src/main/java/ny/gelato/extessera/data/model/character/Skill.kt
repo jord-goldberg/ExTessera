@@ -1,7 +1,7 @@
 package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmObject
-import ny.gelato.extessera.feature.character_sheet.view_model.SkillModel
+import ny.gelato.extessera.feature.character.view_model.SkillModel
 
 /**
  * Created by jord.goldberg on 5/10/17.

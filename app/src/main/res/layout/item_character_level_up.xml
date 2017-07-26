@@ -7,11 +7,11 @@
     <data>
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.LevelUpModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.LevelUpModel"/>
 
         <variable
             name="parent"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
+            type="ny.gelato.extessera.base.BaseView"/>
     </data>
 
     <android.support.v7.widget.CardView

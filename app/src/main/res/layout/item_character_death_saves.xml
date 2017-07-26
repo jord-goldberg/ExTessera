@@ -9,11 +9,11 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character_sheet.view_model.DeathSaveModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.DeathSaveModel"/>
 
         <variable
             name="parent"
-            type="ny.gelato.extessera.feature.character_sheet.CharacterView"/>
+            type="ny.gelato.extessera.base.BaseView"/>
 
         <import type="android.view.View"/>
     </data>

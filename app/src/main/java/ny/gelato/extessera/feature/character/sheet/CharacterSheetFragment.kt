@@ -1,4 +1,4 @@
-package ny.gelato.extessera.feature.character_sheet
+package ny.gelato.extessera.feature.character.sheet
 
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
@@ -23,21 +23,24 @@ import ny.gelato.extessera.BR
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
 import ny.gelato.extessera.feature.spell_detail.SpellDetailBottomFragment
 import ny.gelato.extessera.common.SmoothGridLayoutManager
+import ny.gelato.extessera.feature.character.CharacterComponent
+import ny.gelato.extessera.feature.character.CharacterModule
+import ny.gelato.extessera.feature.character.DaggerCharacterComponent
 
 
 /**
  * Created by jord.goldberg on 4/30/17.
  */
 
-class CharacterFragment : Fragment(), CharacterView {
+class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
     companion object {
-        fun newInstance(id: String): CharacterFragment = CharacterFragment().apply {
+        fun newInstance(id: String): CharacterSheetFragment = CharacterSheetFragment().apply {
             arguments = Bundle().apply { putString("id", id) }
         }
     }
@@ -54,9 +57,9 @@ class CharacterFragment : Fragment(), CharacterView {
         BottomSheetDialog(activity)
     }
 
-    @Inject lateinit var presenter: CharacterPresenter
+    @Inject lateinit var presenter: CharacterSheetPresenter
 
-    val adapter = CharacterAdapter(this)
+    val adapter = CharacterSheetAdapter(this)
 
     val swipeToRemoveHelper: ItemTouchHelper =
             ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
@@ -111,11 +114,11 @@ class CharacterFragment : Fragment(), CharacterView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.apply {
-            adapter = this@CharacterFragment.adapter
+            adapter = this@CharacterSheetFragment.adapter
             layoutManager = SmoothGridLayoutManager(context, 6).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        val model = this@CharacterFragment.adapter.feed[position]
+                        val model = this@CharacterSheetFragment.adapter.feed[position]
                         return when (model) {
                             is SkillModel -> 3
                             is SkillSubheaderModel -> 3
@@ -276,7 +279,7 @@ class CharacterFragment : Fragment(), CharacterView {
                 DataBindingUtil.inflate(activity.layoutInflater, layoutRes, null, false)
         binding.apply {
             setVariable(BR.viewModel, model)
-            setVariable(BR.parent, this@CharacterFragment)
+            setVariable(BR.parent, this@CharacterSheetFragment)
             setVariable(BR.sheet, sheet)
         }
         sheet.setContentView(binding.root)

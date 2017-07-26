@@ -2,10 +2,9 @@ package ny.gelato.extessera.data.source
 
 import io.realm.Case
 import io.realm.Realm
-import ny.gelato.extessera.data.model.Spell
 import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.*
-import ny.gelato.extessera.feature.character_sheet.view_model.*
+import ny.gelato.extessera.feature.character.view_model.*
 import rx.Observable
 import java.util.*
 import javax.inject.Inject

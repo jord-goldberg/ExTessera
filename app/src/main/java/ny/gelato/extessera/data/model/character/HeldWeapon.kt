@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import ny.gelato.extessera.data.model.Weapon
-import ny.gelato.extessera.feature.character_sheet.view_model.WeaponCreateModel
+import ny.gelato.extessera.feature.character.view_model.WeaponCreateModel
 import java.util.*
 
 /**
