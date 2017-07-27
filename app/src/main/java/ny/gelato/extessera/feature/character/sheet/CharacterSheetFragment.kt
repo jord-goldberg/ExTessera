@@ -31,6 +31,7 @@ import ny.gelato.extessera.common.SmoothGridLayoutManager
 import ny.gelato.extessera.feature.character.CharacterComponent
 import ny.gelato.extessera.feature.character.CharacterModule
 import ny.gelato.extessera.feature.character.DaggerCharacterComponent
+import ny.gelato.extessera.feature.character.equipment.CharacterEquipmentFragment
 
 
 /**
@@ -59,7 +60,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
     @Inject lateinit var presenter: CharacterSheetPresenter
 
-    val adapter = CharacterSheetAdapter(this)
+    val sheetAdapter = CharacterSheetAdapter(this)
 
     val swipeToRemoveHelper: ItemTouchHelper =
             ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT.or(ItemTouchHelper.RIGHT)) {
@@ -68,7 +69,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
-                    val model = adapter.feed[position]
+                    val model = sheetAdapter.feed[position]
                     val snackBarText = "Remove " + when (model) {
                         is WeaponModel -> model.name
                         is SpellModel -> model.name
@@ -77,21 +78,21 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                     } + "?"
                     val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
                             .setAction("confirm") { _ ->
-                                adapter.feed.removeAt(position)
-                                adapter.notifyItemRemoved(position)
+                                sheetAdapter.feed.removeAt(position)
+                                sheetAdapter.notifyItemRemoved(position)
                                 presenter.delete(model)
                             }
                             .addCallback(object : Snackbar.Callback() {
                                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                                     if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                        adapter.notifyItemChanged(position)
+                                        sheetAdapter.notifyItemChanged(position)
                                 }
                             })
                     snackBar.show()
                 }
 
                 override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
-                    val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
+                    val model: BaseViewModel = sheetAdapter.feed[viewHolder.adapterPosition]
                     if ((model is NoteModel && model.isDone)
                             .or(model is WeaponModel && model.name != "Unarmed Strike")
                             .or(model is SpellModel && !model.isEmpty())
@@ -114,11 +115,11 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler_view.apply {
-            adapter = this@CharacterSheetFragment.adapter
+            adapter = this@CharacterSheetFragment.sheetAdapter
             layoutManager = SmoothGridLayoutManager(context, 6).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int): Int {
-                        val model = this@CharacterSheetFragment.adapter.feed[position]
+                        val model = this@CharacterSheetFragment.sheetAdapter.feed[position]
                         return when (model) {
                             is SkillModel -> 3
                             is SkillSubheaderModel -> 3
@@ -165,7 +166,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     }
 
     override fun showCharacter(feed: MutableList<BaseViewModel>) {
-        adapter.feed = feed
+        sheetAdapter.feed = feed
     }
 
     override fun showEditCharacter(character: Character) {
@@ -210,8 +211,8 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     override fun showScrollToDestination(destination: BaseViewModel) {
         // The delay is to allow any hidden destinations to appear if necessary
         Handler().postDelayed({
-            for (i in 0 until adapter.feed.size)
-                if (adapter.feed[i].javaClass == destination.javaClass) {
+            for (i in 0 until sheetAdapter.feed.size)
+                if (sheetAdapter.feed[i].javaClass == destination.javaClass) {
                     recycler_view.smoothScrollToPosition(i)
                     break
                 }
@@ -272,6 +273,18 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
     override fun showEquipmentItem(equipment: EquipmentModel) {
         showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
+    }
+
+    override fun showEquipmentInventoryFor(character: Character) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_in_bottom,
+                        R.anim.zoom_out,
+                        R.anim.zoom_in,
+                        R.anim.slide_out_bottom)
+                .replace(R.id.container, CharacterEquipmentFragment.newInstance(character.id))
+                .addToBackStack("equipment:${character.id}")
+                .commit()
     }
 
     private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {

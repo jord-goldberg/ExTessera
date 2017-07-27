@@ -19,6 +19,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             .equalTo("id", id)
             .findFirstAsync()
             .asObservable<Character>()
+            .filter { it.isLoaded }
 
     override fun updateAvatar(avatar: AvatarModel) {
         realm.executeTransactionAsync { realm ->

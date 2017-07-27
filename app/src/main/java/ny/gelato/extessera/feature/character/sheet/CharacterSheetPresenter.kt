@@ -99,7 +99,8 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
                     if (model.isEmpty()) view.showCreateEquipment()
                     else view.showEquipmentItem(model)
                 is EquipmentFooterModel ->
-                    if (model.equipmentSize > CoinModel.Type.values().size) null
+                    if (model.equipmentSize > CoinModel.Type.values().size)
+                        view.showEquipmentInventoryFor(character)
                     else view.showCreateEquipment()
             }
         }

@@ -2,6 +2,7 @@ package ny.gelato.extessera.feature.character
 
 import dagger.Component
 import ny.gelato.extessera.AppComponent
+import ny.gelato.extessera.feature.character.equipment.CharacterEquipmentFragment
 import ny.gelato.extessera.feature.character.sheet.CharacterSheetFragment
 import ny.gelato.extessera.injection.ForView
 
@@ -15,4 +16,5 @@ import ny.gelato.extessera.injection.ForView
 interface CharacterComponent {
 
     fun inject(view: CharacterSheetFragment)
+    fun inject(view: CharacterEquipmentFragment)
 }

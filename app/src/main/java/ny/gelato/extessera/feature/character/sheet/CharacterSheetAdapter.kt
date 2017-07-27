@@ -11,7 +11,7 @@ import ny.gelato.extessera.feature.character.view_model.*
  * Created by jord.goldberg on 4/30/17.
  */
 
-class CharacterSheetAdapter constructor(override val parent: CharacterSheetView) : BaseViewModelAdapter(parent) {
+class CharacterSheetAdapter(override val parent: CharacterSheetView) : BaseViewModelAdapter(parent) {
 
     var feed: MutableList<BaseViewModel> = mutableListOf()
         set(value) {

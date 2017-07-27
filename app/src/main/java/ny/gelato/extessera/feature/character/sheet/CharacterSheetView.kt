@@ -59,4 +59,6 @@ interface CharacterSheetView : BaseView {
     fun showCreateEquipment()
 
     fun showEquipmentItem(equipment: EquipmentModel)
+
+    fun showEquipmentInventoryFor(character: Character)
 }

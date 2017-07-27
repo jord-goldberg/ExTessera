@@ -2,6 +2,7 @@ package ny.gelato.extessera.feature.character
 
 import dagger.Module
 import dagger.Provides
+import io.realm.Realm
 import ny.gelato.extessera.data.source.CharacterManager
 import ny.gelato.extessera.feature.character.sheet.CharacterSheetPresenter
 import ny.gelato.extessera.injection.ForView
@@ -19,6 +20,10 @@ class CharacterModule(private val id: String) {
 
     @Provides
     @ForView
-    fun providePresenter(manager: CharacterManager):
+    fun provideManager(realm: Realm): CharacterManager = CharacterManager(realm, id)
+
+    @Provides
+    @ForView
+    fun provideSheetPresenter(manager: CharacterManager):
             CharacterSheetPresenter = CharacterSheetPresenter(manager)
 }

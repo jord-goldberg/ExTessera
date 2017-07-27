@@ -9,7 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 
 import ny.gelato.extessera.R
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_character.*
 import ny.gelato.extessera.feature.character.sheet.CharacterSheetFragment
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
 
@@ -30,7 +30,7 @@ class CharacterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_character)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -44,6 +44,7 @@ class CharacterActivity : AppCompatActivity() {
         val searchView = menu?.findItem(R.id.action_search)?.actionView as SearchView
         searchView.apply {
             queryHint = "Search all spells, weapons..."
+            isFocusable = false
             setIconifiedByDefault(false)
             setOnClickListener { Search5eActivity.showSearchAll(this@CharacterActivity) }
             findViewById(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->
