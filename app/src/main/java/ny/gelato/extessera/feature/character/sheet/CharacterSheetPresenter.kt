@@ -5,7 +5,8 @@ import ny.gelato.extessera.base.BasePresenter
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Preferences
-import ny.gelato.extessera.data.source.CharacterManager
+import ny.gelato.extessera.feature.character.CharacterManager
+import ny.gelato.extessera.feature.character.*
 import ny.gelato.extessera.feature.character.view_model.*
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -33,7 +34,7 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
                 add(AbilitiesModel(character))
                 add(SavingThrowsModel(character))
                 addAll(character.skillModels())
-                addAll(character.equipmentModels())
+                addAll(character.equipmentModelsSheet())
                 addAll(character.weaponModels())
                 if (character.preferences.showSpells)
                     addAll(character.spellModels())

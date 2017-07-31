@@ -1,13 +1,11 @@
 package ny.gelato.extessera.feature.search_5e.weapon_search
 
-import android.view.View
 import io.realm.Case
 import io.realm.RealmResults
 import io.realm.Sort
 import ny.gelato.extessera.App
 import ny.gelato.extessera.base.BasePresenter
 import ny.gelato.extessera.data.model.Weapon
-import ny.gelato.extessera.feature.search_5e.Search5ePresenter
 import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
@@ -16,7 +14,7 @@ import rx.subscriptions.CompositeSubscription
  * Created by jord.goldberg on 6/14/17.
  */
 
-class WeaponSearchPresenter : Search5ePresenter<WeaponSearchView>() {
+class WeaponSearchPresenter : BasePresenter<WeaponSearchView>() {
 
     val subscriptions: CompositeSubscription = CompositeSubscription()
 

@@ -1,4 +1,4 @@
-package ny.gelato.extessera.data.source
+package ny.gelato.extessera.feature.character
 
 import io.realm.Case
 import io.realm.Realm
@@ -24,10 +24,9 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateAvatar(avatar: AvatarModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.name = avatar.name
             character.hasInspiration = avatar.isInspired
             character.imagePath = avatar.imagePath
-            character.imageUrl = avatar.newImageUrl ?: avatar.imageUrl
+            character.imageUrl = avatar.imageUrl
             character.updated = Date()
         }
     }
@@ -225,7 +224,19 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val weaponType = realm.where(Weapon::class.java).equalTo("name", weaponCreate.type.formatted)
                     .findFirst()
-            character.weapons.add(HeldWeapon(weaponCreate, weaponType))
+            val heldWeapon = HeldWeapon(
+                    name = weaponCreate.name,
+                    isSimple = weaponType.isSimple,
+                    isRanged = weaponType.isRanged,
+                    damage = weaponType.damage,
+                    damageType = weaponType.damageType,
+                    properties = weaponType.properties,
+                    type = weaponType.type,
+                    isCustom = true,
+                    description = weaponCreate.description,
+                    bonus = weaponCreate.bonus,
+                    isProficient = weaponCreate.isProficient)
+            character.weapons.add(heldWeapon)
             character.updated = Date()
         }
     }
@@ -244,8 +255,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val knownSpell = character.spells.where().equalTo("name", spell.name).findFirst()
-            if (knownSpell == null) character.spells.add(KnownSpell(spell))
-            else knownSpell.prepared = spell.prepared
+            knownSpell.prepared = spell.prepared
             character.updated = Date()
         }
     }

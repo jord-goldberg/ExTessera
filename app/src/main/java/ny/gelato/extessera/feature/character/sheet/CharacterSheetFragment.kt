@@ -77,11 +77,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                         else -> "note"
                     } + "?"
                     val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("confirm") { _ ->
-                                sheetAdapter.feed.removeAt(position)
-                                sheetAdapter.notifyItemRemoved(position)
-                                presenter.delete(model)
-                            }
+                            .setAction("confirm") { _ -> presenter.delete(model) }
                             .addCallback(object : Snackbar.Callback() {
                                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                                     if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
@@ -243,6 +239,31 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
         showBottomSheet(skill, R.layout.bottom_sheet_character_skill)
     }
 
+    override fun showCoin(coin: CoinModel) {
+        showBottomSheet(coin, R.layout.bottom_sheet_character_coin)
+    }
+
+    override fun showCreateEquipment() {
+        showBottomSheet(EquipmentModel(), R.layout.bottom_sheet_character_equipment_create)
+    }
+
+    override fun showEquipmentItem(equipment: EquipmentModel) {
+        showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
+    }
+
+    override fun showEquipmentInventoryFor(character: Character) {
+        val fragment = CharacterEquipmentFragment.newInstance(character.id)
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_in_bottom,
+                        R.anim.zoom_and_fade_out,
+                        R.anim.zoom_and_fade_in,
+                        R.anim.slide_out_bottom)
+                .replace(R.id.container, fragment)
+                .addToBackStack("equipment:${character.id}")
+                .commit()
+    }
+
     override fun showWeaponDetail(weapon: WeaponModel) {
         showBottomSheet(weapon, R.layout.bottom_sheet_character_weapon)
     }
@@ -261,30 +282,6 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
     override fun showSpellsFor(character: Character) {
         Search5eActivity.showSpellSearch(activity, character.primary.job, character.primary.spellLevel())
-    }
-
-    override fun showCoin(coin: CoinModel) {
-        showBottomSheet(coin, R.layout.bottom_sheet_character_coin)
-    }
-
-    override fun showCreateEquipment() {
-        showBottomSheet(EquipmentModel(), R.layout.bottom_sheet_character_equipment_create)
-    }
-
-    override fun showEquipmentItem(equipment: EquipmentModel) {
-        showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
-    }
-
-    override fun showEquipmentInventoryFor(character: Character) {
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(
-                        R.anim.slide_in_bottom,
-                        R.anim.zoom_out,
-                        R.anim.zoom_in,
-                        R.anim.slide_out_bottom)
-                .replace(R.id.container, CharacterEquipmentFragment.newInstance(character.id))
-                .addToBackStack("equipment:${character.id}")
-                .commit()
     }
 
     private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {

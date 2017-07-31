@@ -1,6 +1,7 @@
 package ny.gelato.extessera.feature.character.equipment
 
 import ny.gelato.extessera.base.BaseView
+import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.feature.character.view_model.EquipmentModel
 
 /**
@@ -9,7 +10,9 @@ import ny.gelato.extessera.feature.character.view_model.EquipmentModel
 
 interface CharacterEquipmentView : BaseView {
 
-    fun showEquipment(equipment: MutableList<EquipmentModel>)
+    fun showEquipmentInventory(equipment: MutableList<BaseViewModel>)
+
+    fun showEquipmentItem(equipment: EquipmentModel)
 
     fun showCreateEquipment()
 }

@@ -1,4 +1,4 @@
-package ny.gelato.extessera.data.source
+package ny.gelato.extessera.feature.character
 
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Preferences
@@ -8,6 +8,9 @@ import rx.Observable
 
 /**
  * Created by jord.goldberg on 5/1/17.
+ *
+ * Interface implemented by CharacterManager - this contract outlines the CRUD functions/interactions
+ * between a Character data model and this features' view models
  */
 
 interface CharacterDataSource {

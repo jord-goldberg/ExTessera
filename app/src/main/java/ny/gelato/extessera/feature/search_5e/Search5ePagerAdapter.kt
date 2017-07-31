@@ -42,8 +42,8 @@ class Search5ePagerAdapter(fragmentManager: FragmentManager) : FragmentStatePage
 
     fun showSpellsForCharacter(job: String, level: Int) {
         (fragments[0] as SpellSearchFragment).apply {
-            presenter.filters.toggleJob(job)
-            presenter.filters.updateLevel(level)
+            presenter.toggleJobFilter(job)
+            presenter.updateLevelFilter(level)
         }
     }
 }

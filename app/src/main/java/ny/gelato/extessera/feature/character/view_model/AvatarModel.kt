@@ -15,13 +15,13 @@ import ny.gelato.extessera.data.model.character.Character
 data class AvatarModel(
         override val name: String = "",
         val description: String = "",
-        override var isInspired: Boolean = false,
-        override var imagePath: String = "",
-        override var imageUrl: String = ""
+        override val isInspired: Boolean = false,
+        override val imagePath: String = "",
+        override val imageUrl: String = ""
 
 ) : BaseAvatar, BaseViewModel() {
 
-    var newImageUrl: String? = null
+    private var newImageUrl: String = ""
 
     constructor(char: Character) :
             this(char.name,
@@ -35,27 +35,22 @@ data class AvatarModel(
     fun toggleInspiration(): AvatarModel = copy(isInspired = !isInspired)
 
     fun setImageUrl(url: CharSequence) {
-        if (url.isEmpty()) newImageUrl = null
+        if (url.isEmpty()) newImageUrl = ""
         else newImageUrl = url.toString()
         notifyChange()
     }
 
+    fun validateNewUrl(): Boolean = newImageUrl.isNotBlank()
+
     fun clearImage(sheet: BottomSheetDialog): AvatarModel {
-        imagePath = ""
-        imageUrl = ""
-        newImageUrl = null
-        notifyChange()
         sheet.dismiss()
-        return this.copy().apply { action = Action.UPDATE }
+        return this.copy(imagePath = "", imageUrl = "").apply { action = Action.UPDATE }
 
     }
 
     fun updateImage(sheet: BottomSheetDialog): AvatarModel {
         sheet.dismiss()
-        return this.copy().apply {
-            this@AvatarModel.newImageUrl?.let { imageUrl = it }
-            action = Action.UPDATE
-        }
+        return this.copy(imageUrl = newImageUrl).apply { action = Action.UPDATE }
     }
 
     fun about(): AboutModel = AboutModel()

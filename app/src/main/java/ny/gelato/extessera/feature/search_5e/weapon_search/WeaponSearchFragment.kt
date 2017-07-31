@@ -1,5 +1,6 @@
 package ny.gelato.extessera.feature.search_5e.weapon_search
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
@@ -50,18 +51,18 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
 
     val LAYOUT_KEY = "layout"
 
-    var isCreated = false
+    var isAttached = false
 
-    lateinit var search5eView: Search5eView
+    lateinit var parentView: Search5eView
     lateinit var filterBinding: BottomSheetSearchWeaponFiltersBinding
 
     val presenter = WeaponSearchPresenter()
-    val adapter = Search5eRecyclerAdapter(this)
+    val search5eRecyclerAdapter = Search5eRecyclerAdapter(this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        search5eView = activity as Search5eView
-        isCreated = true
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        parentView = context as Search5eView
+        isAttached = true
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -70,7 +71,7 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler_view.apply {
-            adapter = this@WeaponSearchFragment.adapter
+            adapter = search5eRecyclerAdapter
             layoutManager = LinearLayoutManager(activity)
             layoutManager.onRestoreInstanceState(savedInstanceState?.getParcelable(LAYOUT_KEY))
         }
@@ -98,9 +99,13 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
         savedInstanceState?.let { presenter.filters.restore(it.getParcelable("filters")) }
     }
 
+    // Since this fragment is displayed in a ViewPager, onResume isn't always called when the
+    // fragment becomes visible. To make sure we display what we're filtering properly, we'll use
+    // isVisibleToUser. We must check if we're attached first because this can be called out of lifecycle
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isCreated) search5eView.showFiltering(presenter.filters.filtering())
+        if (isAttached && isVisibleToUser)
+            parentView.showFiltering(presenter.filters.filtering())
     }
 
     override fun onClick(v: View, any: Any) {
@@ -109,11 +114,11 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
         }
     }
 
-    override fun queryText(): Observable<String> = search5eView.queryText()
+    override fun queryText(): Observable<String> = parentView.queryText()
 
     override fun showResult(result: List<Any>) {
         text_empty.visibility = View.GONE
-        adapter.feed = result
+        search5eRecyclerAdapter.feed = result
     }
 
     override fun showEmpty() {
@@ -126,8 +131,9 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
         sheet.show()
     }
 
+    // Have to check for visibility here, too, for when the presenter is first attached
     override fun showFiltering(filter: String) {
-        if (userVisibleHint) search5eView.showFiltering(filter)
+        if (userVisibleHint) parentView.showFiltering(filter)
     }
 
     override fun showAddWeapon(v: View, weapon: Weapon) {

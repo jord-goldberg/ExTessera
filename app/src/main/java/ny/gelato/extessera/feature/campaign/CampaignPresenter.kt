@@ -3,7 +3,7 @@ package ny.gelato.extessera.feature.campaign
 import ny.gelato.extessera.base.BasePresenter
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.data.source.CharacterManager
+import ny.gelato.extessera.feature.character.CharacterManager
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 import rx.subscriptions.CompositeSubscription

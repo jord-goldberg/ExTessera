@@ -4,7 +4,6 @@ import io.realm.RealmObject
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
 import ny.gelato.extessera.data.model.Weapon
-import ny.gelato.extessera.feature.character.view_model.WeaponCreateModel
 import java.util.*
 
 /**
@@ -35,17 +34,4 @@ open class HeldWeapon(
                     damageType = weapon.damageType,
                     properties = weapon.properties,
                     type = weapon.type)
-
-    constructor(model: WeaponCreateModel, weapon: Weapon) :
-            this(name = model.name,
-                    isSimple = weapon.isSimple,
-                    isRanged = weapon.isRanged,
-                    damage = weapon.damage,
-                    damageType = weapon.damageType,
-                    properties = weapon.properties,
-                    type = weapon.type,
-                    isCustom = true,
-                    description = model.description,
-                    bonus = model.bonus,
-                    isProficient = model.isProficient)
 }

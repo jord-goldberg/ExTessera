@@ -14,12 +14,15 @@ import android.databinding.BaseObservable
  * amounts to be shown and/or manipulated at once. They can sometimes be interacted with in multiple
  * ways (e.g. update underlying info with Action.UPDATE or open a menu with Action.CONTEXT_MENU)
  *
+ * Using Android Data Binding their methods are used directly in .xml files; viewModels can update
+ * the view by calling notifyChange(). Clicks on them can be passed to any BaseView implementation.
+ *
  * @param action can be used to signal the click intention.
  *
- * @layout every BaseViewModel should have a corresponding .xml file here
+ * @layout every BaseViewModel should have a/multiple corresponding .xml file(s) here
  */
 
-abstract class BaseViewModel(var action: Action = BaseViewModel.Action.VIEW) : BaseObservable() {
+abstract class BaseViewModel(var action: Action = Action.VIEW) : BaseObservable() {
 
     enum class Action {
         VIEW, // View the viewModel normally

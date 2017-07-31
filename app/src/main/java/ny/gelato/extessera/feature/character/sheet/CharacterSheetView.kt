@@ -44,6 +44,14 @@ interface CharacterSheetView : BaseView {
 
     fun showSelectSkillProficiency(skill: SkillModel)
 
+    fun showCoin(coin: CoinModel)
+
+    fun showCreateEquipment()
+
+    fun showEquipmentItem(equipment: EquipmentModel)
+
+    fun showEquipmentInventoryFor(character: Character)
+
     fun showWeaponDetail(weapon: WeaponModel)
 
     fun showWeaponsFor(character: Character)
@@ -53,12 +61,4 @@ interface CharacterSheetView : BaseView {
     fun showSpellDetail(spell: SpellModel)
 
     fun showSpellsFor(character: Character)
-
-    fun showCoin(coin: CoinModel)
-
-    fun showCreateEquipment()
-
-    fun showEquipmentItem(equipment: EquipmentModel)
-
-    fun showEquipmentInventoryFor(character: Character)
 }

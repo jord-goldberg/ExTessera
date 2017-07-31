@@ -46,7 +46,7 @@ class Search5eActivity : AppCompatActivity(), Search5eView {
                 .setAction("change") { _ -> showFilterOptions() }
     }
 
-    val adapter = Search5ePagerAdapter(supportFragmentManager)
+    val pagerAdapter = Search5ePagerAdapter(supportFragmentManager)
 
     val QUERY_KEY = "savedQuery"
 
@@ -61,6 +61,13 @@ class Search5eActivity : AppCompatActivity(), Search5eView {
         setContentView(R.layout.activity_search_5e)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        view_pager.apply {
+            adapter = pagerAdapter
+            setPageTransformer(true, DepthPageTransformer())
+        }
+        tabs.setupWithViewPager(view_pager)
+        image_settings.setOnClickListener { showFilterOptions() }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -77,16 +84,12 @@ class Search5eActivity : AppCompatActivity(), Search5eView {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { querySubject.onNext(it) }
         }
-        view_pager.apply {
-            adapter = this@Search5eActivity.adapter
-            setPageTransformer(true, DepthPageTransformer())
-        }
-        tabs.setupWithViewPager(view_pager, true)
-        image_settings.setOnClickListener { showFilterOptions() }
+        // This is done here because the search fragments are non-null
+        // and the scope is open for the searchView anyway
         intent.extras?.let {
             when (it.getString("search")) {
                 "spells" -> {
-                    adapter.showSpellsForCharacter(it.getString("job"), it.getInt("level"))
+                    pagerAdapter.showSpellsForCharacter(it.getString("job"), it.getInt("level"))
                     view_pager.currentItem = 0
                 }
                 "weapons" -> view_pager.currentItem = 1
@@ -124,6 +127,6 @@ class Search5eActivity : AppCompatActivity(), Search5eView {
     }
 
     override fun showFilterOptions() {
-        (adapter.fragments[view_pager.currentItem] as Search5eView).showFilterOptions()
+        (pagerAdapter.fragments[view_pager.currentItem] as Search5eView).showFilterOptions()
     }
 }

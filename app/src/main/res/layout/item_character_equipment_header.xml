@@ -23,7 +23,6 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:clipToPadding="false"
         app:cardCornerRadius="0px"
         app:contentPaddingBottom="8dp">
@@ -34,8 +33,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
             android:layout_marginTop="8dp"
-            android:onClick="@{(v) -> parent.onClick(v, viewModel.avatar)}"
-            android:onLongClick="@{(v) -> parent.onLongClick(v, viewModel.avatar.toggleInspiration())}"
             bind:viewModel="@{viewModel.avatar}"/>
 
         <LinearLayout
@@ -54,13 +51,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:paddingTop="1dp"
                     android:layout_weight="1"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
+                    android:paddingTop="1dp"
                     android:text="@{viewModel.title}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    tools:text="Spells"/>
+                    tools:text="Equipment Items"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -70,10 +67,12 @@
                     android:foreground="?selectableItemBackground"
                     android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingTop="1dp"
                     android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingTop="1dp"
                     android:src="@drawable/ic_more_vert"
-                    tools:src="@drawable/ic_more_vert"/>
+                    android:visibility="gone"
+                    tools:src="@drawable/ic_more_vert"
+                    tools:visibility="visible"/>
 
             </LinearLayout>
 
@@ -95,7 +94,7 @@
                 android:text="@{viewModel.titleInfo}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                 android:visibility="@{viewModel.titleInfo.isEmpty() ? View.GONE : View.VISIBLE}"
-                tools:text="Spell Attack bonus: +5\nSpell Save DC: 13"/>
+                tools:text="Sorted by last updated"/>
 
         </LinearLayout>
 

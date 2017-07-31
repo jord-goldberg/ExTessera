@@ -1,5 +1,6 @@
 package ny.gelato.extessera.feature.search_5e.spell_search
 
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialog
@@ -8,14 +9,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.android.synthetic.main.mvp_view_wait_error_empty.*
-import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.data.model.Spell
 import ny.gelato.extessera.databinding.BottomSheetSearchSpellFiltersBinding
 import ny.gelato.extessera.feature.search_5e.*
 import ny.gelato.extessera.feature.spell_detail.SpellDetailBottomFragment
 import rx.Observable
-import javax.inject.Inject
 
 /**
  * Created by jord.goldberg on 6/14/17.
@@ -33,15 +32,6 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
                 }
     }
 
-    val component: SpellSearchComponent by lazy {
-        val job = arguments.getString("job")
-        val level = arguments.getInt("level")
-        DaggerSpellSearchComponent.builder()
-                .appComponent(App.component)
-                .spellSearchModule(SpellSearchModule(job, level))
-                .build()
-    }
-
     val sheet: BottomSheetDialog by lazy {
         BottomSheetDialog(activity).apply {
             setOnDismissListener { showFiltering(presenter.filters.filtering()) }
@@ -51,20 +41,18 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
 
     val LAYOUT_KEY = "layout"
 
-    var isCreated = false
+    var isAttached = false
 
-    lateinit var search5eView: Search5eView
+    lateinit var parentView: Search5eView
     lateinit var filterBinding: BottomSheetSearchSpellFiltersBinding
 
-    @Inject lateinit var presenter: SpellSearchPresenter
-    lateinit var adapter: Search5eRecyclerAdapter
+    val presenter = SpellSearchPresenter()
+    val search5eRecyclerAdapter = Search5eRecyclerAdapter(this)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        search5eView = activity as Search5eView
-        component.inject(this)
-        adapter = Search5eRecyclerAdapter(this)
-        isCreated = true
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        parentView = context as Search5eView
+        isAttached = true
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,7 +61,7 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler_view.apply {
-            adapter = this@SpellSearchFragment.adapter
+            adapter = search5eRecyclerAdapter
             layoutManager = LinearLayoutManager(activity)
             layoutManager.onRestoreInstanceState(savedInstanceState?.getParcelable(LAYOUT_KEY))
         }
@@ -101,9 +89,13 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
         savedInstanceState?.let { presenter.restoreFilters(it.getParcelable("filters")) }
     }
 
+    // Since this fragment is displayed in a ViewPager, onResume isn't always called when the
+    // fragment becomes visible. To make sure we display what we're filtering properly, we'll use
+    // isVisibleToUser. We must check if we're attached first because this can be called out of lifecycle
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
-        if (isCreated) search5eView.showFiltering(presenter.filters.filtering())
+        if (isAttached && isVisibleToUser)
+            parentView.showFiltering(presenter.filters.filtering())
     }
 
     override fun onClick(v: View, any: Any) {
@@ -112,11 +104,21 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
         }
     }
 
-    override fun queryText(): Observable<String> = search5eView.queryText()
+    override fun queryText(): Observable<String> = parentView.queryText()
+
+    override fun showFilterOptions() {
+        filterBinding.presenter = presenter
+        sheet.show()
+    }
+
+    // Have to check for visibility here, too, for when the presenter is first attached
+    override fun showFiltering(filter: String) {
+        if (userVisibleHint) parentView.showFiltering(filter)
+    }
 
     override fun showResult(result: List<Any>) {
         text_empty.visibility = View.GONE
-        adapter.feed = result
+        search5eRecyclerAdapter.feed = result
     }
 
     override fun showEmpty() {
@@ -126,14 +128,5 @@ class SpellSearchFragment : Fragment(), SpellSearchView {
 
     override fun showSpellDetail(spell: Spell) {
         SpellDetailBottomFragment.newInstance(spell.name).show(activity.supportFragmentManager, spell.name)
-    }
-
-    override fun showFilterOptions() {
-        filterBinding.presenter = presenter
-        sheet.show()
-    }
-
-    override fun showFiltering(filter: String) {
-        if (userVisibleHint) search5eView.showFiltering(filter)
     }
 }

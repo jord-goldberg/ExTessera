@@ -40,19 +40,19 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
-            val model = adapter.feed[position]
+            val model = playerAdapter.feed[position]
             when (model) {
                 is CharacterModel -> {
                     val snackBar = Snackbar.make(coordinator, "Delete ${model.name.substringBefore(" ")}?", Snackbar.LENGTH_LONG)
                             .setAction("confirm") { _ ->
-                                adapter.feed.removeAt(position)
-                                adapter.notifyItemRemoved(position)
+                                playerAdapter.feed.removeAt(position)
+                                playerAdapter.notifyItemRemoved(position)
                                 presenter.delete(model)
                             }
                             .addCallback(object : Snackbar.Callback() {
                                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                                     if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                        adapter.notifyItemChanged(position)
+                                        playerAdapter.notifyItemChanged(position)
                                 }
                             })
                     snackBar.show()
@@ -61,7 +61,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
         }
 
         override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
-            val model: BaseViewModel = adapter.feed[viewHolder.adapterPosition]
+            val model: BaseViewModel = playerAdapter.feed[viewHolder.adapterPosition]
             if (model is CharacterModel)
                 return super.getSwipeDirs(recyclerView, viewHolder)
             return 0
@@ -70,7 +70,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
 
     @Inject lateinit var presenter: PlayerPresenter
 
-    val adapter = PlayerAdapter(this)
+    val playerAdapter = PlayerAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +83,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(this@PlayerActivity)
-            adapter = this@PlayerActivity.adapter
+            adapter = playerAdapter
         }
         swipeToRemoveHelper.attachToRecyclerView(recycler_view)
         presenter.attachView(this)
@@ -126,7 +126,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
     }
 
     override fun showPlayer(feed: MutableList<BaseViewModel>) {
-        adapter.feed = feed
+        playerAdapter.feed = feed
     }
 
     override fun showCreateCharacter(newCharacter: NewCharacterModel?) {

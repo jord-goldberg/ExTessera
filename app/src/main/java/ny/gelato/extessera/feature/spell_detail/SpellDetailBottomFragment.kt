@@ -3,7 +3,6 @@ package ny.gelato.extessera.feature.spell_detail
 import android.app.Dialog
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v7.widget.PopupMenu
@@ -14,9 +13,7 @@ import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.data.model.Spell
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.data.source.CharacterManager
 import ny.gelato.extessera.databinding.BottomSheetSpellDetailBinding
-import ny.gelato.extessera.feature.edit_character.EditCharacterActivity
 import java.util.*
 
 /**

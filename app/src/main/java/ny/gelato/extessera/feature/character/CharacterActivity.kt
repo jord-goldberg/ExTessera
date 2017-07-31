@@ -26,8 +26,6 @@ class CharacterActivity : AppCompatActivity() {
 
     val id: String by lazy(LazyThreadSafetyMode.NONE) { intent.getStringExtra("id") }
 
-    val characterSheetFragment: CharacterSheetFragment by lazy { CharacterSheetFragment.newInstance(id) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_character)
@@ -35,7 +33,7 @@ class CharacterActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         savedInstanceState ?: supportFragmentManager.beginTransaction()
-                .replace(R.id.container, characterSheetFragment)
+                .replace(R.id.container, CharacterSheetFragment.newInstance(id))
                 .commit()
     }
 

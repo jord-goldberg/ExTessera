@@ -7,9 +7,9 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,12 +18,13 @@ import ny.gelato.extessera.App
 import ny.gelato.extessera.BR
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
-import ny.gelato.extessera.data.source.CharacterManager
+import ny.gelato.extessera.feature.character.CharacterManager
 import ny.gelato.extessera.feature.character.CharacterComponent
 import ny.gelato.extessera.feature.character.CharacterModule
 import ny.gelato.extessera.feature.character.DaggerCharacterComponent
+import ny.gelato.extessera.feature.character.equipmentModelsFull
 import ny.gelato.extessera.feature.character.view_model.EquipmentModel
-import rx.Observable
+import ny.gelato.extessera.feature.character.view_model.HeaderModel
 import rx.subscriptions.CompositeSubscription
 import javax.inject.Inject
 
@@ -65,14 +66,10 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
-                    val model = equipmentAdapter.feed[position]
+                    val model = equipmentAdapter.feed[position] as EquipmentModel
                     val snackBarText = "Remove ${model.name}?"
                     val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("confirm") { _ ->
-                                equipmentAdapter.feed.removeAt(position)
-                                equipmentAdapter.notifyItemRemoved(position)
-                                characterManager.deleteEquipment(model)
-                            }
+                            .setAction("confirm") { _ -> characterManager.deleteEquipment(model) }
                             .addCallback(object : Snackbar.Callback() {
                                 override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                                     if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
@@ -113,13 +110,8 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
     override fun onStart() {
         super.onStart()
         val subscription = characterManager.getCharacter()
-                .flatMap { character ->
-                    Observable.from(character.equipment)
-                            .map { EquipmentModel(it) }
-                            .toList()
-                }
-                .subscribe({ equipment -> showEquipment(equipment) },
-                        { throwable -> Log.e("onSubscribe:", throwable.message, throwable) })
+                .map { character -> character.equipmentModelsFull() }
+                .subscribe { equipment -> showEquipmentInventory(equipment) }
 
         subscriptions.add(subscription)
     }
@@ -135,15 +127,25 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
     }
 
     override fun onClick(v: View, viewModel: BaseViewModel) {
-        viewModel as EquipmentModel
-        when (viewModel.action) {
-            BaseViewModel.Action.CREATE -> characterManager.createEquipment(viewModel)
-            BaseViewModel.Action.DELETE -> characterManager.deleteEquipment(viewModel)
+        if (viewModel.action == BaseViewModel.Action.CONTEXT_MENU)
+            showPopupMenu(v, viewModel)
+        else {
+            viewModel as EquipmentModel
+            when (viewModel.action) {
+                BaseViewModel.Action.CREATE -> characterManager.createEquipment(viewModel)
+                BaseViewModel.Action.UPDATE -> characterManager.updateEquipment(viewModel)
+                BaseViewModel.Action.DELETE -> characterManager.deleteEquipment(viewModel)
+                else -> showEquipmentItem(viewModel)
+            }
         }
     }
 
-    override fun showEquipment(equipment: MutableList<EquipmentModel>) {
+    override fun showEquipmentInventory(equipment: MutableList<BaseViewModel>) {
         equipmentAdapter.feed = equipment
+    }
+
+    override fun showEquipmentItem(equipment: EquipmentModel) {
+        showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
     }
 
     override fun showCreateEquipment() {
@@ -160,5 +162,14 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
         }
         sheet.setContentView(binding.root)
         sheet.show()
+    }
+
+    private fun showPopupMenu(view: View, model: BaseViewModel) {
+        model as HeaderModel
+        PopupMenu(activity, view).apply {
+            menuInflater.inflate(model.menuRes, menu)
+            setOnMenuItemClickListener { true }
+            show()
+        }
     }
 }

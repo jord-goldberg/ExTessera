@@ -2,14 +2,10 @@ package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.Sort
 import io.realm.annotations.Index
 import io.realm.annotations.PrimaryKey
-import ny.gelato.extessera.R
-import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.Armor
 import ny.gelato.extessera.data.model.Weapon
-import ny.gelato.extessera.feature.character.view_model.*
 import java.util.*
 
 /**
@@ -152,80 +148,9 @@ open class Character(
         notes.addAll(primary.levelNotes())
     }
 
-    fun noteModels(): List<BaseViewModel> =
-            notes.map { NoteModel(it) }
-                    .toMutableList<BaseViewModel>()
-                    .apply {
-                        if (hasToLevelUp()) add(LevelUpModel(this@Character))
-                        if (isEmpty()) add(NoteModel(text = "No Notes\nClick to create one"))
-                        val title = if (hasToLevelUp()) "Level Up to ${expLevel()}" else "Notes"
-                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_notes))
-                        add(FooterModel(title))
-                    }
+    fun level(): Int = primary.level + multiclasses.sumBy { it.level }
 
-    fun skillModels(): List<BaseViewModel> =
-            if (preferences.sortSkillsByAbility) getSkillsSortByAbility()
-            else getSkillsSortByName()
-
-    fun weaponModels(): List<BaseViewModel> =
-            weapons.map { WeaponModel(it, this) }
-                    .toMutableList<BaseViewModel>()
-                    .apply {
-                        if (weapons.isEmpty().or(primary.job == Job.Type.MONK.name))
-                            add(0, WeaponModel(this@Character))
-                        val title = "Weapons"
-                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_weapons))
-                        add(FooterModel(title))
-                    }
-
-    fun spellModels(): List<BaseViewModel> {
-        if (primary.job == Job.Type.BARBARIAN.name) return emptyList()
-        val spellModels = mutableListOf<BaseViewModel>()
-
-        if (spells.isEmpty())
-            spellModels.add(SpellModel())
-        else {
-            spellModels.addAll(spells.where().equalTo("prepared", true)
-                    .findAllSorted("level", Sort.DESCENDING, "name", Sort.ASCENDING)
-                    .map { SpellModel(it) })
-
-            spellModels.addAll(spells.where().equalTo("prepared", false)
-                    .findAllSorted("level", Sort.ASCENDING, "name", Sort.ASCENDING)
-                    .map { SpellModel(it) })
-        }
-
-        val title = "Spells"
-        spellModels.add(0, HeaderModel(title, AvatarModel(this), R.menu.menu_character_spells,
-                "Spell Attack bonus:  ${Ability.format(proficiencyBonus() + when (primary.castingAbility()) {
-                    Ability.Type.INT -> intelligence.modifier()
-                    Ability.Type.WIS -> wisdom.modifier()
-                    Ability.Type.CHA -> charisma.modifier()
-                    else -> 0
-                })}\nSpell Save DC:  ${8 + proficiencyBonus() + when (primary.castingAbility()) {
-                    Ability.Type.INT -> intelligence.modifier()
-                    Ability.Type.WIS -> wisdom.modifier()
-                    Ability.Type.CHA -> charisma.modifier()
-                    else -> 0
-                }}"))
-        spellModels.add(FooterModel(title))
-        return spellModels
-    }
-
-    fun equipmentModels(): List<BaseViewModel> = mutableListOf<BaseViewModel>().apply {
-        val title = "Equipment"
-        add(HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_equipment))
-        for (i in 0 until CoinModel.Type.values().size) {
-            add(CoinModel(CoinModel.Type.values()[i], this@Character))
-            if (equipment.size <= i) add(EquipmentModel())
-            else add(EquipmentModel(equipment[i]))
-        }
-        add(FooterModel(title))
-        add(EquipmentFooterModel(this@Character))
-    }
-
-    private fun level(): Int = primary.level + multiclasses.sumBy { it.level }
-
-    private fun expLevel(): Int = when (exp) {
+    fun expLevel(): Int = when (exp) {
         in 0..299 -> 1
         in 0..899 -> 2
         in 0..2_699 -> 3
@@ -247,32 +172,6 @@ open class Character(
         in 0..354_999 -> 19
         else -> 20
     }
-
-    private fun getSkillsSortByAbility(): List<BaseViewModel> =
-            skills.map { SkillModel(this, it) }
-                    .sortedBy { it.type.abilityOrder() }
-                    .toMutableList<BaseViewModel>()
-                    .apply {
-                        add(0, SkillSubheaderModel(Ability.Type.STR.formatted))
-                        add(1, SkillSubheaderModel(Ability.Type.WIS.formatted))
-                        add(4, SkillSubheaderModel(Ability.Type.DEX.formatted))
-                        add(12, SkillSubheaderModel(Ability.Type.INT.formatted))
-                        add(13, SkillSubheaderModel(Ability.Type.CHA.formatted))
-                        add(SkillSubheaderModel(""))
-                        val title = "Skills"
-                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_skills))
-                        add(FooterModel(title))
-                    }
-
-    private fun getSkillsSortByName(): List<BaseViewModel> =
-            skills.map { SkillModel(this, it) }
-                    .sortedBy { it.type.nameOrder() }
-                    .toMutableList<BaseViewModel>()
-                    .apply {
-                        val title = "Skills"
-                        add(0, HeaderModel(title, AvatarModel(this@Character), R.menu.menu_character_skills))
-                        add(FooterModel(title))
-                    }
 
     private fun setSaveProficiencies() {
         strength.save = false

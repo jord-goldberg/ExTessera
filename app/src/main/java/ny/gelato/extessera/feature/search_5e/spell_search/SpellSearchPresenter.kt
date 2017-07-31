@@ -1,12 +1,9 @@
 package ny.gelato.extessera.feature.search_5e.spell_search
 
-import android.view.View
 import io.realm.*
-import ny.gelato.extessera.R
 import ny.gelato.extessera.App
 import ny.gelato.extessera.base.BasePresenter
 import ny.gelato.extessera.data.model.Spell
-import ny.gelato.extessera.feature.search_5e.Search5ePresenter
 import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
@@ -15,12 +12,7 @@ import rx.subscriptions.CompositeSubscription
  * Created by jord.goldberg on 5/15/17.
  */
 
-class SpellSearchPresenter() : Search5ePresenter<SpellSearchView>() {
-
-    constructor(job: String, level: Int) : this() {
-        filters.jobs.add(job)
-        filters.level = level
-    }
+class SpellSearchPresenter : BasePresenter<SpellSearchView>() {
 
     val subscriptions: CompositeSubscription = CompositeSubscription()
 

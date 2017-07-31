@@ -3,7 +3,6 @@ package ny.gelato.extessera.feature.character
 import dagger.Module
 import dagger.Provides
 import io.realm.Realm
-import ny.gelato.extessera.data.source.CharacterManager
 import ny.gelato.extessera.feature.character.sheet.CharacterSheetPresenter
 import ny.gelato.extessera.injection.ForView
 

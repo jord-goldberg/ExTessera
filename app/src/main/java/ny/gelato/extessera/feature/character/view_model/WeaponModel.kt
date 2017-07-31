@@ -60,7 +60,7 @@ data class WeaponModel(
                     char.proficiencyBonus())
 
     override fun isSameAs(model: BaseViewModel): Boolean =
-            if (model is WeaponModel) model.name == name
+            if (model is WeaponModel) model.id == id
             else false
 
     fun properties(): String =

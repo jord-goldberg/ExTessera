@@ -6,6 +6,8 @@ import rx.Observable
 
 /**
  * Created by jord.goldberg on 6/14/17.
+ *
+ * Check out Search5eView for specifics
  */
 
 interface SpellSearchView : Search5eView {

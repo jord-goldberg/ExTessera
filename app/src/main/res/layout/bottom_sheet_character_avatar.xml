@@ -41,7 +41,7 @@
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:src="@drawable/ic_save_white"
                 android:tint="@color/colorAccent"
-                android:visibility="@{viewModel.newImageUrl == null ? View.GONE : View.VISIBLE}"
+                android:visibility="@{viewModel.validateNewUrl() ? View.VISIBLE : View.GONE}"
                 tools:src="@drawable/ic_save_white"/>
 
             <LinearLayout
@@ -80,7 +80,6 @@
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:hint="Set an image url"
                     android:onTextChanged="@{(url, i, x, y) -> viewModel.setImageUrl(url)}"
-                    android:text="@{viewModel.newImageUrl}"
                     android:textColor="@android:color/secondary_text_light"
                     tools:hint="Set an image url"/>
 

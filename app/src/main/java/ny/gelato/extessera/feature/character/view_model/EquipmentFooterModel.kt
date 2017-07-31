@@ -16,5 +16,5 @@ data class EquipmentFooterModel(
 
     constructor(character: Character) : this(character.equipment.size)
 
-    fun showAllItemsText(): String = "more equipment items ($equipmentSize)"
+    fun showAllItemsText(): String = "more equipment items (${equipmentSize - CoinModel.Type.values().size})"
 }
