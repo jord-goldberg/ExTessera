@@ -45,20 +45,22 @@ class App : Application() {
 
     // To be removed when a pre-populated Realm is packaged with the apk
     private fun populateRealm() {
-        val spells = rawToRealmSpells(this, R.raw.spells)
-        val weapons = realmWeapons()
         component.realm().executeTransactionAsync { realm ->
+            val spells = rawToRealmSpells(this, R.raw.spells)
+            val weapons = realmWeapons()
             for (spell in spells) realm.copyToRealmOrUpdate(spell)
             for (weapon in weapons) realm.copyToRealmOrUpdate(weapon)
         }
 
-        try {
-            val file = File(this.externalCacheDir, "export.realm")
-            file.delete()
-            component.realm().writeCopyTo(file)
-            Log.d("Path:", externalCacheDir.canonicalPath)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        // These next lines would be used to write a copy of the realm to a file which I
+        // believe I could package with an apk pre-populated with spells/weapons/monsters
+//        try {
+//            val file = File(this.externalCacheDir, "export.realm")
+//            file.delete()
+//            component.realm().writeCopyTo(file)
+//            Log.d("Path:", externalCacheDir.canonicalPath)
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
     }
 }

@@ -11,7 +11,7 @@ import ny.gelato.extessera.feature.character.view_model.*
 /**
  * Created by jord.goldberg on 7/31/17.
  *
- * Extension functions on a Character data model receiver that return Character view models.
+ * Extension functions for a Character data model receiver that return Character view models.
  * This is here because I didn't want feature-specific view models imported in the data layer.
  */
 

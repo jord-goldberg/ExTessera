@@ -13,6 +13,11 @@ import kotlinx.android.synthetic.main.activity_character.*
 import ny.gelato.extessera.feature.character.sheet.CharacterSheetFragment
 import ny.gelato.extessera.feature.search_5e.Search5eActivity
 
+/**
+ * Pretty much just a container for whatever character fragments are shown. CharacterSheetFragment
+ * in the sheet package is the main view for a character. This activity also keeps the toolbar
+ * navigation - either back up to the player view or to the search view - in one place.
+ */
 
 class CharacterActivity : AppCompatActivity() {
 

@@ -4,6 +4,7 @@ import io.realm.*
 import ny.gelato.extessera.App
 import ny.gelato.extessera.base.BasePresenter
 import ny.gelato.extessera.data.model.Spell
+import ny.gelato.extessera.data.model.character.Job
 import rx.Observable
 import rx.subjects.PublishSubject
 import rx.subscriptions.CompositeSubscription
@@ -104,7 +105,11 @@ class SpellSearchPresenter : BasePresenter<SpellSearchView>() {
     }
 
     fun toggleJobFilter(job: String) {
-        filters.toggleJob(job)
+        when (Job.Type.valueOf(job)) {
+            Job.Type.FIGHTER, Job.Type.ROGUE -> filters.toggleJob(Job.Type.WIZARD.name)
+            Job.Type.MONK -> return
+            else -> filters.toggleJob(job)
+        }
         publishFilters.onNext(filters)
     }
 

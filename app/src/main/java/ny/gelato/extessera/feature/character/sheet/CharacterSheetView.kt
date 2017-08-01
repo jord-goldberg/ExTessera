@@ -8,6 +8,13 @@ import ny.gelato.extessera.feature.character.view_model.*
 
 /**
  * Created by jord.goldberg on 4/30/17.
+ *
+ * Implemented by CharacterSheetFragment. CharacterSheetPresenter observes a character and transforms
+ * that observable into a list of Character viewModels that is shown in a RecyclerView. The fragment/view
+ * handles clicks if it's necessary to display a popup menu below the clicked view. If not, the click is
+ * passed to the presenter which routes the appropriate action (e.g. telling the view to show a relevant bottom
+ * sheet for user input, passing the model to the CharacterManager to change the underlying data model, etc.)
+ * The interaction between viewHolder and viewModel, including clicks, happens in the .xml file related to the viewModel
  */
 
 interface CharacterSheetView : BaseView {
