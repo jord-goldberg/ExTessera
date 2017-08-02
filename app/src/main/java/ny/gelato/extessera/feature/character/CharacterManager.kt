@@ -68,7 +68,9 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             character.hp = status.hp
             character.armor = status.armor - character.dexterity.modifier()
-            character.initiative = status.initiative - character.dexterity.modifier()
+            character.initiative = status.initiative - character.dexterity.modifier() -
+                    if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
+                    else 0
             character.speed = status.speed
             character.primary.dice = status.dice
             character.updated = Date()
