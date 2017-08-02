@@ -143,10 +143,6 @@ open class Character(
             "${if (subrace != null) Trait.Subrace.valueOf(subrace!!).formatted else Trait.Race.valueOf(race).formatted} " +
                     "${Job.Type.valueOf(primary.job).formatted}, Level ${primary.level}"
 
-    fun addLevelNotes() {
-        preferences.showNotes = true
-        notes.addAll(primary.levelNotes())
-    }
 
     fun level(): Int = primary.level + multiclasses.sumBy { it.level }
 
@@ -171,6 +167,17 @@ open class Character(
         in 0..304_999 -> 18
         in 0..354_999 -> 19
         else -> 20
+    }
+
+    fun levelUpPrimary() {
+        primary.level += 1
+        primary.dice += 1
+        addLevelNotes()
+    }
+
+    private fun addLevelNotes() {
+        preferences.showNotes = true
+        notes.addAll(primary.levelNotes())
     }
 
     private fun setSaveProficiencies() {

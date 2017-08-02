@@ -19,7 +19,7 @@ import android.databinding.BaseObservable
  *
  * @param action can be used to signal the click intention.
  *
- * @layout every BaseViewModel should have a/multiple corresponding .xml file(s) here
+ * @layout every BaseViewModel should have (a) corresponding .xml file(s) here
  */
 
 abstract class BaseViewModel(var action: Action = Action.VIEW) : BaseObservable() {

@@ -98,7 +98,7 @@ data class StatusModel(
     fun longRestAndDismiss(sheet: BottomSheetDialog): StatusModel {
         sheet.dismiss()
         hp = maxHp
-        dice = minOf(dice + 2, maxDice)
+        dice = minOf(dice + (maxDice/2), maxDice)
         action = Action.UPDATE
         return this
     }

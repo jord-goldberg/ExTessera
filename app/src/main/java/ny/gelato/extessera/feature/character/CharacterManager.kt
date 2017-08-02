@@ -43,8 +43,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             if (Job.Type.valueOf(character.primary.job) == level.selectedJob)
-                character.primary.level += 1
-            character.addLevelNotes()
+                character.levelUpPrimary()
             character.updated = Date()
         }
     }

@@ -1,5 +1,6 @@
 package ny.gelato.extessera.feature.character.view_model
 
+import android.os.Handler
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
@@ -27,15 +28,17 @@ data class HpModel(
     }
 
     fun healAndDismiss(sheet: BottomSheetDialog): HpModel {
-        sheet.dismiss()
         current += change
+        notifyChange()
+        Handler().postDelayed({ sheet.dismiss() }, 1000)
         return this
     }
 
     fun damageAndDismiss(sheet: BottomSheetDialog): HpModel {
-        sheet.dismiss()
         current -= change
         if (current < 0) current = 0
+        notifyChange()
+        Handler().postDelayed({ sheet.dismiss() }, 1000)
         return this
     }
 
