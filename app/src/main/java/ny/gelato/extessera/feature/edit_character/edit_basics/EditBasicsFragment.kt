@@ -97,7 +97,11 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
                     .deleteAllFromRealm()
             character.setTraitsAndProficiencies()
 
-            id = character.id
+            if (id.isEmpty()) {
+                id = character.id
+                character.hp = character.primary.hitDieMax()
+                character.maxHp = character.primary.hitDieMax()
+            }
         }
     }
 }

@@ -55,8 +55,8 @@ open class Character(
         var gold: Int = 0,
         var platinum: Int = 0,
 
-        var notes: RealmList<Note> = RealmList(Note(text = "Welcome! Make sure to set your skills and " +
-                "abilities according to character creation outlined in the Player's Handbook. " +
+        var notes: RealmList<Note> = RealmList(Note(text = "Welcome to Ex Tessera!\n\n" +
+                "Set your skills and abilities by clicking on them below. " +
                 "Check the box to the left and swipe to dismiss once you're done.")),
 
         var traits: RealmList<Trait> = RealmList(),
