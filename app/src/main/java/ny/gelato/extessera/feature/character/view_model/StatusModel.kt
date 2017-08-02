@@ -37,7 +37,13 @@ data class StatusModel(
                             else 0,
                     speed = character.speed,
                     proficiencyBonus = character.proficiencyBonus(),
-                    passiveWisdom = 10 + character.wisdom.modifier(),
+                    passiveWisdom = 10 + character.wisdom.modifier() + when (character.skills.where()
+                            .equalTo("type", "Perception", Case.INSENSITIVE).findFirst().proficiency) {
+                        Skill.Proficiency.FULL.name -> character.proficiencyBonus()
+                        Skill.Proficiency.EXPERT.name -> character.proficiencyBonus() * 2
+                        else -> if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
+                        else 0
+                    },
                     dice = character.primary.dice,
                     maxDice = character.primary.level,
                     hitDie = character.primary.hitDieMaxFormatted(),
