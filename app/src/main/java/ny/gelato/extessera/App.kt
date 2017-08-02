@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import ny.gelato.extessera.data.Migration
 import ny.gelato.extessera.util.rawToRealmSpells
 import ny.gelato.extessera.util.realmWeapons
 import java.io.File
@@ -37,7 +38,8 @@ class App : Application() {
         Realm.init(this)
 
         val config = RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
+                .schemaVersion(2)
+                .migration(Migration())
                 .build()
 
         Realm.setDefaultConfiguration(config)

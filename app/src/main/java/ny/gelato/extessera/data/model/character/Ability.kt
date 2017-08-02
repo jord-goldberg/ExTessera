@@ -9,7 +9,9 @@ import java.text.DecimalFormat
 
 open class Ability(
         var score: Int = 10,
-        var save: Boolean = false
+        var save: Boolean = false,
+        var miscModifier: Int = 0,
+        var saveModifier: Int = 0
 
 ) : RealmObject() {
 

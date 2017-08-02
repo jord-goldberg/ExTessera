@@ -1,6 +1,7 @@
 package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmObject
+import io.realm.annotations.Index
 import ny.gelato.extessera.feature.character.view_model.SkillModel
 
 /**
@@ -8,7 +9,7 @@ import ny.gelato.extessera.feature.character.view_model.SkillModel
  */
 
 open class Skill(
-        var type: String = Skill.Type.ACROBATICS.name,
+        @Index var type: String = Skill.Type.ACROBATICS.name,
         var proficiency: String = Skill.Proficiency.NONE.name
 
 ): RealmObject() {
