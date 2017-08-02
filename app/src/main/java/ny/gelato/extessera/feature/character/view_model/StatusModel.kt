@@ -1,9 +1,11 @@
 package ny.gelato.extessera.feature.character.view_model
 
 import android.support.design.widget.BottomSheetDialog
+import io.realm.Case
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Ability
 import ny.gelato.extessera.data.model.character.Character
+import ny.gelato.extessera.data.model.character.Skill
 
 /**
  * Created by jord.goldberg on 5/23/17.
@@ -98,7 +100,7 @@ data class StatusModel(
     fun longRestAndDismiss(sheet: BottomSheetDialog): StatusModel {
         sheet.dismiss()
         hp = maxHp
-        dice = minOf(dice + (maxDice/2), maxDice)
+        dice = minOf(dice + maxOf((maxDice / 2), 1), maxDice)
         action = Action.UPDATE
         return this
     }
