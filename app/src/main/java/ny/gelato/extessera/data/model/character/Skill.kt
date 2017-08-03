@@ -2,21 +2,25 @@ package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
-import ny.gelato.extessera.feature.character.view_model.SkillModel
 
 /**
  * Created by jord.goldberg on 5/10/17.
  */
 
 open class Skill(
-        @Index var type: String = Skill.Type.ACROBATICS.name,
-        var proficiency: String = Skill.Proficiency.NONE.name
+        @Index private var typeName: String = Skill.Type.ACROBATICS.name,
+        private var proficiencyName: String = Skill.Proficiency.NONE.name
 
-): RealmObject() {
+) : RealmObject() {
 
-    fun update(skill: SkillModel) {
-        proficiency = skill.proficiency.name
-    }
+    val type: Type
+        get() = Type.valueOf(typeName)
+
+    var proficiency: Proficiency
+        get() = Proficiency.valueOf(proficiencyName)
+        set(value) {
+            proficiencyName = value.name
+        }
 
     enum class Type(val formatted: String) {
         ACROBATICS("Acrobatics") {

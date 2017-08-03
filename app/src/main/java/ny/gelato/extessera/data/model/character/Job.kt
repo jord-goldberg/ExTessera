@@ -2,18 +2,25 @@ package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.Index
 
 /**
  * Created by jord.goldberg on 5/8/17.
  */
 
 open class Job(
-        var job: String = Job.Type.FIGHTER.name,
+        @Index private var jobName: String = Job.Type.FIGHTER.name,
         var level: Int = 1,
         var dice: Int = 1,
         var features: RealmList<Feature> = RealmList()
 
 ) : RealmObject() {
+
+    var job: Job.Type
+        get() = Job.Type.valueOf(jobName)
+        set(value) {
+            jobName = value.name
+        }
 
     enum class Type(val formatted: String) {
         BARBARIAN("Barbarian"),
@@ -35,13 +42,13 @@ open class Job(
         BERSERKER("Berserker") {
             override fun type(): Type = Type.BARBARIAN
         },
-        TOTEM_WARRIOR("Totem Warrior"){
+        TOTEM_WARRIOR("Totem Warrior") {
             override fun type(): Type = Type.BARBARIAN
         },
-        COLLEGE_OF_LORE("College of Lore"){
+        COLLEGE_OF_LORE("College of Lore") {
             override fun type(): Type = Type.BARD
         },
-        COLLEGE_OF_VALOR("College of Valor"){
+        COLLEGE_OF_VALOR("College of Valor") {
             override fun type(): Type = Type.BARD
         },
 
@@ -50,7 +57,7 @@ open class Job(
         abstract fun type(): Type
     }
 
-    fun playersHandbookPage(): Int = when (Type.valueOf(job)) {
+    fun playersHandbookPage(): Int = when (job) {
         Job.Type.BARBARIAN -> 46
         Job.Type.BARD -> 51
         Job.Type.CLERIC -> 56
@@ -65,7 +72,7 @@ open class Job(
         Job.Type.WIZARD -> 112
     }
 
-    fun hitDieMax(): Int = when (Type.valueOf(job)) {
+    fun hitDieMax(): Int = when (job) {
         Type.BARBARIAN -> 12
         Type.FIGHTER, Type.PALADIN, Type.RANGER -> 10
         Type.BARD, Type.CLERIC, Type.DRUID, Type.MONK, Type.ROGUE, Type.WARLOCK -> 8
@@ -76,14 +83,14 @@ open class Job(
 
     fun hitDiceFormatted(): String = "$dice${hitDieMaxFormatted()}"
 
-    fun castingAbility(): Ability.Type = when (Type.valueOf(job)) {
+    fun castingAbility(): Ability.Type = when (job) {
         Type.BARD, Type.PALADIN, Type.SORCERER, Type.WARLOCK -> Ability.Type.CHA
         Type.CLERIC, Type.DRUID, Type.MONK, Type.RANGER -> Ability.Type.WIS
         Type.FIGHTER, Type.ROGUE, Type.WIZARD -> Ability.Type.INT
         else -> Ability.Type.STR
     }
 
-    fun casterLevel(): Int = when (Type.valueOf(job)) {
+    fun casterLevel(): Int = when (job) {
         Type.BARD, Type.CLERIC, Type.DRUID, Type.SORCERER, Type.WIZARD -> level
         Type.PALADIN, Type.RANGER -> level / 2
         Type.ROGUE, Type.FIGHTER -> level / 3
@@ -117,7 +124,7 @@ open class Job(
 
         if (features.isNotEmpty()) {
             addOrUpdateFeatures(features)
-            add(Note(text = "${Type.valueOf(job).formatted} $level " +
+            add(Note(text = "${job.formatted} $level " +
                     "${if (features.size > 1) "features" else "feature"} " +
                     "(PHB ${playersHandbookPage()}):\n" +
                     features.map { it.name }.toString().substring(1).dropLast(1)))
@@ -127,7 +134,7 @@ open class Job(
             4, 8, 12, 16, 19 -> add(Note(text = "Ability Score Improvement"))
         }
 
-        when (Type.valueOf(job)) {
+        when (job) {
             Type.BARBARIAN -> when (level) {
                 6, 10, 14 -> add(Note(text = "Choose Path feature"))
             }
@@ -149,7 +156,7 @@ open class Job(
             }
             Type.DRUID -> when (level) {
                 4, 8 -> add(Note(text = "Wild Shape improvement"))
-                6, 10, 14 -> add (Note(text = "Choose Druid Circle feature"))
+                6, 10, 14 -> add(Note(text = "Choose Druid Circle feature"))
 
                 18 -> add(Note(text = "Magical Secrets: learn 2 spells"))
             }
@@ -197,7 +204,7 @@ open class Job(
     }
 
     private fun featuresForLevel(): List<Feature> = ArrayList<Feature>().apply {
-        when (Type.valueOf(job)) {
+        when (job) {
             Type.BARBARIAN -> when (level) {
                 1 -> {
                     add(Feature("Rage"))

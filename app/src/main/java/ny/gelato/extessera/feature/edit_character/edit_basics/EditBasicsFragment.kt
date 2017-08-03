@@ -85,9 +85,9 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
                             .findFirst()
 
             character.name = model.name
-            character.race = model.race.name
-            character.subrace = model.subrace?.name
-            character.primary.job = model.job.name
+            character.race = model.race
+            character.subrace = model.subrace
+            character.primary.job = model.job
             character.primary.resetLevelTo(model.level)
             character.setExpToLevel()
             character.traits.deleteAllFromRealm()

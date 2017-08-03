@@ -10,7 +10,7 @@ import rx.Observable
  * Created by jord.goldberg on 5/1/17.
  *
  * Interface implemented by CharacterManager - this contract outlines the CRUD functions/interactions
- * between a Character data model and this features' view models
+ * between a Character data model and this features view models
  */
 
 interface CharacterDataSource {

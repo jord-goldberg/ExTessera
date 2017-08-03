@@ -14,11 +14,26 @@ class Migration : RealmMigration {
         var version = oldVersion
 
         if (version == 0L) {
+            schema.get("Character")
+                    // These fields represent the .name of an enum class; they're backing fields and
+                    // should be renamed to represent what they really are
+                    .renameField("race", "raceName")
+                    .renameField("subrace", "subraceName")
+                    .renameField("alignment", "alignmentName")
+
+            schema.get("Job")
+                    .addIndex("job")
+                    .renameField("job", "jobName")
+
             schema.get("Ability")
-                    .addField("miscModifier", Int::class.java)
+                    .addField("scoreModifier", Int::class.java)
                     .addField("saveModifier", Int::class.java)
+
             schema.get("Skill")
                     .addIndex("type")
+                    .renameField("type", "typeName")
+                    .renameField("proficiency", "proficiencyName")
+
             version++
         }
 

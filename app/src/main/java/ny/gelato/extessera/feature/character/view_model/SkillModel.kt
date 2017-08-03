@@ -23,7 +23,7 @@ data class SkillModel(
 ) : BaseViewModel() {
 
     constructor(char: Character, skill: Skill) : this(
-            when (Skill.Type.valueOf(skill.type).ability()) {
+            when (skill.type.ability()) {
                 Ability.Type.STR -> char.strength.modifier()
                 Ability.Type.DEX -> char.dexterity.modifier()
                 Ability.Type.CON -> char.constitution.modifier()
@@ -32,8 +32,8 @@ data class SkillModel(
                 Ability.Type.CHA -> char.charisma.modifier()
             },
             char.proficiencyBonus(),
-            Skill.Type.valueOf(skill.type),
-            Skill.Proficiency.valueOf(skill.proficiency),
+            skill.type,
+            skill.proficiency,
             char.isJackOfAllTrades())
 
     override fun isSameAs(model: BaseViewModel): Boolean =

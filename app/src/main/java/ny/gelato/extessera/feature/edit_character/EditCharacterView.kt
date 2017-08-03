@@ -12,7 +12,7 @@ import ny.gelato.extessera.base.BaseView
 
 interface EditCharacterView : BaseView {
 
-    fun validateInput(): Boolean
+    fun validateInput(): Boolean = true
 
     fun showNext()
 }

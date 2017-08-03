@@ -53,8 +53,6 @@ class EditAboutFragment : Fragment(), EditCharacterView {
         activity.title = "Character Background"
     }
 
-    override fun validateInput(): Boolean = model.background.isNotBlank() && model.about.isNotBlank()
-
     override fun showNext() {
         saveAbout()
         fragmentManager.beginTransaction()
@@ -75,7 +73,7 @@ class EditAboutFragment : Fragment(), EditCharacterView {
                     .findFirst()
 
             character.background = model.background
-            character.alignment = model.alignment.name
+            character.alignment = model.alignment
             character.about = model.about
             character.updated = Date()
         }

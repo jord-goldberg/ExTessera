@@ -36,7 +36,7 @@ fun Character.weaponModels(): List<BaseViewModel> =
                 .toMutableList<BaseViewModel>()
                 .apply {
                     val character = this@weaponModels
-                    if (weapons.isEmpty().or(primary.job == Job.Type.MONK.name))
+                    if (weapons.isEmpty().or(primary.job == Job.Type.MONK))
                         add(0, WeaponModel(character))
                     val title = "Weapons"
                     add(0, HeaderModel(title, AvatarModel(character), R.menu.menu_character_weapons))
@@ -44,7 +44,7 @@ fun Character.weaponModels(): List<BaseViewModel> =
                 }
 
 fun Character.spellModels(): List<BaseViewModel> {
-    if (primary.job == Job.Type.BARBARIAN.name) return emptyList()
+    if (primary.job == Job.Type.BARBARIAN) return emptyList()
     val spellModels = mutableListOf<BaseViewModel>()
 
     if (spells.isEmpty())

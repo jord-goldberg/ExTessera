@@ -10,7 +10,7 @@ import java.text.DecimalFormat
 open class Ability(
         var score: Int = 10,
         var save: Boolean = false,
-        var miscModifier: Int = 0,
+        var scoreModifier: Int = 0,
         var saveModifier: Int = 0
 
 ) : RealmObject() {
@@ -40,5 +40,5 @@ open class Ability(
         CHA("Charisma")
     }
 
-    fun modifier(): Int = Companion.modify(score)
+    fun modifier(): Int = Companion.modify(score + scoreModifier)
 }

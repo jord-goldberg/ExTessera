@@ -19,7 +19,7 @@ data class EditAboutModel(
 ) : BaseViewModel() {
 
     constructor(character: Character) :
-            this(Trait.Alignment.valueOf(character.alignment),
+            this(character.alignment,
                     character.background,
                     character.about)
 

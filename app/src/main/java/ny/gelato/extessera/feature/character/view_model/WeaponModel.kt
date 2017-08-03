@@ -53,7 +53,7 @@ data class WeaponModel(
     constructor(char: Character) :
             this("", "Unarmed Strike",
                     "", "1", Weapon.DamageType.BLUDGEONING,
-                    if (char.primary.job == Job.Type.MONK.name)
+                    if (char.primary.job == Job.Type.MONK)
                         maxOf(char.dexterity.modifier(), char.strength.modifier())
                     else char.strength.modifier(),
                     true,

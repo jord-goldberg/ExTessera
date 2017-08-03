@@ -80,8 +80,6 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
         activity.title = "Tool & Language Proficiencies"
     }
 
-    override fun validateInput(): Boolean = true
-
     override fun showNext() {
         saveProficiencies()
         Handler().postDelayed({ activity.finish() }, 200)

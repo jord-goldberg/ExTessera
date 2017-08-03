@@ -281,7 +281,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     }
 
     override fun showSpellsFor(character: Character) {
-        Search5eActivity.showSpellSearch(activity, character.primary.job, character.primary.spellLevel())
+        Search5eActivity.showSpellSearch(activity, character.primary.job.name, character.primary.spellLevel())
     }
 
     private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {

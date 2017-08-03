@@ -1,5 +1,6 @@
 package ny.gelato.extessera.data.model.character
 
+import io.realm.Case
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
@@ -27,10 +28,12 @@ open class Character(
         var primary: Job = Job(),
         var multiclasses: RealmList<Job> = RealmList(),
 
-        var race: String = Trait.Race.HUMAN.name,
-        var subrace: String? = null,
+        // private because they're backing fields
+        private var raceName: String = Trait.Race.HUMAN.name,
+        private var subraceName: String? = null,
+        private var alignmentName: String = Trait.Alignment.TRUE_NEUTRAL.name,
+
         var background: String = "",
-        var alignment: String = Trait.Alignment.TRUE_NEUTRAL.name,
         var about: String = "",
 
         var strength: Ability = Ability(),
@@ -71,6 +74,53 @@ open class Character(
         var preferences: Preferences = Preferences()
 
 ) : RealmObject() {
+
+    var race: Trait.Race
+        get() = Trait.Race.valueOf(raceName)
+        set(value) {
+            raceName = value.name
+        }
+
+    var subrace: Trait.Subrace?
+        get() = subraceName?.let { Trait.Subrace.valueOf(it) }
+        set(value) {
+            subraceName = value?.name
+        }
+
+    var alignment: Trait.Alignment
+        get() = Trait.Alignment.valueOf(alignmentName)
+        set(value) {
+            alignmentName = value.name
+        }
+
+    fun proficiencyBonus(): Int {
+        if (level() < 5) return 2
+        else if (level() < 9) return 3
+        else if (level() < 13) return 4
+        else if (level() < 17) return 5
+        else return 6
+    }
+
+    fun isJackOfAllTrades(): Boolean = (primary.job == Job.Type.BARD && primary.level > 1)
+
+    fun armorClass(): Int = armor + dexterity.modifier()
+
+    fun initiative(): Int = initiative + dexterity.modifier() +
+            if (isJackOfAllTrades()) proficiencyBonus() / 2
+            else 0
+
+    fun speed(): Int = speed
+
+    fun passivePerception(): Int = 10 + wisdom.modifier() +
+            when (skills.where()
+                    .equalTo("typeName", "perception", Case.INSENSITIVE)
+                    .findFirst()
+                    .proficiency) {
+                Skill.Proficiency.FULL -> proficiencyBonus()
+                Skill.Proficiency.EXPERT -> proficiencyBonus() * 2
+                else -> if (isJackOfAllTrades()) proficiencyBonus() / 2
+                else 0
+            }
 
     fun expToNextLevel(): Int = when (exp) {
         in 0..299 -> 300
@@ -123,25 +173,15 @@ open class Character(
 
     fun hasToLevelUp(): Boolean = expLevel() > level()
 
-    fun proficiencyBonus(): Int {
-        if (level() < 5) return 2
-        else if (level() < 9) return 3
-        else if (level() < 13) return 4
-        else if (level() < 17) return 5
-        else return 6
-    }
-
     fun setTraitsAndProficiencies() {
         setRacialTraits()
         setSaveProficiencies()
         setPrimaryJobProficiencies()
     }
 
-    fun isJackOfAllTrades(): Boolean = (primary.job == Job.Type.BARD.name && primary.level > 1)
-
     fun description(): String =
-            "${if (subrace != null) Trait.Subrace.valueOf(subrace!!).formatted else Trait.Race.valueOf(race).formatted} " +
-                    "${Job.Type.valueOf(primary.job).formatted}, Level ${primary.level}"
+            "${subrace?.let { it.formatted } ?: race.formatted} " +
+                    "${primary.job.formatted}, Level ${primary.level}"
 
 
     fun level(): Int = primary.level + multiclasses.sumBy { it.level }
@@ -188,7 +228,7 @@ open class Character(
         wisdom.save = false
         charisma.save = false
 
-        when (Job.Type.valueOf(primary.job)) {
+        when (primary.job) {
             Job.Type.BARBARIAN -> {
                 strength.save = true
                 constitution.save = true
@@ -240,7 +280,7 @@ open class Character(
         }
     }
 
-    private fun setPrimaryJobProficiencies() = when (Job.Type.valueOf(primary.job)) {
+    private fun setPrimaryJobProficiencies() = when (primary.job) {
         Job.Type.BARBARIAN -> {
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.MEDIUM.formatted))
@@ -333,7 +373,7 @@ open class Character(
         }
     }
 
-    private fun setRacialTraits() = when (Trait.Race.valueOf(race)) {
+    private fun setRacialTraits() = when (race) {
         Trait.Race.DWARF -> {
             speed = 25
             traits.add(Trait("Darkvision (60 ft)"))
@@ -346,7 +386,7 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LIGHT_HAMMER.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.WARHAMMER.formatted))
             subrace.let {
-                if (it == Trait.Subrace.HILL_DWARF.name) traits.add(Trait("Dwarven Toughness"))
+                if (it == Trait.Subrace.HILL_DWARF) traits.add(Trait("Dwarven Toughness"))
                 else {
                     proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
                     proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.MEDIUM.formatted))
@@ -362,11 +402,11 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ELVISH.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTSWORD.formatted))
             subrace.let {
-                if (it == Trait.Subrace.HIGH_ELF.name) {
+                if (it == Trait.Subrace.HIGH_ELF) {
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTBOW.formatted))
-                } else if (it == Trait.Subrace.WOOD_ELF.name) {
+                } else if (it == Trait.Subrace.WOOD_ELF) {
                     speed = 35
                     traits.add(Trait("Mask of the Wild"))
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
@@ -389,7 +429,7 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.HALFLING.formatted))
             subrace.let {
-                if (it == Trait.Subrace.LIGHTFOOT.name) traits.add(Trait("Naturally Stealthy"))
+                if (it == Trait.Subrace.LIGHTFOOT) traits.add(Trait("Naturally Stealthy"))
                 else traits.add(Trait("Stout Resilience"))
             }
         }
@@ -412,7 +452,7 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.GNOMISH.formatted))
             subrace.let {
-                if (it == Trait.Subrace.FOREST_GNOME.name) {
+                if (it == Trait.Subrace.FOREST_GNOME) {
                     traits.add(Trait("Natural Illusionist"))
                     traits.add(Trait("Speak with Small Beasts"))
                 } else {

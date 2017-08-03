@@ -29,7 +29,7 @@ data class AboutModel(
     constructor(character: Character) :
             this(character.name,
                     character.background,
-                    Trait.Alignment.valueOf(character.alignment).formatted,
+                    character.alignment.formatted,
                     character.about,
 
                     character.traits

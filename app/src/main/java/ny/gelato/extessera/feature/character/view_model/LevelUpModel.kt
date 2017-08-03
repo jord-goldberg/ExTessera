@@ -16,7 +16,7 @@ data class LevelUpModel(
 ) : BaseViewModel(Action.UPDATE) {
 
     constructor(character: Character) :
-            this(Job.Type.valueOf(character.primary.job))
+            this(character.primary.job)
 
     lateinit var selectedJob: Job.Type
 

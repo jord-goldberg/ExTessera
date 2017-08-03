@@ -42,7 +42,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateLevel(level: LevelUpModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            if (Job.Type.valueOf(character.primary.job) == level.selectedJob)
+            if (character.primary.job == level.selectedJob)
                 character.levelUpPrimary()
             character.updated = Date()
         }
@@ -68,9 +68,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             character.hp = status.hp
             character.armor = status.armor - character.dexterity.modifier()
-            character.initiative = status.initiative - character.dexterity.modifier() -
-                    if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
-                    else 0
+            character.initiative = status.initiative - character.dexterity.modifier()
             character.speed = status.speed
             character.primary.dice = status.dice
             character.updated = Date()
@@ -123,7 +121,8 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateSkill(skill: SkillModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.skills.where().equalTo("type", skill.type.name).findFirst().update(skill)
+            character.skills.where().equalTo("type", skill.type.name).findFirst()
+                    .proficiency = skill.proficiency
             character.updated = Date()
         }
     }

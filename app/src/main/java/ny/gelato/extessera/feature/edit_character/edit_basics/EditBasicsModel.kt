@@ -23,10 +23,9 @@ data class EditBasicsModel(
     constructor(character: Character) :
             this(character.name,
                     character.primary.level,
-                    Job.Type.valueOf(character.primary.job),
-                    Trait.Race.valueOf(character.race),
-                    if (character.subrace == null) null
-                    else Trait.Subrace.valueOf(character.subrace!!))
+                    character.primary.job,
+                    character.race,
+                    character.subrace)
 
     private val jobs = Job.Type.values()
     private val races = Trait.Race.values()
