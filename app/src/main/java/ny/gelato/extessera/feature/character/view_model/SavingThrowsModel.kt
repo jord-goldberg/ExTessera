@@ -30,12 +30,12 @@ data class SavingThrowsModel(
 
     constructor(char: Character) :
             this(char.proficiencyBonus(),
-                    char.strength.saveModifier(),
-                    char.dexterity.saveModifier(),
-                    char.constitution.saveModifier(),
-                    char.intelligence.saveModifier(),
-                    char.wisdom.saveModifier(),
-                    char.charisma.saveModifier(),
+                    char.strength.modifier(),
+                    char.dexterity.modifier(),
+                    char.constitution.modifier(),
+                    char.intelligence.modifier(),
+                    char.wisdom.modifier(),
+                    char.charisma.modifier(),
                     char.strength.save,
                     char.dexterity.save,
                     char.constitution.save,
