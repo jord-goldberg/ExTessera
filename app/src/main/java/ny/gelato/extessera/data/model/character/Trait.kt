@@ -10,38 +10,32 @@ import io.realm.annotations.Index
 open class Trait(
         @Index var name: String = ""
 
-): RealmObject() {
+) : RealmObject() {
 
     enum class Race(val formatted: String) {
         DWARF("Dwarf") {
-            override fun hasSubrace(): Boolean  = true
+            override fun speed(): Int = 25
+            override fun hasSubrace(): Boolean = true
         },
         ELF("Elf") {
-            override fun hasSubrace(): Boolean  = true
+            override fun hasSubrace(): Boolean = true
         },
         HALFLING("Halfling") {
-            override fun hasSubrace(): Boolean  = true
+            override fun speed(): Int = 25
+            override fun hasSubrace(): Boolean = true
         },
-        HUMAN("Human") {
-            override fun hasSubrace(): Boolean  = false
-        },
-        DRAGONBORN("Dragonborn") {
-            override fun hasSubrace(): Boolean  = false
-        },
+        HUMAN("Human"),
+        DRAGONBORN("Dragonborn"),
         GNOME("Gnome") {
-            override fun hasSubrace(): Boolean  = true
+            override fun speed(): Int = 25
+            override fun hasSubrace(): Boolean = true
         },
-        HALF_ELF("Half-Elf") {
-            override fun hasSubrace(): Boolean  = false
-        },
-        HALF_ORC("Half-Orc") {
-            override fun hasSubrace(): Boolean  = false
-        },
-        TIEFLING("Tiefling") {
-            override fun hasSubrace(): Boolean  = false
-        };
+        HALF_ELF("Half-Elf"),
+        HALF_ORC("Half-Orc"),
+        TIEFLING("Tiefling");
 
-        abstract fun hasSubrace(): Boolean
+        open fun speed(): Int = 30
+        open fun hasSubrace(): Boolean = false
     }
 
     enum class Subrace(val formatted: String) {
@@ -56,6 +50,7 @@ open class Trait(
         },
         WOOD_ELF("Wood Elf") {
             override fun race(): Race = Race.ELF
+            override fun speed(): Int = 35
         },
         DARK_ELF("Drow") {
             override fun race(): Race = Race.ELF
@@ -74,6 +69,7 @@ open class Trait(
         };
 
         abstract fun race(): Race
+        open fun speed(): Int = race().speed()
     }
 
     enum class Alignment(val formatted: String) {

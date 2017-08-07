@@ -20,6 +20,10 @@ class Migration : RealmMigration {
                     .renameField("race", "raceName")
                     .renameField("subrace", "subraceName")
                     .renameField("alignment", "alignmentName")
+                    // These fields are renamed to more accurately reflect the information stored
+                    .renameField("initiative", "initiativeModifier")
+                    .renameField("speed", "speedModifier")
+                    .transform { it.set("speedModifier", 0) }
 
             schema.get("Job")
                     .addIndex("job")

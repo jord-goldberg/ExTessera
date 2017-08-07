@@ -44,8 +44,8 @@ open class Character(
         var charisma: Ability = Ability(),
 
         var armor: Int = 10,
-        var initiative: Int = 0,
-        var speed: Int = 30,
+        var initiativeModifier: Int = 0,
+        var speedModifier: Int = 0,
         var hp: Int = 1,
         var maxHp: Int = 1,
         var tempHp: Int = 0,
@@ -105,11 +105,11 @@ open class Character(
 
     fun armorClass(): Int = armor + dexterity.modifier()
 
-    fun initiative(): Int = initiative + dexterity.modifier() +
+    fun initiative(): Int = initiativeModifier + dexterity.modifier() +
             if (isJackOfAllTrades()) proficiencyBonus() / 2
             else 0
 
-    fun speed(): Int = speed
+    fun speed(): Int = speedModifier + (subrace?.speed() ?: race.speed())
 
     fun passivePerception(): Int = 10 + wisdom.modifier() +
             when (skills.where()
@@ -375,7 +375,6 @@ open class Character(
 
     private fun setRacialTraits() = when (race) {
         Trait.Race.DWARF -> {
-            speed = 25
             traits.add(Trait("Darkvision (60 ft)"))
             traits.add(Trait("Dwarven Resilience"))
             traits.add(Trait("Stonecunning"))
@@ -394,7 +393,6 @@ open class Character(
             }
         }
         Trait.Race.ELF -> {
-            speed = 30
             traits.add(Trait("Darkvision (60 ft)"))
             traits.add(Trait("Fey Ancestry"))
             traits.add(Trait("Trance"))
@@ -407,7 +405,6 @@ open class Character(
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTBOW.formatted))
                 } else if (it == Trait.Subrace.WOOD_ELF) {
-                    speed = 35
                     traits.add(Trait("Mask of the Wild"))
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
                     proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
@@ -422,7 +419,6 @@ open class Character(
             }
         }
         Trait.Race.HALFLING -> {
-            speed = 25
             traits.add(Trait("Lucky"))
             traits.add(Trait("Brave"))
             traits.add(Trait("Halfling Nimbleness"))
@@ -434,11 +430,9 @@ open class Character(
             }
         }
         Trait.Race.HUMAN -> {
-            speed = 30
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
         }
         Trait.Race.DRAGONBORN -> {
-            speed = 30
             traits.add(Trait("Draconic Ancestry"))
             traits.add(Trait("Breath Weapon"))
             traits.add(Trait("Damage Resistance"))
@@ -446,7 +440,6 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.DRACONIC.formatted))
         }
         Trait.Race.GNOME -> {
-            speed = 25
             traits.add(Trait("Darkvision (60 ft)"))
             traits.add(Trait("Gnome Cunning"))
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
@@ -463,14 +456,12 @@ open class Character(
             }
         }
         Trait.Race.HALF_ELF -> {
-            speed = 30
             traits.add(Trait("Darkvision (60 ft)"))
             traits.add(Trait("Fey Ancestry"))
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ELVISH.formatted))
         }
         Trait.Race.HALF_ORC -> {
-            speed = 30
             traits.add(Trait("Darkvision (60 ft)"))
             traits.add(Trait("Relentless Endurance"))
             traits.add(Trait("Savage Attacks"))
@@ -478,7 +469,6 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ORC.formatted))
         }
         Trait.Race.TIEFLING -> {
-            speed = 30
             traits.add(Trait("Darkvision (60 ft)"))
             traits.add(Trait("Hellish Resistance"))
             traits.add(Trait("Infernal Legacy (3rd & 5th level)"))
