@@ -109,7 +109,7 @@ open class Character(
             if (isJackOfAllTrades()) proficiencyBonus() / 2
             else 0
 
-    fun speed(): Int = speedModifier + (subrace?.speed() ?: race.speed())
+    fun speed(): Int = speedModifier + (subrace?.speed ?: race.speed)
 
     fun passivePerception(): Int = 10 + wisdom.modifier() +
             when (skills.where()
@@ -289,7 +289,7 @@ open class Character(
         }
         Job.Type.BARD -> {
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
-            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple() }
+            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple }
                     .map { Proficiency(Proficiency.Type.WEAPON.name, it.formatted) })
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.CROSSBOW_HAND.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
@@ -300,7 +300,7 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.MEDIUM.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.SHIELD.formatted))
-            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple() }
+            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple }
                     .map { Proficiency(Proficiency.Type.WEAPON.name, it.formatted) })
         }
         Job.Type.DRUID -> {
@@ -326,7 +326,7 @@ open class Character(
             proficiencies.addAll(Weapon.Type.values().map { Proficiency(Proficiency.Type.WEAPON.name, it.formatted) })
         }
         Job.Type.MONK -> {
-            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple() }
+            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple }
                     .map { Proficiency(Proficiency.Type.WEAPON.name, it.formatted) })
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTSWORD.formatted))
         }
@@ -345,7 +345,7 @@ open class Character(
         }
         Job.Type.ROGUE -> {
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
-            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple() }
+            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple }
                     .map { Proficiency(Proficiency.Type.WEAPON.name, it.formatted) })
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.CROSSBOW_HAND.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
@@ -361,7 +361,7 @@ open class Character(
         }
         Job.Type.WARLOCK -> {
             proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
-            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple() }
+            proficiencies.addAll(Weapon.Type.values().filter { it.isSimple }
                     .map { Proficiency(Proficiency.Type.WEAPON.name, it.formatted) })
         }
         Job.Type.WIZARD -> {

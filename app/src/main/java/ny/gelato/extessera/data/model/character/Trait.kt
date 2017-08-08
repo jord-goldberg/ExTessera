@@ -12,64 +12,28 @@ open class Trait(
 
 ) : RealmObject() {
 
-    enum class Race(val formatted: String) {
-        DWARF("Dwarf") {
-            override fun speed(): Int = 25
-            override fun hasSubrace(): Boolean = true
-        },
-        ELF("Elf") {
-            override fun hasSubrace(): Boolean = true
-        },
-        HALFLING("Halfling") {
-            override fun speed(): Int = 25
-            override fun hasSubrace(): Boolean = true
-        },
+    enum class Race(val formatted: String, val speed: Int = 30, val subraces: Array<Subrace> = emptyArray()) {
+        DWARF("Dwarf", speed = 25, subraces = arrayOf(Subrace.HILL_DWARF, Subrace.MOUNTAIN_DWARF)),
+        ELF("Elf", subraces = arrayOf(Subrace.HIGH_ELF, Subrace.WOOD_ELF, Subrace.DARK_ELF)),
+        HALFLING("Halfling", speed = 25, subraces = arrayOf(Subrace.LIGHTFOOT, Subrace.STOUT)),
         HUMAN("Human"),
         DRAGONBORN("Dragonborn"),
-        GNOME("Gnome") {
-            override fun speed(): Int = 25
-            override fun hasSubrace(): Boolean = true
-        },
+        GNOME("Gnome", speed = 25, subraces = arrayOf(Subrace.FOREST_GNOME, Subrace.ROCK_GNOME)),
         HALF_ELF("Half-Elf"),
         HALF_ORC("Half-Orc"),
-        TIEFLING("Tiefling");
-
-        open fun speed(): Int = 30
-        open fun hasSubrace(): Boolean = false
+        TIEFLING("Tiefling")
     }
 
-    enum class Subrace(val formatted: String) {
-        HILL_DWARF("Hill Dwarf") {
-            override fun race(): Race = Race.DWARF
-        },
-        MOUNTAIN_DWARF("Mountain Dwarf") {
-            override fun race(): Race = Race.DWARF
-        },
-        HIGH_ELF("High Elf") {
-            override fun race(): Race = Race.ELF
-        },
-        WOOD_ELF("Wood Elf") {
-            override fun race(): Race = Race.ELF
-            override fun speed(): Int = 35
-        },
-        DARK_ELF("Drow") {
-            override fun race(): Race = Race.ELF
-        },
-        LIGHTFOOT("Lightfoot Halfling") {
-            override fun race(): Race = Race.HALFLING
-        },
-        STOUT("Stout Halfling") {
-            override fun race(): Race = Race.HALFLING
-        },
-        FOREST_GNOME("Forest Gnome") {
-            override fun race(): Race = Race.GNOME
-        },
-        ROCK_GNOME("Rock Gnome") {
-            override fun race(): Race = Race.GNOME
-        };
-
-        abstract fun race(): Race
-        open fun speed(): Int = race().speed()
+    enum class Subrace(val formatted: String, val speed: Int = 25) {
+        HILL_DWARF("Hill Dwarf"),
+        MOUNTAIN_DWARF("Mountain Dwarf"),
+        HIGH_ELF("High Elf", speed = 30),
+        WOOD_ELF("Wood Elf", speed = 35),
+        DARK_ELF("Drow", speed = 30),
+        LIGHTFOOT("Lightfoot Halfling"),
+        STOUT("Stout Halfling"),
+        FOREST_GNOME("Forest Gnome"),
+        ROCK_GNOME("Rock Gnome")
     }
 
     enum class Alignment(val formatted: String) {

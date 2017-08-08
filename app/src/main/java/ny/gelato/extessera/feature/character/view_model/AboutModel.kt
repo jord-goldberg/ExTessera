@@ -50,10 +50,10 @@ data class AboutModel(
                         "All Weapons"
                     else if (character.proficiencies
                             .map { it.name }
-                            .containsAll(Weapon.Type.values().filter { it.isSimple() }.map { it.formatted }))
+                            .containsAll(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }))
                         character.proficiencies.filter {
                             it.type == Proficiency.Type.WEAPON.name
-                                    && !(Weapon.Type.values().filter { it.isSimple() }.map { it.formatted }.contains(it.name))
+                                    && !(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }.contains(it.name))
                         }
                                 .map { if (it.name.contains(",")) it.name.replace(", ", " (").plus(")") else it.name }
                                 .toMutableList()

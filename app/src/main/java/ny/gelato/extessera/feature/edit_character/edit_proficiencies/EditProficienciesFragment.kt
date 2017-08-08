@@ -117,13 +117,14 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
     }
 
     private fun header(model: EditProficiencyModel): String = when (model.type) {
-        Proficiency.Type.TOOL ->
-            if (Proficiency.Tool.valueOf(model.name).isArtisan()) "Artisan's Tools"
-            else if (Proficiency.Tool.valueOf(model.name).isGaming()) "Gaming Sets"
-            else if (Proficiency.Tool.valueOf(model.name).isMusical()) "Musical Instruments"
-            else "Other Tools"
+        Proficiency.Type.TOOL -> when (Proficiency.Tool.valueOf(model.name).type) {
+            Proficiency.Tool.Type.ARTISAN -> "Artisan's Tools"
+            Proficiency.Tool.Type.GAMING -> "Gaming Sets"
+            Proficiency.Tool.Type.MUSIC -> "Musical Instruments"
+            Proficiency.Tool.Type.OTHER -> "Other Tools"
+        }
         Proficiency.Type.LANGUAGE ->
-            if (Proficiency.Language.valueOf(model.name).isCommon()) "Standard Languages"
+            if (Proficiency.Language.valueOf(model.name).isCommon) "Standard Languages"
             else "Exotic Languages"
         else -> "Other Proficiencies"
     }

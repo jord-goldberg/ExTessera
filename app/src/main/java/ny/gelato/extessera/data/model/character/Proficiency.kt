@@ -15,286 +15,79 @@ open class Proficiency(
 ) : RealmObject() {
 
     enum class Type {
-        WEAPON,
-        ARMOR,
-        TOOL,
-        LANGUAGE
+        WEAPON, ARMOR, TOOL, LANGUAGE
     }
 
     enum class Origin {
-        RACE_CLASS,
-        CHOICE
+        RACE_CLASS, CHOICE
     }
 
-    enum class Tool(val formatted: String) {
-        ALCHEMIST("Alchemist's supplies") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        BREWER("Brewer's supplies") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        CALLIGRAPHER("Calligrapher's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        CARPENTER("Carpenter's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        CARTOGRAPHER("Cartographer's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        COBBLER("Cobbler's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        COOK("Cook's utensils") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        GLASSBLOWER("Glassblower's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        JEWELER("Jeweler's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        LEATHERWORKER("Leatherworker's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        MASON("Mason's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        PAINTER("Painter's supplies") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        POTTER("Potter's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        SMITH("Smith's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        TINKER("Tinker's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        WEAVER("Weaver's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        WOODCARVER("Woodcarver's tools") {
-            override fun isArtisan(): Boolean = true
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        DICE("Dice set") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = true
-            override fun isMusical(): Boolean = false
-        },
-        DRAGONCHESS("Dragonchess set") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = true
-            override fun isMusical(): Boolean = false
-        },
-        PLAYING_CARD("Playing card set") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = true
-            override fun isMusical(): Boolean = false
-        },
-        THREE_DRAGON_ANTE("Three-Dragon Ante set") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = true
-            override fun isMusical(): Boolean = false
-        },
-        BAGPIPE("Bagpipes") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        DRUM("Drums") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        DULCIMER("Dulcimer") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        FLUTE("Flute") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        LUTE("Lute") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        LYRE("Lyre") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        HORN("Horn") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        PAN_FLUTE("Pan flute") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        SHAWM("Shawm") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        VIOL("Viol") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = true
-        },
-        DISGUISE("Disguise kit") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        FORGERY("Forgery kit") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        HERBALISM("Herbalism kit") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        NAVIGATOR("Navigator's tools") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        POISONER("Poisoner's kit") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        THIEF("Thieves' tools") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        VEHICLE_LAND("Land vehicles") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        },
-        VEHICLE_WATER("Water vehicles") {
-            override fun isArtisan(): Boolean = false
-            override fun isGaming(): Boolean = false
-            override fun isMusical(): Boolean = false
-        };
+    enum class Tool(val formatted: String, val type: Type) {
+        ALCHEMIST("Alchemist's supplies", Type.ARTISAN),
+        BREWER("Brewer's supplies", Type.ARTISAN),
+        CALLIGRAPHER("Calligrapher's tools", Type.ARTISAN),
+        CARPENTER("Carpenter's tools", Type.ARTISAN),
+        CARTOGRAPHER("Cartographer's tools", Type.ARTISAN),
+        COBBLER("Cobbler's tools", Type.ARTISAN),
+        COOK("Cook's utensils", Type.ARTISAN),
+        GLASSBLOWER("Glassblower's tools", Type.ARTISAN),
+        JEWELER("Jeweler's tools", Type.ARTISAN),
+        LEATHERWORKER("Leatherworker's tools", Type.ARTISAN),
+        MASON("Mason's tools", Type.ARTISAN),
+        PAINTER("Painter's supplies", Type.ARTISAN),
+        POTTER("Potter's tools", Type.ARTISAN),
+        SMITH("Smith's tools", Type.ARTISAN),
+        TINKER("Tinker's tools", Type.ARTISAN),
+        WEAVER("Weaver's tools", Type.ARTISAN),
+        WOODCARVER("Woodcarver's tools", Type.ARTISAN),
 
-        abstract fun isArtisan(): Boolean
-        abstract fun isGaming(): Boolean
-        abstract fun isMusical(): Boolean
+        DICE("Dice set", Type.GAMING),
+        DRAGONCHESS("Dragonchess set", Type.GAMING),
+        PLAYING_CARD("Playing card set", Type.GAMING),
+        THREE_DRAGON_ANTE("Three-Dragon Ante set", Type.GAMING),
+
+        BAGPIPE("Bagpipes", Type.MUSIC),
+        DRUM("Drums", Type.MUSIC),
+        DULCIMER("Dulcimer", Type.MUSIC),
+        FLUTE("Flute", Type.MUSIC),
+        LUTE("Lute", Type.MUSIC),
+        LYRE("Lyre", Type.MUSIC),
+        HORN("Horn", Type.MUSIC),
+        PAN_FLUTE("Pan flute", Type.MUSIC),
+        SHAWM("Shawm", Type.MUSIC),
+        VIOL("Viol", Type.MUSIC),
+
+        DISGUISE("Disguise kit", Type.OTHER),
+        FORGERY("Forgery kit", Type.OTHER),
+        HERBALISM("Herbalism kit", Type.OTHER),
+        NAVIGATOR("Navigator's tools", Type.OTHER),
+        POISONER("Poisoner's kit", Type.OTHER),
+        THIEF("Thieves' tools", Type.OTHER),
+        VEHICLE_LAND("Land vehicles", Type.OTHER),
+        VEHICLE_WATER("Water vehicles", Type.OTHER);
+
+        enum class Type {
+            ARTISAN, GAMING, MUSIC, OTHER
+        }
     }
 
-    enum class Language(val formatted: String) {
-        COMMON("Common") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = COMMON.formatted
-        },
-        DWARVISH("Dwarvish") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = DWARVISH.formatted
-        },
-        ELVISH("Elvish") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = ELVISH.formatted
-        },
-        GIANT("Giant") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = DWARVISH.formatted
-        },
-        GNOMISH("Gnomish") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = DWARVISH.formatted
-        },
-        GOBLIN("Goblin") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = DWARVISH.formatted
-        },
-        HALFLING("Halfling") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = COMMON.formatted
-        },
-        ORC("Orc") {
-            override fun isCommon(): Boolean = true
-            override fun script(): String = DWARVISH.formatted
-        },
-        ABYSSAL("Abyssal") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = INFERNAL.formatted
-        },
-        CELESTIAL("Celestial") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = CELESTIAL.formatted
-        },
-        DRACONIC("Draconic") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = DRACONIC.formatted
-        },
-        DEEP_SPEECH("Deep Speech") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = ""
-        },
-        INFERNAL("Infernal") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = INFERNAL.formatted
-        },
-        PRIMORDIAL("Primordial") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = DWARVISH.formatted
-        },
-        SYLVAN("Sylvan") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = ELVISH.script()
-        },
-        UNDERCOMMON("Undercommon") {
-            override fun isCommon(): Boolean = false
-            override fun script(): String = ELVISH.formatted
-        };
+    enum class Language(val formatted: String, val isCommon: Boolean = true, val script: String = formatted) {
+        COMMON("Common"),
+        DWARVISH("Dwarvish"),
+        ELVISH("Elvish"),
+        GIANT("Giant", script = DWARVISH.script),
+        GNOMISH("Gnomish", script = DWARVISH.script),
+        GOBLIN("Goblin", script = DWARVISH.script),
+        HALFLING("Halfling", script = COMMON.script),
+        ORC("Orc", script = DWARVISH.script),
 
-        abstract fun isCommon(): Boolean
-        abstract fun script(): String
+        ABYSSAL("Abyssal", isCommon = false, script = "Infernal"),
+        CELESTIAL("Celestial", isCommon = false),
+        DRACONIC("Draconic", isCommon = false),
+        DEEP_SPEECH("Deep Speech", isCommon = false, script = ""),
+        INFERNAL("Infernal", isCommon = false),
+        PRIMORDIAL("Primordial", isCommon = false, script = DWARVISH.script),
+        SYLVAN("Sylvan", isCommon = false, script = ELVISH.script),
+        UNDERCOMMON("Undercommon", isCommon = false, script = ELVISH.script)
     }
 }

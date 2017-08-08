@@ -23,7 +23,7 @@ data class SkillModel(
 ) : BaseViewModel() {
 
     constructor(char: Character, skill: Skill) : this(
-            when (skill.type.ability()) {
+            when (skill.type.ability) {
                 Ability.Type.STR -> char.strength.modifier()
                 Ability.Type.DEX -> char.dexterity.modifier()
                 Ability.Type.CON -> char.constitution.modifier()
@@ -40,7 +40,7 @@ data class SkillModel(
             if (model is SkillModel) model.type == type
             else false
 
-    fun showStat(): String = "(${type.ability().formatted})"
+    fun showStat(): String = "(${type.ability.formatted})"
 
     fun none(sheet: BottomSheetDialog): SkillModel {
         sheet.dismiss()

@@ -29,13 +29,12 @@ data class EditBasicsModel(
 
     private val jobs = Job.Type.values()
     private val races = Trait.Race.values()
-    private val subraces = Trait.Subrace.values()
 
     fun jobOptions(): Array<String> = jobs.map { it.formatted }.toTypedArray()
 
     fun raceOptions(): Array<String> = races.map { it.formatted }.toTypedArray()
 
-    fun subraceOptions(): Array<String> = subraces.filter { it.race() == race }.map { it.formatted }.toTypedArray()
+    fun subraceOptions(): Array<String> = race.subraces.map { it.formatted }.toTypedArray()
 
     fun showLevelHint(): String = if (level < 10) "  $level  " else " $level "
 
@@ -64,15 +63,15 @@ data class EditBasicsModel(
 
     fun selectRace(position: Int) {
         race = races[position]
-        if (!race.hasSubrace()) subrace = null
+        if (race.subraces.isEmpty()) subrace = null
         notifyChange()
     }
 
     fun selectedRacePosition(): Int = race.ordinal
 
     fun selectSubrace(position: Int) {
-        subrace = subraces.filter { it.race() == race }[position]
+        subrace = race.subraces[position]
     }
 
-    fun selectedSubracePosition(): Int = subraces.filter { it.race() == race }.indexOf(subrace)
+    fun selectedSubracePosition(): Int = race.subraces.indexOf(subrace)
 }

@@ -22,39 +22,102 @@ open class Job(
             jobName = value.name
         }
 
-    enum class Type(val formatted: String) {
-        BARBARIAN("Barbarian"),
-        BARD("Bard"),
-        CLERIC("Cleric"),
-        DRUID("Druid"),
-        FIGHTER("Fighter"),
-        MONK("Monk"),
-        PALADIN("Paladin"),
-        RANGER("Ranger"),
-        ROGUE("Rogue"),
-        SORCERER("Sorcerer"),
-        WARLOCK("Warlock"),
-        WIZARD("Wizard")
+    enum class Type(val formatted: String, val archetypes: Array<Archetype>) {
+        BARBARIAN("Barbarian", archetypes = arrayOf(
+                Archetype.BERSERKER,
+                Archetype.TOTEM_WARRIOR)),
+        BARD("Bard", archetypes = arrayOf(
+                Archetype.COLLEGE_OF_LORE,
+                Archetype.COLLEGE_OF_VALOR)),
+        CLERIC("Cleric", archetypes = arrayOf(
+                Archetype.KNOWLEDGE_DOMAIN,
+                Archetype.LIFE_DOMAIN,
+                Archetype.LIGHT_DOMAIN,
+                Archetype.NATURE_DOMAIN,
+                Archetype.TEMPEST_DOMAIN,
+                Archetype.TRICKERY_DOMAIN,
+                Archetype.WAR_DOMAIN)),
+        DRUID("Druid", archetypes = arrayOf(
+                Archetype.CIRCLE_OF_THE_LAND,
+                Archetype.CIRCLE_OF_THE_MOON)),
+        FIGHTER("Fighter", archetypes = arrayOf(
+                Archetype.CHAMPION,
+                Archetype.BATTLE_MASTER,
+                Archetype.ELDRITCH_KNIGHT)),
+        MONK("Monk", archetypes = arrayOf(
+                Archetype.WAY_OF_THE_OPEN_HAND,
+                Archetype.WAY_OF_SHADOW,
+                Archetype.WAY_OF_THE_FOUR_ELEMENTS)),
+        PALADIN("Paladin", archetypes = arrayOf(
+                Archetype.OATH_OF_DEVOTION,
+                Archetype.OATH_OF_THE_ANCIENTS,
+                Archetype.OATH_OF_VENGEANCE)),
+        RANGER("Ranger", archetypes = arrayOf(
+                Archetype.HUNTER,
+                Archetype.BEAST_MASTER)),
+        ROGUE("Rogue", archetypes = arrayOf(
+                Archetype.THIEF,
+                Archetype.ASSASSIN,
+                Archetype.ARCANE_TRICKSTER)),
+        SORCERER("Sorcerer", archetypes = arrayOf(
+                Archetype.DRACONIC_BLOODLINE,
+                Archetype.WILD_MAGIC)),
+        WARLOCK("Warlock", archetypes = arrayOf(
+                Archetype.ARCHFEY,
+                Archetype.FIEND,
+                Archetype.GREAT_OLD_ONE)),
+        WIZARD("Wizard", archetypes = arrayOf(
+                Archetype.SCHOOL_OF_ABJURATION,
+                Archetype.SCHOOL_OF_CONJURATION,
+                Archetype.SCHOOL_OF_DIVINATION,
+                Archetype.SCHOOL_OF_ENCHANTMENT,
+                Archetype.SCHOOL_OF_EVOCATION,
+                Archetype.SCHOOL_OF_ILLUSION,
+                Archetype.SCHOOL_OF_NECROMANCY,
+                Archetype.SCHOOL_OF_TRANSMUTATION))
     }
 
     enum class Archetype(val formatted: String) {
-
-        BERSERKER("Berserker") {
-            override fun type(): Type = Type.BARBARIAN
-        },
-        TOTEM_WARRIOR("Totem Warrior") {
-            override fun type(): Type = Type.BARBARIAN
-        },
-        COLLEGE_OF_LORE("College of Lore") {
-            override fun type(): Type = Type.BARD
-        },
-        COLLEGE_OF_VALOR("College of Valor") {
-            override fun type(): Type = Type.BARD
-        },
-
-        ;
-
-        abstract fun type(): Type
+        BERSERKER("Berserker"),
+        TOTEM_WARRIOR("Totem Warrior"),
+        COLLEGE_OF_LORE("College of Lore"),
+        COLLEGE_OF_VALOR("College of Valor"),
+        KNOWLEDGE_DOMAIN("Knowledge Domain"),
+        LIFE_DOMAIN("Life Domain"),
+        LIGHT_DOMAIN("Light Domain"),
+        NATURE_DOMAIN("Nature Domain"),
+        TEMPEST_DOMAIN("Tempest Domain"),
+        TRICKERY_DOMAIN("Trickery Domain"),
+        WAR_DOMAIN("War Domain"),
+        CIRCLE_OF_THE_LAND("Circle of the Land"),
+        CIRCLE_OF_THE_MOON("Circle of the Moon"),
+        CHAMPION("Champion"),
+        BATTLE_MASTER("Battle Master"),
+        ELDRITCH_KNIGHT("Eldritch Knight"),
+        WAY_OF_THE_OPEN_HAND("Way of the Open Hand"),
+        WAY_OF_SHADOW("Way of Shadow"),
+        WAY_OF_THE_FOUR_ELEMENTS("Way of the Four Elements"),
+        OATH_OF_DEVOTION("Oath of Devotion"),
+        OATH_OF_THE_ANCIENTS("Oath of the Ancients"),
+        OATH_OF_VENGEANCE("Oath of Vengeance"),
+        HUNTER("Hunter"),
+        BEAST_MASTER("Beast Master"),
+        THIEF("Thief"),
+        ASSASSIN("Assassin"),
+        ARCANE_TRICKSTER("Arcane Trickster"),
+        DRACONIC_BLOODLINE("Draconic Bloodline"),
+        WILD_MAGIC("Wild Magic"),
+        ARCHFEY("The Archfey"),
+        FIEND("The Fiend"),
+        GREAT_OLD_ONE("The Great Old One"),
+        SCHOOL_OF_ABJURATION("School of Abjuration"),
+        SCHOOL_OF_CONJURATION("School of Conjuration"),
+        SCHOOL_OF_DIVINATION("School of Divination"),
+        SCHOOL_OF_ENCHANTMENT("School of Enchantment"),
+        SCHOOL_OF_EVOCATION("School of Evocation"),
+        SCHOOL_OF_ILLUSION("School of Illusion"),
+        SCHOOL_OF_NECROMANCY("School of Necromancy"),
+        SCHOOL_OF_TRANSMUTATION("School of Transmutation"),
     }
 
     fun playersHandbookPage(): Int = when (job) {
@@ -109,6 +172,12 @@ open class Job(
         15, 16 -> 8
         in 17..20 -> 9
         else -> 0
+    }
+
+    fun archetypeSpecializationLevel(): Int = when (job) {
+        Type.BARBARIAN, Type.BARD, Type.FIGHTER, Type.MONK, Type.PALADIN, Type.RANGER, Type.ROGUE -> 3
+        Type.CLERIC, Type.SORCERER, Type.WARLOCK -> 1
+        Type.DRUID, Type.WIZARD -> 2
     }
 
     fun resetLevelTo(level: Int) {
