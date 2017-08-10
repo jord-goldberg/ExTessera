@@ -1,6 +1,7 @@
 package ny.gelato.extessera.data
 
 import io.realm.DynamicRealm
+import io.realm.FieldAttribute
 import io.realm.RealmMigration
 
 /**
@@ -28,6 +29,9 @@ class Migration : RealmMigration {
             schema.get("Job")
                     .addIndex("job")
                     .renameField("job", "jobName")
+                    .addField("archetypeName", String::class.java, FieldAttribute.INDEXED)
+                    .removeField("features")
+                    .addField("counter1", Int::class.java)
 
             schema.get("Ability")
                     .addField("scoreModifier", Int::class.java)
@@ -37,6 +41,12 @@ class Migration : RealmMigration {
                     .addIndex("type")
                     .renameField("type", "typeName")
                     .renameField("proficiency", "proficiencyName")
+
+            schema.get("Proficiency")
+                    .renameField("type", "typeName")
+                    .removeField("origin")
+
+            schema.remove("Feature")
 
             version++
         }

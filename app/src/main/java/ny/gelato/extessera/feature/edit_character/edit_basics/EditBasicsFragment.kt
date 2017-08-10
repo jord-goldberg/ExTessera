@@ -88,13 +88,10 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
             character.race = model.race
             character.subrace = model.subrace
             character.primary.job = model.job
-            character.primary.resetLevelTo(model.level)
+            character.primary.level = model.level
             character.setExpToLevel()
             character.traits.deleteAllFromRealm()
-            character.proficiencies.where()
-                    .equalTo("origin", Proficiency.Origin.RACE_CLASS.name)
-                    .findAll()
-                    .deleteAllFromRealm()
+            character.proficiencies.deleteAllFromRealm()
             character.setTraitsAndProficiencies()
 
             if (id.isEmpty()) {

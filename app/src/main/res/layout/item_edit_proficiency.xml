@@ -8,6 +8,10 @@
         <variable
             name="viewModel"
             type="ny.gelato.extessera.feature.edit_character.edit_proficiencies.EditProficiencyModel"/>
+
+        <variable
+            name="parent"
+            type="ny.gelato.extessera.base.BaseView"/>
     </data>
 
         <FrameLayout
@@ -31,8 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:clickable="@{viewModel.isClickable()}"
-                android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleIsChecked(isChecked)}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.toggleIsChecked())}"
                 android:checked="@{viewModel.checked}"/>
 
         </FrameLayout>

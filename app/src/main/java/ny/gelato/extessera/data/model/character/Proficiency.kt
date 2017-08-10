@@ -8,18 +8,15 @@ import io.realm.annotations.Index
  */
 
 open class Proficiency(
-        @Index var type: String = "",
-        @Index var name: String = "",
-        @Index var origin: String = Proficiency.Origin.RACE_CLASS.name
+        @Index private var typeName: String = "",
+        @Index var name: String = ""
 
 ) : RealmObject() {
 
+    val type: Type get() = Type.valueOf(typeName)
+
     enum class Type {
         WEAPON, ARMOR, TOOL, LANGUAGE
-    }
-
-    enum class Origin {
-        RACE_CLASS, CHOICE
     }
 
     enum class Tool(val formatted: String, val type: Type) {

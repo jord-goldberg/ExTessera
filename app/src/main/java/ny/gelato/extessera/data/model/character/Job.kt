@@ -1,6 +1,5 @@
 package ny.gelato.extessera.data.model.character
 
-import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 
@@ -9,17 +8,24 @@ import io.realm.annotations.Index
  */
 
 open class Job(
-        @Index private var jobName: String = Job.Type.FIGHTER.name,
+        @Index private var jobName: String = Job.Type.BARBARIAN.name,
+        @Index private var archetypeName: String? = null,
         var level: Int = 1,
         var dice: Int = 1,
-        var features: RealmList<Feature> = RealmList()
+        var counter1: Int = 0
 
 ) : RealmObject() {
 
-    var job: Job.Type
-        get() = Job.Type.valueOf(jobName)
+    var job: Type
+        get() = Type.valueOf(jobName)
         set(value) {
             jobName = value.name
+        }
+
+    var archetype: Archetype?
+        get() = archetypeName?.let { Archetype.valueOf(it) }
+        set(value) {
+            archetypeName = value?.name
         }
 
     enum class Type(val formatted: String, val archetypes: Array<Archetype>) {
@@ -120,6 +126,20 @@ open class Job(
         SCHOOL_OF_TRANSMUTATION("School of Transmutation"),
     }
 
+    fun features(): List<String> = mutableListOf<String>().apply{
+        (1..level)
+                .flatMap { featuresForLevel(it) }
+                .forEach { feature ->
+                    if (feature.contains(" (")) {
+                        val oldFeature = find { it.contains(feature.substringBefore(" (")) }
+                        oldFeature?.let {
+                            add(indexOf(it), feature)
+                            remove(it)
+                        } ?: add(feature)
+                    } else add(feature)
+                }
+    }
+
     fun playersHandbookPage(): Int = when (job) {
         Job.Type.BARBARIAN -> 46
         Job.Type.BARD -> 51
@@ -174,29 +194,20 @@ open class Job(
         else -> 0
     }
 
-    fun archetypeSpecializationLevel(): Int = when (job) {
+    fun hasToSelectArchetype(): Boolean = (archetypeName == null) && level >= when (job) {
         Type.BARBARIAN, Type.BARD, Type.FIGHTER, Type.MONK, Type.PALADIN, Type.RANGER, Type.ROGUE -> 3
         Type.CLERIC, Type.SORCERER, Type.WARLOCK -> 1
         Type.DRUID, Type.WIZARD -> 2
     }
 
-    fun resetLevelTo(level: Int) {
-        features.deleteAllFromRealm()
-        for (i in 1..level) {
-            this.level = i
-            addOrUpdateFeatures(featuresForLevel())
-        }
-    }
-
     fun levelNotes(): List<Note> = ArrayList<Note>().apply {
-        val features = featuresForLevel()
+        val features = featuresForLevel(level)
 
         if (features.isNotEmpty()) {
-            addOrUpdateFeatures(features)
             add(Note(text = "${job.formatted} $level " +
                     "${if (features.size > 1) "features" else "feature"} " +
                     "(PHB ${playersHandbookPage()}):\n" +
-                    features.map { it.name }.toString().substring(1).dropLast(1)))
+                    features.toString().substring(1).dropLast(1)))
         }
 
         when (level) {
@@ -272,228 +283,218 @@ open class Job(
         }
     }
 
-    private fun featuresForLevel(): List<Feature> = ArrayList<Feature>().apply {
+    private fun featuresForLevel(level: Int): List<String> = ArrayList<String>().apply {
         when (job) {
             Type.BARBARIAN -> when (level) {
                 1 -> {
-                    add(Feature("Rage"))
-                    add(Feature("Unarmored Defense"))
+                    add("Rage")
+                    add("Unarmored Defense")
                 }
                 2 -> {
-                    add(Feature("Reckless Attack"))
-                    add(Feature("Danger Sense"))
+                    add("Reckless Attack")
+                    add("Danger Sense")
                 }
-                3 -> add(Feature("Primal Path"))
+                3 -> add("Primal Path")
                 5 -> {
-                    add(Feature("Extra Attack"))
-                    add(Feature("Fast Movement"))
+                    add("Extra Attack")
+                    add("Fast Movement")
                 }
-                7 -> add(Feature("Feral Instinct"))
-                9 -> add(Feature("Brutal Critical (+1d)"))
-                11 -> add(Feature("Relentless Rage"))
-                13 -> add(Feature("Brutal Critical (+2d)"))
-                15 -> add(Feature("Persistent Rage"))
-                17 -> add(Feature("Brutal Critical (+3d)"))
-                18 -> add(Feature("Indomitable Might"))
-                20 -> add(Feature("Primal Champion"))
+                7 -> add("Feral Instinct")
+                9 -> add("Brutal Critical (+1d)")
+                11 -> add("Relentless Rage")
+                13 -> add("Brutal Critical (+2d)")
+                15 -> add("Persistent Rage")
+                17 -> add("Brutal Critical (+3d)")
+                18 -> add("Indomitable Might")
+                20 -> add("Primal Champion")
             }
             Type.BARD -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Bardic Inspiration (d6)"))
+                    add("Spellcasting")
+                    add("Bardic Inspiration (d6)")
                 }
                 2 -> {
-                    add(Feature("Jack of All Trades"))
-                    add(Feature("Song of Rest (d6)"))
+                    add("Jack of All Trades")
+                    add("Song of Rest (d6)")
                 }
-                3 -> add(Feature("Bard College"))
+                3 -> add("Bard College")
                 5 -> {
-                    add(Feature("Bardic Inspiration (d8)"))
-                    add(Feature("Font of Inspiration"))
+                    add("Bardic Inspiration (d8)")
+                    add("Font of Inspiration")
                 }
-                6 -> add(Feature("Countercharm"))
-                9 -> add(Feature("Song of Rest d8"))
-                10 -> add(Feature("Bardic Inspiration (d10)"))
-                13 -> add(Feature("Song of Rest (d10)"))
-                15 -> add(Feature("Bardic Inspiration (d12)"))
-                17 -> add(Feature("Song of Rest (d12)"))
-                20 -> add(Feature("Superior Inspiration"))
+                6 -> add("Countercharm")
+                9 -> add("Song of Rest d8")
+                10 -> add("Bardic Inspiration (d10)")
+                13 -> add("Song of Rest (d10)")
+                15 -> add("Bardic Inspiration (d12)")
+                17 -> add("Song of Rest (d12)")
+                20 -> add("Superior Inspiration")
             }
             Type.CLERIC -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Divine Domain"))
+                    add("Spellcasting")
+                    add("Divine Domain")
                 }
-                2 -> add(Feature("Channel Divinity (1/rest)"))
-                5 -> add(Feature("Destroy Undead (CR 1/2)"))
-                6 -> add(Feature("Channel Divinity (2/rest)"))
-                8 -> add(Feature("Destroy Undead (CR 1)"))
-                10 -> add(Feature("Divine Intervention"))
-                11 -> add(Feature("Destroy Undead (CR 2)"))
-                14 -> add(Feature("Destroy Undead (CR 3)"))
-                17 -> add(Feature("Destroy Undead (CR 4)"))
-                18 -> add(Feature("Channel Divinity (3/rest)"))
-                20 -> add(Feature("Divine Intervention improvement"))
+                2 -> add("Channel Divinity (1/rest)")
+                5 -> add("Destroy Undead (CR 1/2)")
+                6 -> add("Channel Divinity (2/rest)")
+                8 -> add("Destroy Undead (CR 1)")
+                10 -> add("Divine Intervention")
+                11 -> add("Destroy Undead (CR 2)")
+                14 -> add("Destroy Undead (CR 3)")
+                17 -> add("Destroy Undead (CR 4)")
+                18 -> add("Channel Divinity (3/rest)")
+                20 -> add("Divine Intervention improvement")
             }
             Type.DRUID -> when (level) {
                 1 -> {
-                    add(Feature("Druidic"))
-                    add(Feature("Spellcasting"))
+                    add("Druidic")
+                    add("Spellcasting")
                 }
                 2 -> {
-                    add(Feature("Wild Shape"))
-                    add(Feature("Druid Circle"))
+                    add("Wild Shape")
+                    add("Druid Circle")
                 }
                 18 -> {
-                    add(Feature("Timeless Body"))
-                    add(Feature("Beast Spells"))
+                    add("Timeless Body")
+                    add("Beast Spells")
                 }
-                20 -> add(Feature("Archdruid"))
+                20 -> add("Archdruid")
             }
             Type.FIGHTER -> when (level) {
                 1 -> {
-                    add(Feature("Fighting Style"))
-                    add(Feature("Second Wind"))
+                    add("Fighting Style")
+                    add("Second Wind")
                 }
-                2 -> add(Feature("Action Surge (one use)"))
-                3 -> add(Feature("Martial Archetype"))
-                5 -> add(Feature("Extra Attack (1)"))
-                9 -> add(Feature("Indomitable (one use)"))
-                11 -> add(Feature("Extra Attack (2)"))
-                13 -> add(Feature("Indomitable (two uses)"))
-                15 -> add(Feature("Persistent Rage"))
+                2 -> add("Action Surge (one use)")
+                3 -> add("Martial Archetype")
+                5 -> add("Extra Attack (1)")
+                9 -> add("Indomitable (one use)")
+                11 -> add("Extra Attack (2)")
+                13 -> add("Indomitable (two uses)")
+                15 -> add("Persistent Rage")
                 17 -> {
-                    add(Feature("Action Surge (two uses)"))
-                    add(Feature("Indomitable (three uses)"))
+                    add("Action Surge (two uses)")
+                    add("Indomitable (three uses)")
                 }
-                20 -> add(Feature("Extra Attack (3)"))
+                20 -> add("Extra Attack (3)")
             }
             Type.MONK -> when (level) {
                 1 -> {
-                    add(Feature("Unarmored Defense"))
-                    add(Feature("Martial Arts"))
+                    add("Unarmored Defense")
+                    add("Martial Arts")
                 }
                 2 -> {
-                    add(Feature("Ki"))
-                    add(Feature("Unarmored Movement"))
+                    add("Ki")
+                    add("Unarmored Movement")
                 }
                 3 -> {
-                    add(Feature("Monastic Tradition"))
-                    add(Feature("Deflect Missiles"))
+                    add("Monastic Tradition")
+                    add("Deflect Missiles")
                 }
-                4 -> add(Feature("Slow Fall"))
+                4 -> add("Slow Fall")
                 5 -> {
-                    add(Feature("Extra Attack"))
-                    add(Feature("Stunning Strike"))
+                    add("Extra Attack")
+                    add("Stunning Strike")
                 }
-                6 -> add(Feature("Ki Empowered Strikes"))
+                6 -> add("Ki Empowered Strikes")
                 7 -> {
-                    add(Feature("Evasion"))
-                    add(Feature("Stillness of Mind"))
+                    add("Evasion")
+                    add("Stillness of Mind")
                 }
-                9 -> add(Feature("Unarmored Movement improvement"))
-                10 -> add(Feature("Purity of Body"))
-                13 -> add(Feature("Tongue of the Sun and Moon"))
-                14 -> add(Feature("Diamond Soul"))
-                15 -> add(Feature("Timeless Body"))
-                18 -> add(Feature("Empty Body"))
-                20 -> add(Feature("Perfect Self"))
+                9 -> add("Unarmored Movement improvement")
+                10 -> add("Purity of Body")
+                13 -> add("Tongue of the Sun and Moon")
+                14 -> add("Diamond Soul")
+                15 -> add("Timeless Body")
+                18 -> add("Empty Body")
+                20 -> add("Perfect Self")
             }
             Type.PALADIN -> when (level) {
                 1 -> {
-                    add(Feature("Divine Sense"))
-                    add(Feature("Lay on Hands"))
+                    add("Divine Sense")
+                    add("Lay on Hands")
                 }
                 2 -> {
-                    add(Feature("Fighting Style"))
-                    add(Feature("Spellcasting"))
-                    add(Feature("Divine Smite"))
+                    add("Fighting Style")
+                    add("Spellcasting")
+                    add("Divine Smite")
                 }
                 3 -> {
-                    add(Feature("Divine Health"))
-                    add(Feature("Sacred Oath"))
+                    add("Divine Health")
+                    add("Sacred Oath")
                 }
-                5 -> add(Feature("Extra Attack"))
-                6 -> add(Feature("Aura of Protection"))
-                10 -> add(Feature("Aura of Courage"))
-                11 -> add(Feature("Improved Divine Smite"))
-                14 -> add(Feature("Cleansing Touch"))
-                18 -> add(Feature("Aura improvements"))
+                5 -> add("Extra Attack")
+                6 -> add("Aura of Protection")
+                10 -> add("Aura of Courage")
+                11 -> add("Improved Divine Smite")
+                14 -> add("Cleansing Touch")
+                18 -> add("Aura improvements")
             }
 
             Job.Type.RANGER -> when (level) {
                 1 -> {
-                    add(Feature("Favored Enemy"))
-                    add(Feature("Natural Explorer"))
+                    add("Favored Enemy")
+                    add("Natural Explorer")
                 }
                 2 -> {
-                    add(Feature("Fighting Style"))
-                    add(Feature("Spellcasting"))
+                    add("Fighting Style")
+                    add("Spellcasting")
                 }
                 3 -> {
-                    add(Feature("Ranger Archetype"))
-                    add(Feature("Primeval Awareness"))
+                    add("Ranger Archetype")
+                    add("Primeval Awareness")
                 }
-                5 -> add(Feature("Extra Attack"))
-                8 -> add(Feature("Land's Stride"))
-                10 -> add(Feature("Hide in Plain Sight"))
-                14 -> add(Feature("Vanish"))
-                18 -> add(Feature("Feral Senses"))
-                20 -> add(Feature("Foe Slayer"))
+                5 -> add("Extra Attack")
+                8 -> add("Land's Stride")
+                10 -> add("Hide in Plain Sight")
+                14 -> add("Vanish")
+                18 -> add("Feral Senses")
+                20 -> add("Foe Slayer")
             }
             Job.Type.ROGUE -> when (level) {
                 1 -> {
-                    add(Feature("Sneak Attack"))
-                    add(Feature("Thieves' Cant"))
+                    add("Sneak Attack")
+                    add("Thieves' Cant")
                 }
-                2 -> add(Feature("Cunning Action"))
-                3 -> add(Feature("Roguish Archetype"))
-                5 -> add(Feature("Uncanny Dodge"))
-                7 -> add(Feature("Evasion"))
-                11 -> add(Feature("Reliable Talent"))
-                14 -> add(Feature("Blind Sense"))
-                15 -> add(Feature("Slippery Mind"))
-                18 -> add(Feature("Elusive"))
-                20 -> add(Feature("Stroke of Luck"))
+                2 -> add("Cunning Action")
+                3 -> add("Roguish Archetype")
+                5 -> add("Uncanny Dodge")
+                7 -> add("Evasion")
+                11 -> add("Reliable Talent")
+                14 -> add("Blind Sense")
+                15 -> add("Slippery Mind")
+                18 -> add("Elusive")
+                20 -> add("Stroke of Luck")
             }
             Job.Type.SORCERER -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Sorcerous Origin"))
+                    add("Spellcasting")
+                    add("Sorcerous Origin")
                 }
-                2 -> add(Feature("Font of Magic"))
-                3 -> add(Feature("Metamagic"))
-                20 -> add(Feature("Sorcerous Restoration"))
+                2 -> add("Font of Magic")
+                3 -> add("Metamagic")
+                20 -> add("Sorcerous Restoration")
             }
             Job.Type.WARLOCK -> when (level) {
                 1 -> {
-                    add(Feature("Otherworldly Patron"))
-                    add(Feature("Pact Magic"))
+                    add("Otherworldly Patron")
+                    add("Pact Magic")
                 }
-                2 -> add(Feature("Eldritch Invocations"))
-                3 -> add(Feature("Pact Boon"))
-                11 -> add(Feature("Mystic Arcanum"))
-                20 -> add(Feature("Eldritch Master"))
+                2 -> add("Eldritch Invocations")
+                3 -> add("Pact Boon")
+                11 -> add("Mystic Arcanum")
+                20 -> add("Eldritch Master")
             }
             Job.Type.WIZARD -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Arcane Recovery"))
+                    add("Spellcasting")
+                    add("Arcane Recovery")
                 }
-                2 -> add(Feature("Arcane Tradition"))
-                18 -> add(Feature("Spell Mastery"))
-                20 -> add(Feature("Signature Spell"))
+                2 -> add("Arcane Tradition")
+                18 -> add("Spell Mastery")
+                20 -> add("Signature Spell")
             }
-        }
-    }
-
-    private fun addOrUpdateFeatures(new: List<Feature>) {
-        for (feature in new) {
-            if (feature.name.contains(" (")) {
-                val old = features.where().contains("name", feature.name.substringBefore(" (")).findFirst()
-                old?.let { features.remove(it); it.deleteFromRealm() }
-            }
-            features.add(feature)
         }
     }
 }

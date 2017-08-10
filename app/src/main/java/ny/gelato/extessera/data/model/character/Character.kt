@@ -215,6 +215,30 @@ open class Character(
         addLevelNotes()
     }
 
+    fun proficienciesFormatted(type: Proficiency.Type): String = when (type) {
+        Proficiency.Type.WEAPON ->
+            if (proficiencies.map { it.name }
+                    .containsAll(Weapon.Type.values().map { it.formatted }))
+                listOf("All Weapons") // this block returns a list
+            else if (proficiencies.map { it.name }
+                    .containsAll(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }))
+                proficiencies.filter {
+                    it.type == Proficiency.Type.WEAPON
+                            && !(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }.contains(it.name))
+                }
+                        .map { if (it.name.contains(",")) it.name.replace(", ", " (").plus(")") else it.name }
+                        .toMutableList()
+                        .apply { add(0, "Simple Weapons") }
+            else proficiencies.where().equalTo("typeName", Proficiency.Type.WEAPON.name)
+                    .findAll()
+                    .map { if (it.name.contains(",")) it.name.replace(", ", " (").plus(")") else it.name }
+        else -> proficiencies.where()
+                .equalTo("typeName", type.name)
+                .findAll()
+                .map { it.name }
+
+    }.toString().substring(1).dropLast(1)
+
     private fun addLevelNotes() {
         preferences.showNotes = true
         notes.addAll(primary.levelNotes())
