@@ -8,6 +8,7 @@ import io.realm.annotations.PrimaryKey
 import ny.gelato.extessera.data.model.Armor
 import ny.gelato.extessera.data.model.Weapon
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by jord.goldberg on 5/8/17.
@@ -29,9 +30,9 @@ open class Character(
         var multiclasses: RealmList<Job> = RealmList(),
 
         // private because they're backing fields
-        private var raceName: String = Trait.Race.HUMAN.name,
+        private var raceName: String = Race.HUMAN.name,
         private var subraceName: String? = null,
-        private var alignmentName: String = Trait.Alignment.TRUE_NEUTRAL.name,
+        private var alignmentName: String = Alignment.TRUE_NEUTRAL.name,
 
         var background: String = "",
         var about: String = "",
@@ -62,7 +63,6 @@ open class Character(
                 "Set your skills and abilities by clicking on them below. " +
                 "Check the box to the left and swipe to dismiss once you're done.")),
 
-        var traits: RealmList<Trait> = RealmList(),
         var proficiencies: RealmList<Proficiency> = RealmList(),
         var skills: RealmList<Skill> = RealmList(*Skill.Type.values().map { Skill(it.name) }.toTypedArray()),
         var equipment: RealmList<Equipment> = RealmList(),
@@ -75,23 +75,37 @@ open class Character(
 
 ) : RealmObject() {
 
-    var race: Trait.Race
-        get() = Trait.Race.valueOf(raceName)
+    var race: Race
+        get() = Race.valueOf(raceName)
         set(value) {
             raceName = value.name
         }
 
-    var subrace: Trait.Subrace?
-        get() = subraceName?.let { Trait.Subrace.valueOf(it) }
+    var subrace: Race.Subrace?
+        get() = subraceName?.let { Race.Subrace.valueOf(it) }
         set(value) {
             subraceName = value?.name
         }
 
-    var alignment: Trait.Alignment
-        get() = Trait.Alignment.valueOf(alignmentName)
+    var alignment: Alignment
+        get() = Alignment.valueOf(alignmentName)
         set(value) {
             alignmentName = value.name
         }
+
+    enum class Alignment(val formatted: String) {
+        LAWFUL_GOOD("Lawful Good"),
+        NEUTRAL_GOOD("Neutral Good"),
+        CHAOTIC_GOOD("Chaotic Good"),
+        LAWFUL_NEUTRAL("Lawful Neutral"),
+        TRUE_NEUTRAL("True Neutral"),
+        CHAOTIC_NEUTRAL("Chaotic Neutral"),
+        LAWFUL_EVIL("Lawful Evil"),
+        NEUTRAL_EVIL("Neutral Evil"),
+        CHAOTIC_EVIL("Chaotic Evil")
+    }
+
+    fun List<String>.formatted(): String = this.toString().substring(1).dropLast(1)
 
     fun proficiencyBonus(): Int {
         if (level() < 5) return 2
@@ -173,9 +187,9 @@ open class Character(
 
     fun hasToLevelUp(): Boolean = expLevel() > level()
 
-    fun setTraitsAndProficiencies() {
-        setRacialTraits()
+    fun setProficiencies() {
         setSaveProficiencies()
+        setRacialProficiencies()
         setPrimaryJobProficiencies()
     }
 
@@ -215,7 +229,79 @@ open class Character(
         addLevelNotes()
     }
 
-    fun proficienciesFormatted(type: Proficiency.Type): String = when (type) {
+    fun racialTraits(): List<String> = ArrayList<String>().apply {
+        when (race) {
+            Race.DWARF -> {
+                add("Darkvision (60 ft)")
+                add("Dwarven Resilience")
+                add("Stonecunning")
+                subrace.let { if (it == Race.Subrace.HILL_DWARF) add("Dwarven Toughness") }
+            }
+            Race.ELF -> {
+                add("Darkvision (60 ft)")
+                add("Fey Ancestry")
+                add("Trance")
+                subrace.let {
+                    if (it == Race.Subrace.WOOD_ELF) {
+                        add("Mask of the Wild")
+                    } else {
+                        set(0, "Darkvision (120 ft)")
+                        add("Sunlight Sensitivity")
+                        add("Drow Magic (3rd & 5th level)")
+                    }
+                }
+            }
+            Race.HALFLING -> {
+                add("Lucky")
+                add("Brave")
+                add("Halfling Nimbleness")
+                subrace.let {
+                    if (it == Race.Subrace.LIGHTFOOT) add("Naturally Stealthy")
+                    else add("Stout Resilience")
+                }
+            }
+            Race.DRAGONBORN -> {
+                add("Draconic Ancestry")
+                add("Breath Weapon")
+                add("Damage Resistance")
+            }
+            Race.GNOME -> {
+                add("Darkvision (60 ft)")
+                add("Gnome Cunning")
+                subrace.let {
+                    if (it == Race.Subrace.FOREST_GNOME) {
+                        add("Natural Illusionist")
+                        add("Speak with Small Beasts")
+                    } else {
+                        add("Artificer's Lore")
+                        add("Tinker")
+                    }
+                }
+            }
+            Race.HALF_ELF -> {
+                add("Darkvision (60 ft)")
+                add("Fey Ancestry")
+            }
+            Race.HALF_ORC -> {
+                add("Darkvision (60 ft)")
+                add("Relentless Endurance")
+                add("Savage Attacks")
+            }
+            Race.TIEFLING -> {
+                add("Darkvision (60 ft)")
+                add("Hellish Resistance")
+                add("Infernal Legacy (3rd & 5th level)")
+            }
+        }
+    }
+
+    fun racialTraitsFormatted(): String = racialTraits().formatted()
+
+    fun classFeatures(): List<String> = primary.features()
+
+    fun classFeaturesFormatted(): String = classFeatures().formatted()
+
+    fun proficiencies(type: Proficiency.Type): List<String> = when (type) {
         Proficiency.Type.WEAPON ->
             if (proficiencies.map { it.name }
                     .containsAll(Weapon.Type.values().map { it.formatted }))
@@ -237,7 +323,9 @@ open class Character(
                 .findAll()
                 .map { it.name }
 
-    }.toString().substring(1).dropLast(1)
+    }
+
+    fun proficienciesFormatted(type: Proficiency.Type): String = proficiencies(type).formatted()
 
     private fun addLevelNotes() {
         preferences.showNotes = true
@@ -300,6 +388,76 @@ open class Character(
             Job.Type.WIZARD -> {
                 intelligence.save = true
                 wisdom.save = true
+            }
+        }
+    }
+
+    private fun setRacialProficiencies() {
+        when (race) {
+            Race.DWARF -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.DWARVISH.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.BATTLEAXE.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.HANDAXE.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LIGHT_HAMMER.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.WARHAMMER.formatted))
+                subrace.let {
+                    if (it == Race.Subrace.MOUNTAIN_DWARF) {
+                        proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
+                        proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.MEDIUM.formatted))
+                    }
+                }
+            }
+            Race.ELF -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ELVISH.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTSWORD.formatted))
+                subrace.let {
+                    if (it == Race.Subrace.HIGH_ELF) {
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTBOW.formatted))
+                    } else if (it == Race.Subrace.WOOD_ELF) {
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTBOW.formatted))
+                    } else {
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.RAPIER.formatted))
+                        proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.CROSSBOW_HAND.formatted))
+                    }
+                }
+            }
+            Race.HALFLING -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.HALFLING.formatted))
+            }
+            Race.HUMAN -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+            }
+            Race.DRAGONBORN -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.DRACONIC.formatted))
+            }
+            Race.GNOME -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.GNOMISH.formatted))
+                subrace.let {
+                    if (it == Race.Subrace.ROCK_GNOME) {
+                        proficiencies.add(Proficiency(Proficiency.Type.TOOL.name, Proficiency.Tool.TINKER.formatted))
+                    }
+                }
+            }
+            Race.HALF_ELF -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ELVISH.formatted))
+            }
+            Race.HALF_ORC -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ORC.formatted))
+            }
+            Race.TIEFLING -> {
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
+                proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.INFERNAL.formatted))
             }
         }
     }
@@ -394,110 +552,6 @@ open class Character(
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SLING.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.QUARTERSTAFF.formatted))
             proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.CROSSBOW_LIGHT.formatted))
-        }
-    }
-
-    private fun setRacialTraits() = when (race) {
-        Trait.Race.DWARF -> {
-            traits.add(Trait("Darkvision (60 ft)"))
-            traits.add(Trait("Dwarven Resilience"))
-            traits.add(Trait("Stonecunning"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.DWARVISH.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.BATTLEAXE.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.HANDAXE.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LIGHT_HAMMER.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.WARHAMMER.formatted))
-            subrace.let {
-                if (it == Trait.Subrace.HILL_DWARF) traits.add(Trait("Dwarven Toughness"))
-                else {
-                    proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.LIGHT.formatted))
-                    proficiencies.add(Proficiency(Proficiency.Type.ARMOR.name, Armor.Category.MEDIUM.formatted))
-                }
-            }
-        }
-        Trait.Race.ELF -> {
-            traits.add(Trait("Darkvision (60 ft)"))
-            traits.add(Trait("Fey Ancestry"))
-            traits.add(Trait("Trance"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ELVISH.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTSWORD.formatted))
-            subrace.let {
-                if (it == Trait.Subrace.HIGH_ELF) {
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTBOW.formatted))
-                } else if (it == Trait.Subrace.WOOD_ELF) {
-                    traits.add(Trait("Mask of the Wild"))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGSWORD.formatted))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.LONGBOW.formatted))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.SHORTBOW.formatted))
-                } else {
-                    traits[0] = Trait("Darkvision (120 ft)")
-                    traits.add(Trait("Sunlight Sensitivity"))
-                    traits.add(Trait("Drow Magic (3rd & 5th level)"))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.RAPIER.formatted))
-                    proficiencies.add(Proficiency(Proficiency.Type.WEAPON.name, Weapon.Type.CROSSBOW_HAND.formatted))
-                }
-            }
-        }
-        Trait.Race.HALFLING -> {
-            traits.add(Trait("Lucky"))
-            traits.add(Trait("Brave"))
-            traits.add(Trait("Halfling Nimbleness"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.HALFLING.formatted))
-            subrace.let {
-                if (it == Trait.Subrace.LIGHTFOOT) traits.add(Trait("Naturally Stealthy"))
-                else traits.add(Trait("Stout Resilience"))
-            }
-        }
-        Trait.Race.HUMAN -> {
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-        }
-        Trait.Race.DRAGONBORN -> {
-            traits.add(Trait("Draconic Ancestry"))
-            traits.add(Trait("Breath Weapon"))
-            traits.add(Trait("Damage Resistance"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.DRACONIC.formatted))
-        }
-        Trait.Race.GNOME -> {
-            traits.add(Trait("Darkvision (60 ft)"))
-            traits.add(Trait("Gnome Cunning"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.GNOMISH.formatted))
-            subrace.let {
-                if (it == Trait.Subrace.FOREST_GNOME) {
-                    traits.add(Trait("Natural Illusionist"))
-                    traits.add(Trait("Speak with Small Beasts"))
-                } else {
-                    traits.add(Trait("Artificer's Lore"))
-                    traits.add(Trait("Tinker"))
-                    proficiencies.add(Proficiency(Proficiency.Type.TOOL.name, Proficiency.Tool.TINKER.formatted))
-                }
-            }
-        }
-        Trait.Race.HALF_ELF -> {
-            traits.add(Trait("Darkvision (60 ft)"))
-            traits.add(Trait("Fey Ancestry"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ELVISH.formatted))
-        }
-        Trait.Race.HALF_ORC -> {
-            traits.add(Trait("Darkvision (60 ft)"))
-            traits.add(Trait("Relentless Endurance"))
-            traits.add(Trait("Savage Attacks"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.ORC.formatted))
-        }
-        Trait.Race.TIEFLING -> {
-            traits.add(Trait("Darkvision (60 ft)"))
-            traits.add(Trait("Hellish Resistance"))
-            traits.add(Trait("Infernal Legacy (3rd & 5th level)"))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.COMMON.formatted))
-            proficiencies.add(Proficiency(Proficiency.Type.LANGUAGE.name, Proficiency.Language.INFERNAL.formatted))
         }
     }
 }

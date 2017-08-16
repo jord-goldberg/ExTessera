@@ -2,8 +2,6 @@ package ny.gelato.extessera.feature.edit_character.edit_about
 
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.data.model.character.Job
-import ny.gelato.extessera.data.model.character.Trait
 
 /**
  * Created by jord.goldberg on 7/6/17.
@@ -12,7 +10,7 @@ import ny.gelato.extessera.data.model.character.Trait
  */
 
 data class EditAboutModel(
-        var alignment: Trait.Alignment = Trait.Alignment.TRUE_NEUTRAL,
+        var alignment: Character.Alignment = Character.Alignment.TRUE_NEUTRAL,
         var background: String = "",
         var about: String = ""
 
@@ -23,7 +21,7 @@ data class EditAboutModel(
                     character.background,
                     character.about)
 
-    private val alignments: Array<Trait.Alignment> = Trait.Alignment.values()
+    private val alignments: Array<Character.Alignment> = Character.Alignment.values()
 
     fun alignmentOptions(): Array<String> = alignments.map { it.formatted }.toTypedArray()
 

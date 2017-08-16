@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="ny.gelato.extessera.feature.character.view_model.AboutModel"/>
 
         <import type="android.view.View"/>
+
         <import type="java.lang.String"/>
     </data>
 
@@ -25,7 +27,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp">
+                android:layout_height="48dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -33,10 +36,10 @@
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="32dp"
                     android:alpha=".87"
+                    android:ellipsize="end"
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-                    android:ellipsize="end"
                     android:text="@{viewModel.title()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     tools:text="About Reginald"/>
@@ -55,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_vertical_margin">
+                android:visibility="@{viewModel.background.isEmpty() ? View.GONE : View.VISIBLE}">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -118,6 +121,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@{viewModel.about}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:visibility="@{viewModel.about.isEmpty() ? View.GONE : View.VISIBLE}"
                 tools:text="I love to make a big entrance and I want everybody in town talking about me.
                 \nI tend to look down on people I see as below me
                 \nHealing my brother is the the only thing that matters. I'll go to any length except harming kids. I send him money each week."/>
@@ -156,7 +160,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:alpha=".87"
                 android:fontFamily="sans-serif"
-                android:text="Class Features:"
+                android:text="@{viewModel.classFeaturesTitle()}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
                 android:textStyle="bold"
                 android:visibility="@{viewModel.classFeatures.isEmpty() ? View.GONE : View.VISIBLE}"

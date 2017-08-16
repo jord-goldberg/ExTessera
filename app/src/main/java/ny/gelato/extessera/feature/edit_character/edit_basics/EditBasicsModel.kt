@@ -3,7 +3,7 @@ package ny.gelato.extessera.feature.edit_character.edit_basics
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Job
-import ny.gelato.extessera.data.model.character.Trait
+import ny.gelato.extessera.data.model.character.Race
 
 /**
  * Created by jord.goldberg on 7/5/17.
@@ -15,8 +15,8 @@ data class EditBasicsModel(
         var name: String = "",
         var level: Int = 1,
         var job: Job.Type = Job.Type.FIGHTER,
-        var race: Trait.Race = Trait.Race.HUMAN,
-        var subrace: Trait.Subrace? = null
+        var race: Race = Race.HUMAN,
+        var subrace: Race.Subrace? = null
 
 ) : BaseViewModel() {
 
@@ -28,7 +28,7 @@ data class EditBasicsModel(
                     character.subrace)
 
     private val jobs = Job.Type.values()
-    private val races = Trait.Race.values()
+    private val races = Race.values()
 
     fun jobOptions(): Array<String> = jobs.map { it.formatted }.toTypedArray()
 

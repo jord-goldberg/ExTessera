@@ -121,7 +121,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateSkill(skill: SkillModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.skills.where().equalTo("type", skill.type.name).findFirst()
+            character.skills.where().equalTo("typeName", skill.type.name).findFirst()
                     .proficiency = skill.proficiency
             character.updated = Date()
         }

@@ -28,59 +28,168 @@ open class Job(
             archetypeName = value?.name
         }
 
-    enum class Type(val formatted: String, val archetypes: Array<Archetype>) {
-        BARBARIAN("Barbarian", archetypes = arrayOf(
-                Archetype.BERSERKER,
-                Archetype.TOTEM_WARRIOR)),
-        BARD("Bard", archetypes = arrayOf(
-                Archetype.COLLEGE_OF_LORE,
-                Archetype.COLLEGE_OF_VALOR)),
-        CLERIC("Cleric", archetypes = arrayOf(
-                Archetype.KNOWLEDGE_DOMAIN,
-                Archetype.LIFE_DOMAIN,
-                Archetype.LIGHT_DOMAIN,
-                Archetype.NATURE_DOMAIN,
-                Archetype.TEMPEST_DOMAIN,
-                Archetype.TRICKERY_DOMAIN,
-                Archetype.WAR_DOMAIN)),
-        DRUID("Druid", archetypes = arrayOf(
-                Archetype.CIRCLE_OF_THE_LAND,
-                Archetype.CIRCLE_OF_THE_MOON)),
-        FIGHTER("Fighter", archetypes = arrayOf(
-                Archetype.CHAMPION,
-                Archetype.BATTLE_MASTER,
-                Archetype.ELDRITCH_KNIGHT)),
-        MONK("Monk", archetypes = arrayOf(
-                Archetype.WAY_OF_THE_OPEN_HAND,
-                Archetype.WAY_OF_SHADOW,
-                Archetype.WAY_OF_THE_FOUR_ELEMENTS)),
-        PALADIN("Paladin", archetypes = arrayOf(
-                Archetype.OATH_OF_DEVOTION,
-                Archetype.OATH_OF_THE_ANCIENTS,
-                Archetype.OATH_OF_VENGEANCE)),
-        RANGER("Ranger", archetypes = arrayOf(
-                Archetype.HUNTER,
-                Archetype.BEAST_MASTER)),
-        ROGUE("Rogue", archetypes = arrayOf(
-                Archetype.THIEF,
-                Archetype.ASSASSIN,
-                Archetype.ARCANE_TRICKSTER)),
-        SORCERER("Sorcerer", archetypes = arrayOf(
-                Archetype.DRACONIC_BLOODLINE,
-                Archetype.WILD_MAGIC)),
-        WARLOCK("Warlock", archetypes = arrayOf(
-                Archetype.ARCHFEY,
-                Archetype.FIEND,
-                Archetype.GREAT_OLD_ONE)),
-        WIZARD("Wizard", archetypes = arrayOf(
-                Archetype.SCHOOL_OF_ABJURATION,
-                Archetype.SCHOOL_OF_CONJURATION,
-                Archetype.SCHOOL_OF_DIVINATION,
-                Archetype.SCHOOL_OF_ENCHANTMENT,
-                Archetype.SCHOOL_OF_EVOCATION,
-                Archetype.SCHOOL_OF_ILLUSION,
-                Archetype.SCHOOL_OF_NECROMANCY,
-                Archetype.SCHOOL_OF_TRANSMUTATION))
+    enum class Type(val formatted: String, val archetypes: Array<Archetype>,
+                    val startingAbilityScores: HashMap<Ability.Type, Int>) {
+
+        BARBARIAN("Barbarian",
+                archetypes = arrayOf(
+                        Archetype.BERSERKER,
+                        Archetype.TOTEM_WARRIOR),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 15),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 12),
+                        Pair(Ability.Type.CHA, 10))),
+
+        BARD("Bard",
+                archetypes = arrayOf(
+                        Archetype.COLLEGE_OF_LORE,
+                        Archetype.COLLEGE_OF_VALOR),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 14),
+                        Pair(Ability.Type.CON, 12),
+                        Pair(Ability.Type.INT, 13),
+                        Pair(Ability.Type.WIS, 10),
+                        Pair(Ability.Type.CHA, 15))),
+
+        CLERIC("Cleric",
+                archetypes = arrayOf(
+                        Archetype.KNOWLEDGE_DOMAIN,
+                        Archetype.LIFE_DOMAIN,
+                        Archetype.LIGHT_DOMAIN,
+                        Archetype.NATURE_DOMAIN,
+                        Archetype.TEMPEST_DOMAIN,
+                        Archetype.TRICKERY_DOMAIN,
+                        Archetype.WAR_DOMAIN),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 13),
+                        Pair(Ability.Type.DEX, 8),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 15),
+                        Pair(Ability.Type.CHA, 10))),
+
+        DRUID("Druid",
+                archetypes = arrayOf(
+                        Archetype.CIRCLE_OF_THE_LAND,
+                        Archetype.CIRCLE_OF_THE_MOON),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 10),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 15),
+                        Pair(Ability.Type.CHA, 8))),
+
+        FIGHTER("Fighter",
+                archetypes = arrayOf(
+                        Archetype.CHAMPION,
+                        Archetype.BATTLE_MASTER,
+                        Archetype.ELDRITCH_KNIGHT),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 15),
+                        Pair(Ability.Type.DEX, 14),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 8),
+                        Pair(Ability.Type.CHA, 10))),
+
+        MONK("Monk",
+                archetypes = arrayOf(
+                        Archetype.WAY_OF_THE_OPEN_HAND,
+                        Archetype.WAY_OF_SHADOW,
+                        Archetype.WAY_OF_THE_FOUR_ELEMENTS),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 12),
+                        Pair(Ability.Type.DEX, 15),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 14),
+                        Pair(Ability.Type.CHA, 10))),
+
+        PALADIN("Paladin",
+                archetypes = arrayOf(
+                        Archetype.OATH_OF_DEVOTION,
+                        Archetype.OATH_OF_THE_ANCIENTS,
+                        Archetype.OATH_OF_VENGEANCE),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 15),
+                        Pair(Ability.Type.DEX, 12),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 8),
+                        Pair(Ability.Type.CHA, 14))),
+
+        RANGER("Ranger",
+                archetypes = arrayOf(
+                        Archetype.HUNTER,
+                        Archetype.BEAST_MASTER),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 13),
+                        Pair(Ability.Type.DEX, 15),
+                        Pair(Ability.Type.CON, 12),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 14),
+                        Pair(Ability.Type.CHA, 8))),
+
+        ROGUE("Rogue",
+                archetypes = arrayOf(
+                        Archetype.THIEF,
+                        Archetype.ASSASSIN,
+                        Archetype.ARCANE_TRICKSTER),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 10),
+                        Pair(Ability.Type.DEX, 15),
+                        Pair(Ability.Type.CON, 12),
+                        Pair(Ability.Type.INT, 14),
+                        Pair(Ability.Type.WIS, 8),
+                        Pair(Ability.Type.CHA, 13))),
+
+        SORCERER("Sorcerer",
+                archetypes = arrayOf(
+                        Archetype.DRACONIC_BLOODLINE,
+                        Archetype.WILD_MAGIC),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 12),
+                        Pair(Ability.Type.DEX, 8),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 13),
+                        Pair(Ability.Type.CHA, 15))),
+
+        WARLOCK("Warlock",
+                archetypes = arrayOf(
+                        Archetype.ARCHFEY,
+                        Archetype.FIEND,
+                        Archetype.GREAT_OLD_ONE),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 10),
+                        Pair(Ability.Type.DEX, 12),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 13),
+                        Pair(Ability.Type.CHA, 15))),
+
+        WIZARD("Wizard",
+                archetypes = arrayOf(
+                        Archetype.SCHOOL_OF_ABJURATION,
+                        Archetype.SCHOOL_OF_CONJURATION,
+                        Archetype.SCHOOL_OF_DIVINATION,
+                        Archetype.SCHOOL_OF_ENCHANTMENT,
+                        Archetype.SCHOOL_OF_EVOCATION,
+                        Archetype.SCHOOL_OF_ILLUSION,
+                        Archetype.SCHOOL_OF_NECROMANCY,
+                        Archetype.SCHOOL_OF_TRANSMUTATION),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 14),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 15),
+                        Pair(Ability.Type.WIS, 10),
+                        Pair(Ability.Type.CHA, 12)))
     }
 
     enum class Archetype(val formatted: String) {
@@ -126,7 +235,7 @@ open class Job(
         SCHOOL_OF_TRANSMUTATION("School of Transmutation"),
     }
 
-    fun features(): List<String> = mutableListOf<String>().apply{
+    fun features(): List<String> = mutableListOf<String>().apply {
         (1..level)
                 .flatMap { featuresForLevel(it) }
                 .forEach { feature ->

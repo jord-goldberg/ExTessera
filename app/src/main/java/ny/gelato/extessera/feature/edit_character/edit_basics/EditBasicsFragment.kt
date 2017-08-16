@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import ny.gelato.extessera.App
 import ny.gelato.extessera.R
+import ny.gelato.extessera.data.model.character.Ability
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.data.model.character.Proficiency
 import ny.gelato.extessera.databinding.FragmentEditCharacterBasicsBinding
 import ny.gelato.extessera.feature.edit_character.edit_about.EditAboutFragment
 import ny.gelato.extessera.feature.edit_character.EditCharacterView
@@ -90,14 +90,38 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
             character.primary.job = model.job
             character.primary.level = model.level
             character.setExpToLevel()
-            character.traits.deleteAllFromRealm()
             character.proficiencies.deleteAllFromRealm()
-            character.setTraitsAndProficiencies()
+            character.setProficiencies()
 
             if (id.isEmpty()) {
                 id = character.id
-                character.hp = character.primary.hitDieMax()
-                character.maxHp = character.primary.hitDieMax()
+
+                character.strength.score = character.primary.job.startingAbilityScores.getOrDefault(Ability.Type.STR, 0) +
+                        character.race.abilityScoreIncrease(Ability.Type.STR) +
+                        (character.subrace?.abilityScoreIncrease(Ability.Type.STR) ?: 0)
+
+                character.dexterity.score = character.primary.job.startingAbilityScores.getOrDefault(Ability.Type.DEX, 0) +
+                        character.race.abilityScoreIncrease(Ability.Type.DEX) +
+                        (character.subrace?.abilityScoreIncrease(Ability.Type.DEX) ?: 0)
+
+                character.constitution.score = character.primary.job.startingAbilityScores.getOrDefault(Ability.Type.CON, 0) +
+                        character.race.abilityScoreIncrease(Ability.Type.CON) +
+                        (character.subrace?.abilityScoreIncrease(Ability.Type.CON) ?: 0)
+
+                character.intelligence.score = character.primary.job.startingAbilityScores.getOrDefault(Ability.Type.INT, 0) +
+                        character.race.abilityScoreIncrease(Ability.Type.INT) +
+                        (character.subrace?.abilityScoreIncrease(Ability.Type.INT) ?: 0)
+
+                character.wisdom.score = character.primary.job.startingAbilityScores.getOrDefault(Ability.Type.WIS, 0) +
+                        character.race.abilityScoreIncrease(Ability.Type.WIS) +
+                        (character.subrace?.abilityScoreIncrease(Ability.Type.WIS) ?: 0)
+
+                character.charisma.score = character.primary.job.startingAbilityScores.getOrDefault(Ability.Type.CHA, 0) +
+                        character.race.abilityScoreIncrease(Ability.Type.CHA) +
+                        (character.subrace?.abilityScoreIncrease(Ability.Type.CHA) ?: 0)
+
+                character.hp = character.primary.hitDieMax() + character.constitution.modifier()
+                character.maxHp = character.primary.hitDieMax() + character.constitution.modifier()
             }
         }
     }

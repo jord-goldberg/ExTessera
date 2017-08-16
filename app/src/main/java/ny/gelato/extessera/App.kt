@@ -38,9 +38,9 @@ class App : Application() {
         Realm.init(this)
 
         val config = RealmConfiguration.Builder()
-//                .deleteRealmIfMigrationNeeded()
                 .schemaVersion(1)
                 .migration(Migration())
+//                .deleteRealmIfMigrationNeeded()
                 .build()
 
         Realm.setDefaultConfiguration(config)
