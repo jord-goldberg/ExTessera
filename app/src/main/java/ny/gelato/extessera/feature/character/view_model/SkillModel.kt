@@ -18,7 +18,8 @@ data class SkillModel(
         val bonus: Int = 0,
         val type: Skill.Type = Skill.Type.ACROBATICS,
         var proficiency: Skill.Proficiency = Skill.Proficiency.NONE,
-        var jackOfAllTrades: Boolean = false
+        val jackOfAllTrades: Boolean = false,
+        val showCheckBox: Boolean = false
 
 ) : BaseViewModel() {
 
@@ -34,28 +35,22 @@ data class SkillModel(
             char.proficiencyBonus(),
             skill.type,
             skill.proficiency,
-            char.isJackOfAllTrades())
+            char.isJackOfAllTrades(),
+            char.preferences.editAllSkills)
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is SkillModel) model.type == type
             else false
 
+    fun updateProficiency(proficiency: Skill.Proficiency): SkillModel =
+            copy(proficiency = proficiency).apply { action = Action.UPDATE }
+
+    fun updateProficiencyAndDismiss(proficiency: Skill.Proficiency, sheet: BottomSheetDialog): SkillModel {
+        sheet.dismiss()
+        return updateProficiency(proficiency)
+    }
+
     fun showStat(): String = "(${type.ability.formatted})"
-
-    fun none(sheet: BottomSheetDialog): SkillModel {
-        sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.NONE).apply { action = Action.UPDATE }
-    }
-
-    fun full(sheet: BottomSheetDialog): SkillModel {
-        sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.FULL).apply { action = Action.UPDATE }
-    }
-
-    fun expert(sheet: BottomSheetDialog): SkillModel {
-        sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.EXPERT).apply { action = Action.UPDATE }
-    }
 
     fun showModifier(): String = Ability.format(modifier + when (proficiency) {
         Skill.Proficiency.NONE -> if (jackOfAllTrades) bonus / 2 else 0

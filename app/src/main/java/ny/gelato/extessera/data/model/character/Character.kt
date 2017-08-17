@@ -229,6 +229,10 @@ open class Character(
         addLevelNotes()
     }
 
+    fun attacksPerAction(): Int = maxOf(
+            primary.attacksPerAction(),
+            multiclasses.maxBy { it.attacksPerAction() }?.attacksPerAction() ?: 0)
+
     fun racialTraits(): List<String> = ArrayList<String>().apply {
         when (race) {
             Race.DWARF -> {

@@ -10,6 +10,7 @@ import io.realm.annotations.Index
 open class Job(
         @Index private var jobName: String = Job.Type.BARBARIAN.name,
         @Index private var archetypeName: String? = null,
+        @Index private var subtypeName: String? = null,
         var level: Int = 1,
         var dice: Int = 1,
         var counter1: Int = 0
@@ -28,7 +29,15 @@ open class Job(
             archetypeName = value?.name
         }
 
-    enum class Type(val formatted: String, val archetypes: Array<Archetype>,
+    var subtype: Subtype?
+        get() = subtypeName?.let { Subtype.valueOf(it) }
+        set(value) {
+            subtypeName = value?.name
+        }
+
+    enum class Type(val formatted: String,
+                    val archetypes: Array<Archetype>,
+                    val subtypes: Array<Subtype> = emptyArray(),
                     val startingAbilityScores: HashMap<Ability.Type, Int>) {
 
         BARBARIAN("Barbarian",
@@ -39,20 +48,20 @@ open class Job(
                         Pair(Ability.Type.STR, 15),
                         Pair(Ability.Type.DEX, 13),
                         Pair(Ability.Type.CON, 14),
-                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 12),
-                        Pair(Ability.Type.CHA, 10))),
+                        Pair(Ability.Type.CHA, 8))),
 
         BARD("Bard",
                 archetypes = arrayOf(
                         Archetype.COLLEGE_OF_LORE,
                         Archetype.COLLEGE_OF_VALOR),
                 startingAbilityScores = hashMapOf(
-                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.STR, 10),
                         Pair(Ability.Type.DEX, 14),
                         Pair(Ability.Type.CON, 12),
                         Pair(Ability.Type.INT, 13),
-                        Pair(Ability.Type.WIS, 10),
+                        Pair(Ability.Type.WIS, 8),
                         Pair(Ability.Type.CHA, 15))),
 
         CLERIC("Cleric",
@@ -68,21 +77,21 @@ open class Job(
                         Pair(Ability.Type.STR, 13),
                         Pair(Ability.Type.DEX, 8),
                         Pair(Ability.Type.CON, 14),
-                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 15),
-                        Pair(Ability.Type.CHA, 10))),
+                        Pair(Ability.Type.CHA, 12))),
 
         DRUID("Druid",
                 archetypes = arrayOf(
                         Archetype.CIRCLE_OF_THE_LAND,
                         Archetype.CIRCLE_OF_THE_MOON),
                 startingAbilityScores = hashMapOf(
-                        Pair(Ability.Type.STR, 10),
+                        Pair(Ability.Type.STR, 8),
                         Pair(Ability.Type.DEX, 13),
                         Pair(Ability.Type.CON, 14),
-                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 15),
-                        Pair(Ability.Type.CHA, 8))),
+                        Pair(Ability.Type.CHA, 12))),
 
         FIGHTER("Fighter",
                 archetypes = arrayOf(
@@ -91,11 +100,11 @@ open class Job(
                         Archetype.ELDRITCH_KNIGHT),
                 startingAbilityScores = hashMapOf(
                         Pair(Ability.Type.STR, 15),
-                        Pair(Ability.Type.DEX, 14),
-                        Pair(Ability.Type.CON, 13),
-                        Pair(Ability.Type.INT, 12),
-                        Pair(Ability.Type.WIS, 8),
-                        Pair(Ability.Type.CHA, 10))),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 12),
+                        Pair(Ability.Type.CHA, 8))),
 
         MONK("Monk",
                 archetypes = arrayOf(
@@ -106,9 +115,9 @@ open class Job(
                         Pair(Ability.Type.STR, 12),
                         Pair(Ability.Type.DEX, 15),
                         Pair(Ability.Type.CON, 13),
-                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 14),
-                        Pair(Ability.Type.CHA, 10))),
+                        Pair(Ability.Type.CHA, 8))),
 
         PALADIN("Paladin",
                 archetypes = arrayOf(
@@ -117,10 +126,10 @@ open class Job(
                         Archetype.OATH_OF_VENGEANCE),
                 startingAbilityScores = hashMapOf(
                         Pair(Ability.Type.STR, 15),
-                        Pair(Ability.Type.DEX, 12),
+                        Pair(Ability.Type.DEX, 10),
                         Pair(Ability.Type.CON, 13),
-                        Pair(Ability.Type.INT, 10),
-                        Pair(Ability.Type.WIS, 8),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 12),
                         Pair(Ability.Type.CHA, 14))),
 
         RANGER("Ranger",
@@ -128,12 +137,12 @@ open class Job(
                         Archetype.HUNTER,
                         Archetype.BEAST_MASTER),
                 startingAbilityScores = hashMapOf(
-                        Pair(Ability.Type.STR, 13),
+                        Pair(Ability.Type.STR, 12),
                         Pair(Ability.Type.DEX, 15),
-                        Pair(Ability.Type.CON, 12),
-                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 8),
                         Pair(Ability.Type.WIS, 14),
-                        Pair(Ability.Type.CHA, 8))),
+                        Pair(Ability.Type.CHA, 10))),
 
         ROGUE("Rogue",
                 archetypes = arrayOf(
@@ -141,23 +150,23 @@ open class Job(
                         Archetype.ASSASSIN,
                         Archetype.ARCANE_TRICKSTER),
                 startingAbilityScores = hashMapOf(
-                        Pair(Ability.Type.STR, 10),
+                        Pair(Ability.Type.STR, 12),
                         Pair(Ability.Type.DEX, 15),
-                        Pair(Ability.Type.CON, 12),
-                        Pair(Ability.Type.INT, 14),
-                        Pair(Ability.Type.WIS, 8),
-                        Pair(Ability.Type.CHA, 13))),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 14),
+                        Pair(Ability.Type.CHA, 10))),
 
         SORCERER("Sorcerer",
                 archetypes = arrayOf(
                         Archetype.DRACONIC_BLOODLINE,
                         Archetype.WILD_MAGIC),
                 startingAbilityScores = hashMapOf(
-                        Pair(Ability.Type.STR, 12),
-                        Pair(Ability.Type.DEX, 8),
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 13),
                         Pair(Ability.Type.CON, 14),
-                        Pair(Ability.Type.INT, 10),
-                        Pair(Ability.Type.WIS, 13),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 10),
                         Pair(Ability.Type.CHA, 15))),
 
         WARLOCK("Warlock",
@@ -165,12 +174,16 @@ open class Job(
                         Archetype.ARCHFEY,
                         Archetype.FIEND,
                         Archetype.GREAT_OLD_ONE),
+                subtypes = arrayOf(
+                        Subtype.PACT_OF_THE_CHAIN,
+                        Subtype.PACT_OF_THE_BLADE,
+                        Subtype.PACT_OF_THE_TOME),
                 startingAbilityScores = hashMapOf(
-                        Pair(Ability.Type.STR, 10),
-                        Pair(Ability.Type.DEX, 12),
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 13),
                         Pair(Ability.Type.CON, 14),
-                        Pair(Ability.Type.INT, 8),
-                        Pair(Ability.Type.WIS, 13),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 10),
                         Pair(Ability.Type.CHA, 15))),
 
         WIZARD("Wizard",
@@ -185,8 +198,8 @@ open class Job(
                         Archetype.SCHOOL_OF_TRANSMUTATION),
                 startingAbilityScores = hashMapOf(
                         Pair(Ability.Type.STR, 8),
-                        Pair(Ability.Type.DEX, 14),
-                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 15),
                         Pair(Ability.Type.WIS, 10),
                         Pair(Ability.Type.CHA, 12)))
@@ -232,7 +245,13 @@ open class Job(
         SCHOOL_OF_EVOCATION("School of Evocation"),
         SCHOOL_OF_ILLUSION("School of Illusion"),
         SCHOOL_OF_NECROMANCY("School of Necromancy"),
-        SCHOOL_OF_TRANSMUTATION("School of Transmutation"),
+        SCHOOL_OF_TRANSMUTATION("School of Transmutation")
+    }
+
+    enum class Subtype(val formatted: String) {
+        PACT_OF_THE_CHAIN("Pact of the Chain"),
+        PACT_OF_THE_BLADE("Pact of the Blade"),
+        PACT_OF_THE_TOME("Pact of the Tome")
     }
 
     fun features(): List<String> = mutableListOf<String>().apply {
@@ -307,6 +326,23 @@ open class Job(
         Type.BARBARIAN, Type.BARD, Type.FIGHTER, Type.MONK, Type.PALADIN, Type.RANGER, Type.ROGUE -> 3
         Type.CLERIC, Type.SORCERER, Type.WARLOCK -> 1
         Type.DRUID, Type.WIZARD -> 2
+    }
+
+    fun hasToSelectSubtype(): Boolean = when (job) {
+        Type.WARLOCK -> !hasToSelectArchetype() && (subtypeName == null) && level >= 3
+        else -> false
+    }
+
+    fun attacksPerAction(): Int = when (job) {
+        Type.BARBARIAN, Type.MONK, Type.PALADIN, Type.RANGER -> if (level < 5) 1 else 2
+        Type.BARD -> if (level > 5 && archetype == Archetype.COLLEGE_OF_VALOR) 2 else 1
+        Type.FIGHTER -> when (level) {
+            in 1..4 -> 1
+            in 5..10 -> 2
+            in 11..19 -> 3
+            else -> 4
+        }
+        else -> 1
     }
 
     fun levelNotes(): List<Note> = ArrayList<Note>().apply {

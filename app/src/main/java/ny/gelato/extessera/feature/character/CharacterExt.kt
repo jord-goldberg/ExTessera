@@ -23,13 +23,21 @@ fun Character.noteModels(): List<BaseViewModel> =
                     if (hasToLevelUp()) add(LevelUpModel(character))
                     if (isEmpty()) add(NoteModel(text = "No Notes\nClick to create one"))
                     val title = if (hasToLevelUp()) "Level Up to ${character.expLevel()}" else "Notes"
-                    add(0, HeaderModel(title, AvatarModel(character), R.menu.menu_character_notes))
-                    add(FooterModel(title))
+                    val section = HeaderModel.Section.NOTES
+                    add(0, HeaderModel(section, AvatarModel(character), R.menu.menu_character_notes))
+                    add(FooterModel(section))
                 }
 
 fun Character.skillModels(): List<BaseViewModel> =
-        if (preferences.sortSkillsByAbility) getSkillsSortByAbility(this)
-        else getSkillsSortByName(this)
+        (if (preferences.sortSkillsByAbility) getSkillsSortByAbility(this)
+        else getSkillsSortByName(this))
+                .apply {
+                    val section = HeaderModel.Section.SKILLS
+                    val editSkills = preferences.editAllSkills
+                    add(0, HeaderModel(section, AvatarModel(this@skillModels), R.menu.menu_character_skills,
+                            isEditingSection = editSkills))
+                    add(FooterModel(section))
+                }
 
 fun Character.weaponModels(): List<BaseViewModel> =
         weapons.map { WeaponModel(it, this) }
@@ -38,9 +46,11 @@ fun Character.weaponModels(): List<BaseViewModel> =
                     val character = this@weaponModels
                     if (weapons.isEmpty().or(primary.job == Job.Type.MONK))
                         add(0, WeaponModel(character))
-                    val title = "Weapons"
-                    add(0, HeaderModel(title, AvatarModel(character), R.menu.menu_character_weapons))
-                    add(FooterModel(title))
+                    val section = HeaderModel.Section.WEAPONS
+                    val titleInfo = if (character.attacksPerAction() > 1)
+                        "Attacks per Action:  ${character.attacksPerAction()}" else ""
+                    add(0, HeaderModel(section, AvatarModel(character), R.menu.menu_character_weapons, titleInfo))
+                    add(FooterModel(section))
                 }
 
 fun Character.spellModels(): List<BaseViewModel> {
@@ -59,8 +69,8 @@ fun Character.spellModels(): List<BaseViewModel> {
                 .map { SpellModel(it) })
     }
 
-    val title = "Spells"
-    spellModels.add(0, HeaderModel(title, AvatarModel(this), R.menu.menu_character_spells,
+    val section = HeaderModel.Section.SPELLS
+    spellModels.add(0, HeaderModel(section, AvatarModel(this), R.menu.menu_character_spells,
             "Spell Attack bonus:  ${Ability.format(proficiencyBonus() + when (primary.castingAbility()) {
                 Ability.Type.INT -> intelligence.modifier()
                 Ability.Type.WIS -> wisdom.modifier()
@@ -72,32 +82,33 @@ fun Character.spellModels(): List<BaseViewModel> {
                 Ability.Type.CHA -> charisma.modifier()
                 else -> 0
             }}"))
-    spellModels.add(FooterModel(title))
+    spellModels.add(FooterModel(section))
     return spellModels
 }
 
 fun Character.equipmentModelsSheet(): List<BaseViewModel> = mutableListOf<BaseViewModel>().apply {
     val character = this@equipmentModelsSheet
-    val title = "Equipment"
-    add(HeaderModel(title, AvatarModel(character), R.menu.menu_character_equipment))
+    val section = HeaderModel.Section.EQUIPMENT
+    add(HeaderModel(section, AvatarModel(character), R.menu.menu_character_equipment))
     for (i in 0 until CoinModel.Type.values().size) {
         add(CoinModel(CoinModel.Type.values()[i], character))
         if (equipment.size <= i) add(EquipmentModel())
         else add(EquipmentModel(equipment[i]))
     }
-    add(FooterModel(title))
+    add(FooterModel(section))
     add(EquipmentFooterModel(character))
 }
 
 fun Character.equipmentModelsFull(): MutableList<BaseViewModel> = mutableListOf<BaseViewModel>().apply {
     val character = this@equipmentModelsFull
     val title = "Equipment Items"
-    add(HeaderModel(title, AvatarModel(character), R.menu.menu_character_equipment))
+    val section = HeaderModel.Section.EQUIPMENT
+    add(HeaderModel(section, AvatarModel(character), R.menu.menu_character_equipment))
     addAll(equipment.map { EquipmentModel(it) })
-    add(FooterModel(title))
+    add(FooterModel(section))
 }
 
-private fun getSkillsSortByAbility(character: Character): List<BaseViewModel> =
+private fun getSkillsSortByAbility(character: Character): MutableList<BaseViewModel> =
         character.skills.map { SkillModel(character, it) }
                 .sortedBy { it.type.abilityOrder() }
                 .toMutableList<BaseViewModel>()
@@ -108,17 +119,9 @@ private fun getSkillsSortByAbility(character: Character): List<BaseViewModel> =
                     add(12, SkillSubheaderModel(Ability.Type.INT.formatted))
                     add(13, SkillSubheaderModel(Ability.Type.CHA.formatted))
                     add(SkillSubheaderModel(""))
-                    val title = "Skills"
-                    add(0, HeaderModel(title, AvatarModel(character), R.menu.menu_character_skills))
-                    add(FooterModel(title))
                 }
 
-private fun getSkillsSortByName(character: Character): List<BaseViewModel> =
+private fun getSkillsSortByName(character: Character): MutableList<BaseViewModel> =
         character.skills.map { SkillModel(character, it) }
                 .sortedBy { it.type.nameOrder() }
-                .toMutableList<BaseViewModel>()
-                .apply {
-                    val title = "Skills"
-                    add(0, HeaderModel(title, AvatarModel(character), R.menu.menu_character_skills))
-                    add(FooterModel(title))
-                }
+                .toMutableList()

@@ -9,14 +9,27 @@ import ny.gelato.extessera.base.BaseViewModel
  */
 
 data class HeaderModel(
-        val title: String,
+        val section: Section,
         val avatar: AvatarModel,
         val menuRes: Int,
-        val titleInfo: String = ""
+        val titleInfo: String = "",
+        val isEditingSection: Boolean = false
 
 ) : BaseViewModel(Action.CONTEXT_MENU) {
 
+    enum class Section(val title: String) {
+        NOTES("Notes"),
+        SKILLS("Skills"),
+        EQUIPMENT("Equipment"),
+        WEAPONS("Weapons"),
+        SPELLS("Spells")
+    }
+
     override fun isSameAs(model: BaseViewModel): Boolean =
-            if (model is HeaderModel) title == model.title
+            if (model is HeaderModel) section.title == model.section.title
             else false
+
+    fun title(): String = section.title
+
+    fun updateSection(): HeaderModel = copy().apply { action = Action.UPDATE }
 }

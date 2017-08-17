@@ -275,6 +275,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val preferences = character.preferences
             when (preference) {
+                Preferences.Toggle.EDIT_SKILLS -> preferences.editAllSkills = !preferences.editAllSkills
                 Preferences.Toggle.SORT_SKILLS -> preferences.sortSkillsByAbility = !preferences.sortSkillsByAbility
                 Preferences.Toggle.SHOW_NOTES -> preferences.showNotes = !preferences.showNotes
                 Preferences.Toggle.SHOW_SPELLS -> preferences.showSpells = !preferences.showSpells

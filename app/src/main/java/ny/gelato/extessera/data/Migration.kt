@@ -31,6 +31,7 @@ class Migration : RealmMigration {
                     .addIndex("job")
                     .renameField("job", "jobName")
                     .addField("archetypeName", String::class.java, FieldAttribute.INDEXED)
+                    .addField("subtypeName", String::class.java, FieldAttribute.INDEXED)
                     .removeField("features")
                     .addField("counter1", Int::class.java)
 
@@ -46,6 +47,9 @@ class Migration : RealmMigration {
             schema.get("Proficiency")
                     .renameField("type", "typeName")
                     .removeField("origin")
+
+            schema.get("Preferences")
+                    .addField("editAllSkills", Boolean::class.java)
 
             schema.remove("Trait")
             schema.remove("Feature")

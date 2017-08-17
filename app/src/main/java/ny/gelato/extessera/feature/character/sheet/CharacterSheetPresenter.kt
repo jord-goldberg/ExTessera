@@ -155,6 +155,7 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
             }
             R.id.action_status_long_rest -> view.showConfirmLongRest(model as StatusModel)
             R.id.action_status_edit_max_hp -> view.showEditMaxHp(MaxHpModel(character))
+            R.id.action_skills_edit_proficiencies -> characterManager.updatePreference(Preferences.Toggle.EDIT_SKILLS)
             R.id.action_skills_toggle_sort -> characterManager.updatePreference(Preferences.Toggle.SORT_SKILLS)
             R.id.action_weapons_add -> view.showWeaponsFor(character)
             R.id.action_weapons_add_custom -> view.showCreateWeapon()
@@ -177,6 +178,8 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
             is AvatarModel -> characterManager.updateAvatar(model)
             is ExpModel -> characterManager.updateExp(model)
             is LevelUpModel -> characterManager.updateLevel(model)
+            is HeaderModel -> if (model.section == HeaderModel.Section.SKILLS)
+                characterManager.updatePreference(Preferences.Toggle.EDIT_SKILLS)
             is NoteModel -> characterManager.updateNote(model)
             is DeathSaveModel -> {
                 characterManager.updateDeathSaves(model)

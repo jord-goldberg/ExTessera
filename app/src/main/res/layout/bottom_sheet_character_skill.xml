@@ -75,7 +75,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.none(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.NONE, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:visibility="@{viewModel.jackOfAllTrades ? View.GONE : View.VISIBLE}">
@@ -103,7 +103,7 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.none(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.NONE, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
                 android:visibility="@{viewModel.jackOfAllTrades ? View.VISIBLE : View.GONE}">
@@ -130,7 +130,7 @@
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.full(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.FULL, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin">
 
@@ -156,7 +156,7 @@
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.expert(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.EXPERT, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin">
 

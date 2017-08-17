@@ -3,6 +3,9 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_skills_toggle_sort"/>
+        android:id="@+id/action_skills_edit_proficiencies"
+        android:title="Edit Proficiencies"/>
 
+    <item
+        android:id="@+id/action_skills_toggle_sort"/>
 </menu>
