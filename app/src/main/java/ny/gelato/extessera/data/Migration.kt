@@ -4,7 +4,6 @@ import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import ny.gelato.extessera.data.model.character.Ability
-import ny.gelato.extessera.data.model.character.Job
 
 /**
  * Created by jord.goldberg on 8/2/17.
@@ -32,8 +31,9 @@ class Migration : RealmMigration {
                     .addField("baseHp", Int::class.java)
                     .transform {
                         val maxHp = it.getInt("maxHp")
-                        val conModifier = it.get<Ability>("constitution").modifier()
-                        val level = it.get<Job>("primary").level
+                        val conScore = it.getObject("constitution").getInt("score")
+                        val conModifier = Ability.modify(conScore)
+                        val level = it.getObject("primary").getInt("level")
                         it.set("baseHp", maxHp - (conModifier * level))
                     }
                     .removeField("maxHp")
