@@ -1,5 +1,6 @@
 package ny.gelato.extessera.data.model.character
 
+import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.Index
 
@@ -13,7 +14,7 @@ open class Job(
         @Index private var subtypeName: String? = null,
         var level: Int = 1,
         var dice: Int = 1,
-        var counter1: Int = 0
+        var counters: RealmList<Counter> = RealmList()
 
 ) : RealmObject() {
 

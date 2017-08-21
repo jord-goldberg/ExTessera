@@ -28,7 +28,7 @@ data class StatusModel(
 
     constructor(character: Character) :
             this(hp = character.hp,
-                    maxHp = character.maxHp,
+                    maxHp = character.maxHp(),
                     armor = character.armorClass(),
                     initiative = character.initiative(),
                     speed = character.speed(),

@@ -120,8 +120,8 @@ class EditBasicsFragment : Fragment(), EditCharacterView {
                         character.race.abilityScoreIncrease(Ability.Type.CHA) +
                         (character.subrace?.abilityScoreIncrease(Ability.Type.CHA) ?: 0)
 
-                character.hp = character.primary.hitDieMax() + character.constitution.modifier()
-                character.maxHp = character.primary.hitDieMax() + character.constitution.modifier()
+                character.baseHp = character.primary.hitDieMax()
+                character.hp = character.maxHp()
             }
         }
     }

@@ -86,8 +86,8 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateMaxHp(maxHp: MaxHpModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.maxHp = maxHp.current
-            character.hp = maxHp.current
+            character.baseHp = maxHp.current - (character.constitution.modifier() * character.level())
+            character.hp = character.maxHp()
             character.updated = Date()
         }
     }

@@ -18,7 +18,7 @@ data class HpModel(
 
 ) : BaseViewModel() {
 
-    constructor(character: Character) : this(character.hp, character.maxHp) {
+    constructor(character: Character) : this(character.hp, character.maxHp()) {
         action = Action.UPDATE
     }
 

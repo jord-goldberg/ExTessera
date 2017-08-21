@@ -16,7 +16,7 @@ data class MaxHpModel(
 
 ) : BaseViewModel() {
 
-    constructor(character: Character) : this(character.maxHp) {
+    constructor(character: Character) : this(character.maxHp()) {
         action = Action.UPDATE
     }
 

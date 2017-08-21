@@ -48,7 +48,7 @@ open class Character(
         var initiativeModifier: Int = 0,
         var speedModifier: Int = 0,
         var hp: Int = 1,
-        var maxHp: Int = 1,
+        var baseHp: Int = 1,
         var tempHp: Int = 0,
         var successes: Int = 0,
         var failures: Int = 0,
@@ -107,12 +107,14 @@ open class Character(
 
     fun List<String>.formatted(): String = this.toString().substring(1).dropLast(1)
 
-    fun proficiencyBonus(): Int {
-        if (level() < 5) return 2
-        else if (level() < 9) return 3
-        else if (level() < 13) return 4
-        else if (level() < 17) return 5
-        else return 6
+    fun maxHp(): Int = baseHp + (constitution.modifier() * level())
+
+    fun proficiencyBonus(): Int = when {
+        level() < 5 -> 2
+        level() < 9 -> 3
+        level() < 13 -> 4
+        level() < 17 -> 5
+        else -> 6
     }
 
     fun isJackOfAllTrades(): Boolean = (primary.job == Job.Type.BARD && primary.level > 1)
@@ -194,7 +196,7 @@ open class Character(
     }
 
     fun description(): String =
-            "${subrace?.let { it.formatted } ?: race.formatted} " +
+            "${subrace?.formatted ?: race.formatted} " +
                     "${primary.job.formatted}, Level ${primary.level}"
 
 
@@ -307,21 +309,22 @@ open class Character(
 
     fun proficiencies(type: Proficiency.Type): List<String> = when (type) {
         Proficiency.Type.WEAPON ->
-            if (proficiencies.map { it.name }
-                    .containsAll(Weapon.Type.values().map { it.formatted }))
-                listOf("All Weapons") // this block returns a list
-            else if (proficiencies.map { it.name }
-                    .containsAll(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }))
-                proficiencies.filter {
+            when {
+                proficiencies.map { it.name }
+                        .containsAll(Weapon.Type.values().map { it.formatted }) -> listOf("All Weapons")
+            // this block returns a list
+                proficiencies.map { it.name }
+                        .containsAll(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }) -> proficiencies.filter {
                     it.type == Proficiency.Type.WEAPON
                             && !(Weapon.Type.values().filter { it.isSimple }.map { it.formatted }.contains(it.name))
                 }
                         .map { if (it.name.contains(",")) it.name.replace(", ", " (").plus(")") else it.name }
                         .toMutableList()
                         .apply { add(0, "Simple Weapons") }
-            else proficiencies.where().equalTo("typeName", Proficiency.Type.WEAPON.name)
-                    .findAll()
-                    .map { if (it.name.contains(",")) it.name.replace(", ", " (").plus(")") else it.name }
+                else -> proficiencies.where().equalTo("typeName", Proficiency.Type.WEAPON.name)
+                        .findAll()
+                        .map { if (it.name.contains(",")) it.name.replace(", ", " (").plus(")") else it.name }
+            }
         else -> proficiencies.where()
                 .equalTo("typeName", type.name)
                 .findAll()
