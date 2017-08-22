@@ -1,6 +1,7 @@
 package ny.gelato.extessera.feature.edit_character.edit_about
 
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.data.model.character.Background
 import ny.gelato.extessera.data.model.character.Character
 
 /**
@@ -11,7 +12,7 @@ import ny.gelato.extessera.data.model.character.Character
 
 data class EditAboutModel(
         var alignment: Character.Alignment = Character.Alignment.TRUE_NEUTRAL,
-        var background: String = "",
+        var background: Background = Background.ACOLYTE,
         var about: String = ""
 
 ) : BaseViewModel() {
@@ -21,7 +22,16 @@ data class EditAboutModel(
                     character.background,
                     character.about)
 
+    private val backgrounds: Array<Background> = Background.values()
     private val alignments: Array<Character.Alignment> = Character.Alignment.values()
+
+    fun backgroundOptions(): Array<String> = backgrounds.map { it.formatted }.toTypedArray()
+
+    fun selectBackground(position: Int) {
+        background = backgrounds[position]
+    }
+
+    fun selectedBackgroundPosition(): Int = background.ordinal
 
     fun alignmentOptions(): Array<String> = alignments.map { it.formatted }.toTypedArray()
 
@@ -31,11 +41,6 @@ data class EditAboutModel(
     }
 
     fun selectedAlignmentPosition(): Int = alignment.ordinal
-
-    fun setBackground(background: CharSequence) {
-        this.background = background.toString()
-        notifyChange()
-    }
 
     fun setAbout(about: CharSequence) {
         this.about = about.toString()

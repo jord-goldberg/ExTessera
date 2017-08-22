@@ -33,8 +33,8 @@ open class Character(
         private var raceName: String = Race.HUMAN.name,
         private var subraceName: String? = null,
         private var alignmentName: String = Alignment.TRUE_NEUTRAL.name,
+        private var backgroundName: String = Background.ACOLYTE.name,
 
-        var background: String = "",
         var about: String = "",
 
         var strength: Ability = Ability(),
@@ -91,6 +91,12 @@ open class Character(
         get() = Alignment.valueOf(alignmentName)
         set(value) {
             alignmentName = value.name
+        }
+
+    var background: Background
+        get() = Background.valueOf(backgroundName)
+        set(value) {
+            backgroundName = value.name
         }
 
     enum class Alignment(val formatted: String) {

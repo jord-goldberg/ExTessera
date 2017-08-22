@@ -27,7 +27,7 @@ data class AboutModel(
 
     constructor(character: Character) :
             this(character.name,
-                    character.background,
+                    character.background.formatted,
                     character.alignment.formatted,
                     character.about,
                     character.racialTraitsFormatted(),

@@ -39,7 +39,8 @@ open class Job(
     enum class Type(val formatted: String,
                     val archetypes: Array<Archetype>,
                     val subtypes: Array<Subtype> = emptyArray(),
-                    val startingAbilityScores: HashMap<Ability.Type, Int>) {
+                    val startingAbilityScores: HashMap<Ability.Type, Int>,
+                    val skills: Array<Skill.Type>) {
 
         BARBARIAN("Barbarian",
                 archetypes = arrayOf(
@@ -51,7 +52,14 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 12),
-                        Pair(Ability.Type.CHA, 8))),
+                        Pair(Ability.Type.CHA, 8)),
+                skills = arrayOf(
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.NATURE,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.SURVIVAL)),
 
         BARD("Bard",
                 archetypes = arrayOf(
@@ -63,7 +71,8 @@ open class Job(
                         Pair(Ability.Type.CON, 12),
                         Pair(Ability.Type.INT, 13),
                         Pair(Ability.Type.WIS, 8),
-                        Pair(Ability.Type.CHA, 15))),
+                        Pair(Ability.Type.CHA, 15)),
+                skills = Skill.Type.values()),
 
         CLERIC("Cleric",
                 archetypes = arrayOf(
@@ -80,7 +89,13 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 15),
-                        Pair(Ability.Type.CHA, 12))),
+                        Pair(Ability.Type.CHA, 12)),
+                skills = arrayOf(
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.RELIGION)),
 
         DRUID("Druid",
                 archetypes = arrayOf(
@@ -92,7 +107,16 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 15),
-                        Pair(Ability.Type.CHA, 12))),
+                        Pair(Ability.Type.CHA, 12)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.NATURE,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.RELIGION,
+                        Skill.Type.SURVIVAL)),
 
         FIGHTER("Fighter",
                 archetypes = arrayOf(
@@ -105,7 +129,16 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 12),
-                        Pair(Ability.Type.CHA, 8))),
+                        Pair(Ability.Type.CHA, 8)),
+                skills = arrayOf(
+                        Skill.Type.ACROBATICS,
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.SURVIVAL)),
 
         MONK("Monk",
                 archetypes = arrayOf(
@@ -118,7 +151,14 @@ open class Job(
                         Pair(Ability.Type.CON, 13),
                         Pair(Ability.Type.INT, 10),
                         Pair(Ability.Type.WIS, 14),
-                        Pair(Ability.Type.CHA, 8))),
+                        Pair(Ability.Type.CHA, 8)),
+                skills = arrayOf(
+                        Skill.Type.ACROBATICS,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.RELIGION,
+                        Skill.Type.STEALTH)),
 
         PALADIN("Paladin",
                 archetypes = arrayOf(
@@ -131,7 +171,14 @@ open class Job(
                         Pair(Ability.Type.CON, 13),
                         Pair(Ability.Type.INT, 8),
                         Pair(Ability.Type.WIS, 12),
-                        Pair(Ability.Type.CHA, 14))),
+                        Pair(Ability.Type.CHA, 14)),
+                skills = arrayOf(
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.RELIGION)),
 
         RANGER("Ranger",
                 archetypes = arrayOf(
@@ -143,7 +190,16 @@ open class Job(
                         Pair(Ability.Type.CON, 13),
                         Pair(Ability.Type.INT, 8),
                         Pair(Ability.Type.WIS, 14),
-                        Pair(Ability.Type.CHA, 10))),
+                        Pair(Ability.Type.CHA, 10)),
+                skills = arrayOf(
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.NATURE,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.STEALTH,
+                        Skill.Type.SURVIVAL)),
 
         ROGUE("Rogue",
                 archetypes = arrayOf(
@@ -156,7 +212,19 @@ open class Job(
                         Pair(Ability.Type.CON, 13),
                         Pair(Ability.Type.INT, 8),
                         Pair(Ability.Type.WIS, 14),
-                        Pair(Ability.Type.CHA, 10))),
+                        Pair(Ability.Type.CHA, 10)),
+                skills = arrayOf(
+                        Skill.Type.ACROBATICS,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.DECEPTION,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.PERFORMANCE,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.SLEIGHT_OF_HAND,
+                        Skill.Type.STEALTH)),
 
         SORCERER("Sorcerer",
                 archetypes = arrayOf(
@@ -168,7 +236,14 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 12),
                         Pair(Ability.Type.WIS, 10),
-                        Pair(Ability.Type.CHA, 15))),
+                        Pair(Ability.Type.CHA, 15)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.DECEPTION,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.RELIGION)),
 
         WARLOCK("Warlock",
                 archetypes = arrayOf(
@@ -185,7 +260,15 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 12),
                         Pair(Ability.Type.WIS, 10),
-                        Pair(Ability.Type.CHA, 15))),
+                        Pair(Ability.Type.CHA, 15)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.DECEPTION,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.NATURE,
+                        Skill.Type.RELIGION)),
 
         WIZARD("Wizard",
                 archetypes = arrayOf(
@@ -203,7 +286,14 @@ open class Job(
                         Pair(Ability.Type.CON, 14),
                         Pair(Ability.Type.INT, 15),
                         Pair(Ability.Type.WIS, 10),
-                        Pair(Ability.Type.CHA, 12)))
+                        Pair(Ability.Type.CHA, 12)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.RELIGION))
     }
 
     enum class Archetype(val formatted: String) {

@@ -2,6 +2,7 @@ package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmObject
 import io.realm.annotations.Index
+import java.util.*
 
 /**
  * Created by jord.goldberg on 6/16/17.
@@ -65,6 +66,15 @@ open class Proficiency(
 
         enum class Type {
             ARTISAN, GAMING, MUSIC, OTHER
+        }
+
+        companion object {
+            private val randomNumber: Random = Random()
+
+            fun random(type: Type): Proficiency.Tool {
+                val tools = values().filter { it.type == type }
+                return tools[randomNumber.nextInt(tools.size)]
+            }
         }
     }
 

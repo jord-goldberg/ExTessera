@@ -45,21 +45,23 @@
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:text="Summarize your background &amp; choose an alignment"
+                    android:text="Choose a background &amp; an alignment"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                     android:textColor="@android:color/tertiary_text_light"/>
 
-                <EditText
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:hint="Noble, Thief, Academic..."
-                    android:inputType="textCapSentences|textNoSuggestions"
-                    android:onTextChanged="@{(text, i, x, y) -> viewModel.setBackground(text)}"
-                    android:privateImeOptions="nm"
-                    android:text="@{viewModel.background}"/>
+                    android:backgroundTint="@color/colorAccent"
+                    android:entries="@{viewModel.backgroundOptions()}"
+                    android:onItemSelected="@{(p, v, position, id) -> viewModel.selectBackground(position)}"
+                    android:selectedItemPosition="@{viewModel.selectedBackgroundPosition()}"
+                    android:spinnerMode="dialog"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
                 <Spinner
                     android:layout_width="wrap_content"

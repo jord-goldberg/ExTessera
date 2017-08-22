@@ -12,6 +12,7 @@ import ny.gelato.extessera.App
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
+import ny.gelato.extessera.data.model.character.Equipment
 import ny.gelato.extessera.data.model.character.Proficiency
 import ny.gelato.extessera.feature.edit_character.EditCharacterView
 
@@ -91,6 +92,24 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
     }
 
     override fun showNext() {
+        App.component.realm().executeTransaction { realm ->
+            val character = realm.where(Character::class.java)
+                    .equalTo("id", id)
+                    .findFirst()
+
+            character.proficiencies.where()
+                    .equalTo("typeName", Proficiency.Type.TOOL.name)
+                    .findAll()
+                    .filter {
+                        it.name != Proficiency.Tool.VEHICLE_LAND.formatted &&
+                                it.name != Proficiency.Tool.VEHICLE_WATER.formatted &&
+                                character.equipment.where()
+                                        .equalTo("name", it.name)
+                                        .findFirst() == null
+                    }
+                    .forEach { character.equipment.add(Equipment(it.name)) }
+        }
+
         Handler().postDelayed({ activity.finish() }, 200)
     }
 

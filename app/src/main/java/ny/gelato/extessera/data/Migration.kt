@@ -4,6 +4,7 @@ import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import ny.gelato.extessera.data.model.character.Ability
+import ny.gelato.extessera.data.model.character.Background
 
 /**
  * Created by jord.goldberg on 8/2/17.
@@ -22,6 +23,8 @@ class Migration : RealmMigration {
                     .renameField("race", "raceName")
                     .renameField("subrace", "subraceName")
                     .renameField("alignment", "alignmentName")
+                    .renameField("background", "backgroundName")
+                    .transform { it.set("backgroundName", Background.ACOLYTE.name) }
                     // These next 2 fields are renamed to more accurately reflect the information stored
                     .renameField("initiative", "initiativeModifier")
                     .renameField("speed", "speedModifier")
