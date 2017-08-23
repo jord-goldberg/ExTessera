@@ -10,7 +10,7 @@ import ny.gelato.extessera.data.model.Weapon
  * @layout bottom_sheet_character_weapon_create.xml
  */
 
-data class WeaponCreateModel(
+data class WeaponCustomModel(
         var name: String = "",
         var description: String = "",
         var bonus: Int = 0,
@@ -52,7 +52,7 @@ data class WeaponCreateModel(
 
     fun validateInput(): Boolean = name.isNotBlank()
 
-    fun createAndDismiss(sheet: BottomSheetDialog): WeaponCreateModel {
+    fun createAndDismiss(sheet: BottomSheetDialog): WeaponCustomModel {
         action = Action.CREATE
         sheet.dismiss()
         return this

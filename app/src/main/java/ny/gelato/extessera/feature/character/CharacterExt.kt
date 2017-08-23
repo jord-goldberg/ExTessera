@@ -19,7 +19,7 @@ fun Character.noteModels(): List<BaseViewModel> =
         notes.where()
                 .isNull("archived")
                 .findAll()
-                .map { NoteModel(it) }
+                .mapIndexed { index, note -> NoteModel(note, index) }
                 .toMutableList<BaseViewModel>()
                 .apply {
                     val character = this@noteModels
@@ -43,7 +43,7 @@ fun Character.skillModels(): List<BaseViewModel> =
                 }
 
 fun Character.weaponModels(): List<BaseViewModel> =
-        weapons.map { WeaponModel(it, this) }
+        weapons.mapIndexed { index, heldWeapon -> WeaponModel(heldWeapon, this, index) }
                 .toMutableList<BaseViewModel>()
                 .apply {
                     val character = this@weaponModels
@@ -65,11 +65,11 @@ fun Character.spellModels(): List<BaseViewModel> {
     else {
         spellModels.addAll(spells.where().equalTo("prepared", true)
                 .findAllSorted("level", Sort.DESCENDING, "name", Sort.ASCENDING)
-                .map { SpellModel(it) })
+                .mapIndexed { index, knownSpell -> SpellModel(knownSpell, index) })
 
         spellModels.addAll(spells.where().equalTo("prepared", false)
                 .findAllSorted("level", Sort.ASCENDING, "name", Sort.ASCENDING)
-                .map { SpellModel(it) })
+                .mapIndexed { index, knownSpell -> SpellModel(knownSpell, index) })
     }
 
     val section = HeaderModel.Section.SPELLS
@@ -96,7 +96,7 @@ fun Character.equipmentModelsSheet(): List<BaseViewModel> = mutableListOf<BaseVi
     for (i in 0 until CoinModel.Type.values().size) {
         add(CoinModel(CoinModel.Type.values()[i], character))
         if (equipment.size <= i) add(EquipmentModel())
-        else add(EquipmentModel(equipment[i]))
+        else add(EquipmentModel(equipment[i], i))
     }
     add(FooterModel(section))
     add(EquipmentFooterModel(character))
@@ -107,7 +107,7 @@ fun Character.equipmentModelsFull(): MutableList<BaseViewModel> = mutableListOf<
     val title = "Equipment Items"
     val section = HeaderModel.Section.EQUIPMENT
     add(HeaderModel(section, AvatarModel(character), R.menu.menu_character_equipment))
-    addAll(equipment.map { EquipmentModel(it) })
+    addAll(equipment.mapIndexed { index, equipment -> EquipmentModel(equipment, index) })
     add(FooterModel(section))
 }
 

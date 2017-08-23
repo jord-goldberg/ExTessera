@@ -54,10 +54,14 @@ interface CharacterDataSource {
     fun deleteEquipment(equipment: EquipmentModel)
 
 
-    fun createWeapon(weaponCreate: WeaponCreateModel)
+    fun createWeapon(weapon: WeaponModel)
+
+    fun createCustomWeapon(weaponCustom: WeaponCustomModel)
 
     fun deleteWeapon(weaponId: String)
 
+
+    fun createSpell(spell: SpellModel)
 
     fun updateSpell(spell: SpellModel)
 

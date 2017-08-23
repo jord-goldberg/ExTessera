@@ -171,8 +171,10 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
     fun create(model: BaseViewModel) {
         when (model) {
             is NoteModel -> characterManager.createNote(model)
-            is WeaponCreateModel -> characterManager.createWeapon(model)
             is EquipmentModel -> characterManager.createEquipment(model)
+            is WeaponModel -> characterManager.createWeapon(model)
+            is WeaponCustomModel -> characterManager.createCustomWeapon(model)
+            is SpellModel -> characterManager.createSpell(model)
         }
     }
 

@@ -12,7 +12,7 @@
 
         <variable
             name="viewModel"
-            type="ny.gelato.extessera.feature.character.view_model.WeaponCreateModel"/>
+            type="ny.gelato.extessera.feature.character.view_model.WeaponCustomModel"/>
 
         <variable
             name="parent"

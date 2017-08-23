@@ -16,11 +16,12 @@ import java.util.*
 data class NoteModel(
         val id: String = "",
         var text: String = "",
-        var created: Date = Date()
+        var created: Date = Date(),
+        val index: Int? = null
 
 ) : BaseViewModel() {
 
-    constructor(note: Note) : this(note.id, note.text, note.created)
+    constructor(note: Note, index: Int?) : this(note.id, note.text, note.created, index)
 
     enum class Update {
         TEXT, ARCHIVED

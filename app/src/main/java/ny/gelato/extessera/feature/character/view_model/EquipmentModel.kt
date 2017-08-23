@@ -14,11 +14,12 @@ import ny.gelato.extessera.data.model.character.Equipment
 
 data class EquipmentModel(
         var name: String = "",
-        var amount: Int = 1
+        var amount: Int = 1,
+        val index: Int? = null
 
 ) : BaseViewModel() {
 
-    constructor(equipment: Equipment) : this(equipment.name, equipment.number)
+    constructor(equipment: Equipment, index: Int?) : this(equipment.name, equipment.number, index)
 
     var change = 0
 

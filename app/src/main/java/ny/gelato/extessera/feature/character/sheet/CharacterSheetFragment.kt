@@ -70,29 +70,32 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     val model = sheetAdapter.feed[position]
-
-                    if (model is NoteModel) {
-                        model.updateArchived()
-                        presenter.update(model)
-                        Snackbar.make(coordinator, "Note archived", Snackbar.LENGTH_LONG)
-                                .setAction("undo") { _ -> presenter.update(model) }
-                                .show()
-                    } else {
-                        val snackBarText = "Remove " + when (model) {
-                            is WeaponModel -> model.name
-                            is SpellModel -> model.name
-                            is EquipmentModel -> model.name
-                            else -> "note"
-                        } + "?"
-                        Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                                .setAction("confirm") { _ -> presenter.delete(model) }
-                                .addCallback(object : Snackbar.Callback() {
-                                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                            sheetAdapter.notifyItemChanged(position)
-                                    }
-                                })
-                                .show()
+                    when (model) {
+                        is NoteModel -> {
+                            model.updateArchived()
+                            presenter.update(model)
+                            Snackbar.make(coordinator, "Note archived", Snackbar.LENGTH_LONG)
+                                    .setAction("undo") { _ -> presenter.update(model) }
+                                    .show()
+                        }
+                        else -> {
+                            presenter.delete(model)
+                            val snackBarText = when (model) {
+                                is WeaponModel -> model.name
+                                is SpellModel -> model.name
+                                is EquipmentModel -> model.name
+                                else -> "Item"
+                            } + " removed"
+                            Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
+                                    .setAction("undo") { presenter.create(model) }
+                                    .addCallback(object : Snackbar.Callback() {
+                                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                            if (event == Snackbar.Callback.DISMISS_EVENT_MANUAL)
+                                                presenter.create(model)
+                                        }
+                                    })
+                                    .show()
+                        }
                     }
                 }
 
@@ -285,7 +288,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     }
 
     override fun showCreateWeapon() {
-        showBottomSheet(WeaponCreateModel(), R.layout.bottom_sheet_character_weapon_create)
+        showBottomSheet(WeaponCustomModel(), R.layout.bottom_sheet_character_weapon_custom_create)
     }
 
     override fun showSpellDetail(spell: SpellModel) {

@@ -23,11 +23,12 @@ data class WeaponModel(
         val type: String = "",
         val isCustom: Boolean = false,
         val description: String = "",
-        val bonus: Int = 0
+        val bonus: Int = 0,
+        val index: Int? = null
 
 ) : BaseViewModel() {
 
-    constructor(weapon: HeldWeapon, char: Character) :
+    constructor(weapon: HeldWeapon, char: Character, index: Int?) :
             this(weapon.id,
                     weapon.name,
                     weapon.properties,
@@ -48,7 +49,8 @@ data class WeaponModel(
                     weapon.type,
                     weapon.isCustom,
                     weapon.description,
-                    weapon.bonus)
+                    weapon.bonus,
+                    index)
 
     constructor(char: Character) :
             this("", "Unarmed Strike",
