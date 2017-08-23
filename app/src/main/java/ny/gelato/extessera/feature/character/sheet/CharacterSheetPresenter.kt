@@ -87,7 +87,7 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
                     }
                     GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
                 }
-                is NoteModel -> view.showCreateNote()
+                is NoteModel -> if (model.isEmpty()) view.showCreateNote()
                 is HpModel -> view.showEditHp(HpModel(character))
                 is MaxHpModel -> view.showEditMaxHp(MaxHpModel(character))
                 is SkillModel -> view.showSelectSkillProficiency(model)
@@ -146,7 +146,6 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
                 view.showHasInspiration(avatar)
             }
             R.id.action_notes_create -> view.showCreateNote()
-            R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
             R.id.action_death_save_reset -> characterManager.updateDeathSaves(DeathSaveModel())
             R.id.action_death_save_stabilize -> {

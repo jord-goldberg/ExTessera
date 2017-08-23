@@ -5,6 +5,7 @@ import io.realm.FieldAttribute
 import io.realm.RealmMigration
 import ny.gelato.extessera.data.model.character.Ability
 import ny.gelato.extessera.data.model.character.Background
+import java.util.*
 
 /**
  * Created by jord.goldberg on 8/2/17.
@@ -72,6 +73,17 @@ class Migration : RealmMigration {
 
             schema.get("Preferences")
                     .addField("editAllSkills", Boolean::class.java)
+
+            schema.get("Note")
+                    .addField("created", Date::class.java, FieldAttribute.INDEXED)
+                    .transform { it.set("created", Date()) }
+                    .addField("archived", Date::class.java, FieldAttribute.INDEXED)
+                    .transform {
+                        val isDone = it.getBoolean("isDone")
+                        if (isDone) it.set("archived", Date())
+                        else it.set("archived", null)
+                    }
+                    .removeField("isDone")
 
             schema.remove("Trait")
             schema.remove("Feature")

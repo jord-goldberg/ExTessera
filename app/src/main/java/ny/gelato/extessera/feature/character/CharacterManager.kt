@@ -130,7 +130,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun createNote(note: NoteModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.notes.add(Note(text = note.text, isDone = note.isDone))
+            character.notes.add(Note(text = note.text))
             character.updated = Date()
         }
     }
@@ -139,7 +139,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val characterNote = character.notes.where().equalTo("id", note.id).findFirst()
-            characterNote.isDone = note.isDone
+            characterNote.archived = if (characterNote.archived == null) Date() else null
             character.updated = Date()
         }
     }
@@ -151,19 +151,6 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             character.notes.remove(deleteNote)
             character.updated = Date()
             deleteNote.deleteFromRealm()
-        }
-    }
-
-    override fun deleteCheckedNotes() {
-        realm.executeTransactionAsync { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.notes
-                    .filter { it.isDone }
-                    .forEach {
-                        character.notes.remove(it)
-                        it.deleteFromRealm()
-                    }
-            character.updated = Date()
         }
     }
 

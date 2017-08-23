@@ -70,26 +70,34 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     val model = sheetAdapter.feed[position]
-                    val snackBarText = "Remove " + when (model) {
-                        is WeaponModel -> model.name
-                        is SpellModel -> model.name
-                        is EquipmentModel -> model.name
-                        else -> "note"
-                    } + "?"
-                    val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("confirm") { _ -> presenter.delete(model) }
-                            .addCallback(object : Snackbar.Callback() {
-                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                        sheetAdapter.notifyItemChanged(position)
-                                }
-                            })
-                    snackBar.show()
+
+                    if (model is NoteModel) {
+                        presenter.update(model)
+                        Snackbar.make(coordinator, "Note archived", Snackbar.LENGTH_LONG)
+                                .setAction("undo") { _ -> presenter.update(model) }
+                                .show()
+                    } else {
+                        val snackBarText = "Remove " + when (model) {
+                            is WeaponModel -> model.name
+                            is SpellModel -> model.name
+                            is EquipmentModel -> model.name
+                            else -> "note"
+                        } + "?"
+                        val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
+                                .setAction("confirm") { _ -> presenter.delete(model) }
+                                .addCallback(object : Snackbar.Callback() {
+                                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
+                                            sheetAdapter.notifyItemChanged(position)
+                                    }
+                                })
+                        snackBar.show()
+                    }
                 }
 
                 override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
                     val model: BaseViewModel = sheetAdapter.feed[viewHolder.adapterPosition]
-                    if ((model is NoteModel && model.isDone)
+                    if ((model is NoteModel && !model.isEmpty())
                             .or(model is WeaponModel && model.name != "Unarmed Strike")
                             .or(model is SpellModel && !model.isEmpty())
                             .or(model is EquipmentModel && !model.isEmpty()))
@@ -150,8 +158,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     override fun onClick(v: View, viewModel: BaseViewModel) {
         if (viewModel.action == BaseViewModel.Action.CONTEXT_MENU) {
             showPopupMenu(v, viewModel)
-        }
-        else presenter.routeOnClick(viewModel)
+        } else presenter.routeOnClick(viewModel)
     }
 
     override fun onLongClick(v: View, viewModel: BaseViewModel): Boolean {

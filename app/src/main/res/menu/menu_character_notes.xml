@@ -6,10 +6,6 @@
         android:title="Create a Note"/>
 
     <item
-        android:id="@+id/action_notes_clear_checked"
-        android:title="Clear Finished"/>
-
-    <item
         android:id="@+id/action_notes_hide"
         android:title="Hide"/>
 

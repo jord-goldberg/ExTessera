@@ -61,7 +61,7 @@ open class Character(
 
         var notes: RealmList<Note> = RealmList(Note(text = "Welcome to Ex Tessera!\n\n" +
                 "Set your skills and abilities by clicking on them below. " +
-                "Check the box to the left and swipe to dismiss once you're done.")),
+                "Swipe this message to dismiss once you're done.")),
 
         var proficiencies: RealmList<Proficiency> = RealmList(),
         var skills: RealmList<Skill> = RealmList(*Skill.Type.values().map { Skill(it.name) }.toTypedArray()),

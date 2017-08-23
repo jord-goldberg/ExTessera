@@ -44,8 +44,6 @@ interface CharacterDataSource {
 
     fun deleteNote(note: NoteModel)
 
-    fun deleteCheckedNotes()
-
 
     fun updateCoin(coin: CoinModel)
 

@@ -16,7 +16,10 @@ import ny.gelato.extessera.feature.character.view_model.*
  */
 
 fun Character.noteModels(): List<BaseViewModel> =
-        notes.map { NoteModel(it) }
+        notes.where()
+                .isNull("archived")
+                .findAll()
+                .map { NoteModel(it) }
                 .toMutableList<BaseViewModel>()
                 .apply {
                     val character = this@noteModels
