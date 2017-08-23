@@ -139,7 +139,12 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val characterNote = character.notes.where().equalTo("id", note.id).findFirst()
-            characterNote.archived = if (characterNote.archived == null) Date() else null
+            when (note.updateFlag) {
+                NoteModel.Update.TEXT -> characterNote.text = note.text
+                NoteModel.Update.ARCHIVED -> {
+                    characterNote.archived = if (characterNote.archived == null) Date() else null
+                }
+            }
             character.updated = Date()
         }
     }

@@ -4,7 +4,6 @@ import android.support.design.widget.BottomSheetDialog
 import android.text.format.DateUtils
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Note
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -23,6 +22,12 @@ data class NoteModel(
 
     constructor(note: Note) : this(note.id, note.text, note.created)
 
+    enum class Update {
+        TEXT, ARCHIVED
+    }
+
+    var updateFlag: Update? = null
+
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is NoteModel) model.id == id
             else false
@@ -38,6 +43,19 @@ data class NoteModel(
     fun createAndDismiss(sheet: BottomSheetDialog): NoteModel {
         action = Action.CREATE
         sheet.dismiss()
+        return this
+    }
+
+    fun updateTextAndDismiss(sheet: BottomSheetDialog): NoteModel {
+        action = Action.UPDATE
+        updateFlag = Update.TEXT
+        sheet.dismiss()
+        return this
+    }
+
+    fun updateArchived(): NoteModel {
+        action = Action.UPDATE
+        updateFlag = Update.ARCHIVED
         return this
     }
 

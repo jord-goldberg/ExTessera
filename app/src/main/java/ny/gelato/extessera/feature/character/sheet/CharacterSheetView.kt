@@ -41,6 +41,8 @@ interface CharacterSheetView : BaseView {
 
     fun showCreateNote()
 
+    fun showEditNote(note: NoteModel)
+
     fun showIsStabilized()
 
     fun showEditHp(hp: HpModel)

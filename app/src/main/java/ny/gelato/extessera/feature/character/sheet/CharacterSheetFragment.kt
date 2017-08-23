@@ -72,6 +72,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                     val model = sheetAdapter.feed[position]
 
                     if (model is NoteModel) {
+                        model.updateArchived()
                         presenter.update(model)
                         Snackbar.make(coordinator, "Note archived", Snackbar.LENGTH_LONG)
                                 .setAction("undo") { _ -> presenter.update(model) }
@@ -83,7 +84,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                             is EquipmentModel -> model.name
                             else -> "note"
                         } + "?"
-                        val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
+                        Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
                                 .setAction("confirm") { _ -> presenter.delete(model) }
                                 .addCallback(object : Snackbar.Callback() {
                                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
@@ -91,7 +92,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                                             sheetAdapter.notifyItemChanged(position)
                                     }
                                 })
-                        snackBar.show()
+                                .show()
                     }
                 }
 
@@ -224,6 +225,10 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
     override fun showCreateNote() {
         showBottomSheet(NoteModel(), R.layout.bottom_sheet_character_note_create)
+    }
+
+    override fun showEditNote(note: NoteModel) {
+        showBottomSheet(note, R.layout.bottom_sheet_character_note_edit)
     }
 
     override fun showIsStabilized() {

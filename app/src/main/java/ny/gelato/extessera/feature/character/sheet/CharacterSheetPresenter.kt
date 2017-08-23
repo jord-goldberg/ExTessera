@@ -113,6 +113,10 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
             view.showHasInspiration(model)
             true
         }
+        is NoteModel -> {
+            view.showEditNote(model.copy())
+            true
+        }
         is StatusModel -> {
             characterManager.updateStatus(model)
             true
