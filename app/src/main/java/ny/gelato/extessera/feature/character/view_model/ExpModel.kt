@@ -23,13 +23,15 @@ data class ExpModel(
         action = Action.UPDATE
     }
 
+    var isWaitingToDismiss = false
+
     fun hint(): String = "+$toNextLevel exp to next level"
 
     fun showExp(): String = NumberFormat.getInstance().format(current)
 
     fun setChange(exp: CharSequence) {
-        if (exp.isEmpty()) change = 0
-        else change = exp.toString().toInt()
+        change = if (exp.isEmpty()) 0
+        else exp.toString().toInt()
         notifyChange()
     }
 
@@ -37,6 +39,7 @@ data class ExpModel(
         current += change
         notifyChange()
         Handler().postDelayed({ sheet.dismiss() }, 1000)
+        isWaitingToDismiss = true
         return this
     }
 
@@ -44,6 +47,7 @@ data class ExpModel(
         current = change
         notifyChange()
         Handler().postDelayed({ sheet.dismiss() }, 1000)
+        isWaitingToDismiss = true
         return this
     }
 }
