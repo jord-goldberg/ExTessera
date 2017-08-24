@@ -205,9 +205,18 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
     fun delete(model: BaseViewModel) {
         when (model) {
             is NoteModel -> characterManager.deleteNote(model)
-            is WeaponModel -> characterManager.deleteWeapon(model.id)
-            is SpellModel -> characterManager.deleteSpell(model.name)
-            is EquipmentModel -> characterManager.deleteEquipment(model)
+            is EquipmentModel -> {
+                characterManager.deleteEquipment(model)
+                view.showEquipmentDeleted(model)
+            }
+            is WeaponModel -> {
+                characterManager.deleteWeapon(model.id)
+                view.showWeaponDeleted(model)
+            }
+            is SpellModel -> {
+                characterManager.deleteSpell(model.name)
+                view.showSpellDeleted(model)
+            }
         }
     }
 }

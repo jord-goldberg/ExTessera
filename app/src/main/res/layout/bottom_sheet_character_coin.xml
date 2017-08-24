@@ -7,6 +7,7 @@
     app:layout_anchorGravity="bottom">
 
     <data>
+
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -49,7 +50,7 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     tools:text="Gold"/>
 
-                <TextView
+                <com.robinhood.ticker.TickerView
                     android:layout_width="wrap_content"
                     android:layout_height="46dp"
                     android:layout_marginEnd="@dimen/activity_horizontal_margin"
@@ -58,8 +59,10 @@
                     android:alpha=".87"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:text="@{viewModel.showAmount()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+                    app:ticker_animationDuration="200"
                     tools:text="348"/>
 
             </LinearLayout>
@@ -84,7 +87,7 @@
                 android:maxLength="9"
                 android:onTextChanged="@{(coin, i, x, y) -> viewModel.setChange(coin)}"
                 android:textColor="@android:color/secondary_text_light"
-                tools:hint="Gold pieces"/>
+                tools:hint="Gold pieces (default = 1)"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,8 +95,8 @@
                 android:layout_marginStart="36dp"
                 android:fontFamily="sans-serif"
                 android:text="@{viewModel.showError()}"
-                android:textColor="@color/colorAccent"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:textColor="@color/colorAccent"
                 android:textStyle="italic"
                 android:visibility="@{viewModel.isSpendingTooMuch ? View.VISIBLE : View.INVISIBLE}"
                 tools:text="Not enough Gold"/>
@@ -111,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change != 0 ? parent.onClick(v, viewModel.addCoin(sheet)) : sheet.dismiss()}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.addCoin())}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="@{viewModel.showAddCoin()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
@@ -124,7 +127,7 @@
                     android:layout_gravity="end"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> viewModel.change > viewModel.amount ? viewModel.notifyError() : parent.onClick(v, viewModel.spendCoin(sheet))}"
+                    android:onClick="@{(v) -> viewModel.change > viewModel.amount ? viewModel.notifyError() : parent.onClick(v, viewModel.spendCoinAndDismissIfZero(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Spend"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

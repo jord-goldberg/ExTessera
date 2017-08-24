@@ -21,7 +21,7 @@ data class EquipmentModel(
 
     constructor(equipment: Equipment, index: Int?) : this(equipment.name, equipment.number, index)
 
-    var change = 0
+    var change = 1
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is EquipmentModel) name == model.name
@@ -39,8 +39,8 @@ data class EquipmentModel(
     fun validateName(): Boolean = name.isNotBlank()
 
     fun setChange(amount: CharSequence) {
-        if (amount.isEmpty()) change = 0
-        else change = amount.toString().toInt()
+        change = if (amount.isEmpty()) 1
+        else amount.toString().toInt()
     }
 
     fun createAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
@@ -49,17 +49,19 @@ data class EquipmentModel(
         return this
     }
 
-    fun addAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
-        sheet.dismiss()
+    fun add(): EquipmentModel {
         amount += change
         notifyChange()
         return this.copy().apply { action = Action.UPDATE }
     }
 
-    fun removeAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
-        sheet.dismiss()
+    fun removeAndDismissIfZero(sheet: BottomSheetDialog): EquipmentModel {
         amount -= change
         notifyChange()
-        return this.copy().apply { action = Action.UPDATE }
+        return if (amount < 1) {
+            amount += change
+            sheet.dismiss()
+            this.copy().apply { action = Action.DELETE }
+        } else this.copy().apply { action = Action.UPDATE }
     }
 }

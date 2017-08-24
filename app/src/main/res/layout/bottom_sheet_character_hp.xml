@@ -20,7 +20,6 @@
             type="ny.gelato.extessera.base.BaseView"/>
 
         <import type="android.view.View"/>
-        <import type="com.robinhood.ticker.TickerUtils"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -59,10 +58,9 @@
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
                     android:maxLines="1"
+                    android:text="@{viewModel.showCurrent()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    app:ticker_animationDuration="800"
-                    bind:characterList="@{TickerUtils.defaultNumberList}"
-                    bind:text="@{viewModel.showCurrent()}"/>
+                    app:ticker_animationDuration="800"/>
 
                 <TextView
                     android:layout_width="wrap_content"
