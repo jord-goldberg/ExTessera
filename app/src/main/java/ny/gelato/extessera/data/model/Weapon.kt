@@ -15,14 +15,17 @@ open class Weapon(
         var damage: String = "",
         var damageType: String = DamageType.BLUDGEONING,
         @Index var properties: String = "",
-        @Index var type: String = name,
+        @Index private var typeName: String = "",
         @Index var isCustom: Boolean = false,
         var description: String = "",
         var bonus: Int = 0
 
 ) : RealmObject() {
 
-    enum class Type(val formatted: String, val isSimple: Boolean = true) {
+    val type: Type
+        get() = Type.valueOf(typeName)
+
+    enum class Type(val formatted: String, val isSimple: Boolean = true, val ammunitionType: AmmunitionType? = null) {
         CLUB("Club"),
         DAGGER("Dagger"),
         GREATCLUB("Greatclub"),
@@ -33,10 +36,10 @@ open class Weapon(
         QUARTERSTAFF("Quarterstaff"),
         SICKLE("Sickle"),
         SPEAR("Spear"),
-        CROSSBOW_LIGHT("Crossbow, light"),
+        CROSSBOW_LIGHT("Crossbow, light", ammunitionType = AmmunitionType.BOLT),
         DART("Dart"),
-        SHORTBOW("Shortbow"),
-        SLING("Sling"),
+        SHORTBOW("Shortbow", ammunitionType = AmmunitionType.ARROW),
+        SLING("Sling", ammunitionType = AmmunitionType.BULLET),
         BATTLEAXE("Battleaxe", isSimple = false),
         FLAIL("Flail", isSimple = false),
         GLAIVE("Glaive", isSimple = false),
@@ -55,17 +58,27 @@ open class Weapon(
         WAR_PICK("War pick", isSimple = false),
         WARHAMMER("Warhammer", isSimple = false),
         WHIP("Whip", isSimple = false),
-        BLOWGUN("Blowgun", isSimple = false),
-        CROSSBOW_HAND("Crossbow, hand", isSimple = false),
-        CROSSBOW_HEAVY("Crossbow, heavy", isSimple = false),
-        LONGBOW("Longbow", isSimple = false),
+        BLOWGUN("Blowgun", isSimple = false, ammunitionType = AmmunitionType.NEEDLE),
+        CROSSBOW_HAND("Crossbow, hand", isSimple = false, ammunitionType = AmmunitionType.BOLT),
+        CROSSBOW_HEAVY("Crossbow, heavy", isSimple = false, ammunitionType = AmmunitionType.BOLT),
+        LONGBOW("Longbow", isSimple = false, ammunitionType = AmmunitionType.ARROW),
         NET("Net", isSimple = false)
     }
 
+    enum class AmmunitionType(val formatted: String) {
+        ARROW("Arrow"),
+        BOLT("Bolt"),
+        BULLET("Sling Bullet"),
+        NEEDLE("Blowgun Needle")
+    }
+
     object DamageType {
-        @JvmField val BLUDGEONING = "Bludgeoning"
-        @JvmField val PIERCING = "Piercing"
-        @JvmField val SLASHING = "Slashing"
+        @JvmField
+        val BLUDGEONING = "Bludgeoning"
+        @JvmField
+        val PIERCING = "Piercing"
+        @JvmField
+        val SLASHING = "Slashing"
     }
 
     fun category(): String = "${if (isSimple) "Simple" else "Martial"} ${if (isRanged) "Ranged" else "Melee"}"

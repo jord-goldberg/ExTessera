@@ -2,6 +2,7 @@ package ny.gelato.extessera.feature.character.view_model
 
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Equipment
 
 /**
@@ -15,11 +16,18 @@ import ny.gelato.extessera.data.model.character.Equipment
 data class EquipmentModel(
         var name: String = "",
         var amount: Int = 1,
+        var ammunitionType: Weapon.AmmunitionType? = null,
         val index: Int? = null
 
 ) : BaseViewModel() {
 
-    constructor(equipment: Equipment, index: Int?) : this(equipment.name, equipment.number, index)
+    constructor(equipment: Equipment, index: Int?) :
+            this(equipment.name,
+                    equipment.number,
+                    equipment.ammunitionType,
+                    index)
+
+    private val ammunitionTypes = Weapon.AmmunitionType.values()
 
     var change = 1
 
@@ -33,6 +41,18 @@ data class EquipmentModel(
 
     fun setName(new: CharSequence) {
         name = new.toString()
+        notifyChange()
+    }
+
+    fun toggleIsAmmunition(isChecked: Boolean) {
+        ammunitionType = if (isChecked) ammunitionTypes[0] else null
+        notifyChange()
+    }
+
+    fun ammunitionTypes() = ammunitionTypes.map { it.formatted }.toTypedArray()
+
+    fun selectAmmunitionType(position: Int) {
+        ammunitionType = ammunitionTypes[position]
         notifyChange()
     }
 
@@ -51,6 +71,12 @@ data class EquipmentModel(
 
     fun add(): EquipmentModel {
         amount += change
+        notifyChange()
+        return this.copy().apply { action = Action.UPDATE }
+    }
+
+    fun remove(): EquipmentModel {
+        amount -= change
         notifyChange()
         return this.copy().apply { action = Action.UPDATE }
     }

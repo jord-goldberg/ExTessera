@@ -3,6 +3,7 @@ package ny.gelato.extessera.feature.character
 import io.realm.Sort
 import ny.gelato.extessera.R
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Ability
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Job
@@ -42,19 +43,30 @@ fun Character.skillModels(): List<BaseViewModel> =
                     add(FooterModel(section))
                 }
 
-fun Character.weaponModels(): List<BaseViewModel> =
-        weapons.mapIndexed { index, heldWeapon -> WeaponModel(heldWeapon, this, index) }
-                .toMutableList<BaseViewModel>()
-                .apply {
-                    val character = this@weaponModels
-                    if (weapons.isEmpty().or(primary.job == Job.Type.MONK))
-                        add(0, WeaponModel(character))
-                    val section = HeaderModel.Section.WEAPONS
-                    val titleInfo = if (character.attacksPerAction() > 1)
-                        "Attacks per Action:  ${character.attacksPerAction()}" else ""
-                    add(0, HeaderModel(section, AvatarModel(character), R.menu.menu_character_weapons, titleInfo))
-                    add(FooterModel(section))
-                }
+fun Character.weaponModels(): List<BaseViewModel> {
+    val ammunition = this.equipment.where().isNotNull("ammunitionTypeName").findAll()
+
+    val weapons = weapons.mapIndexed { index, heldWeapon ->
+        heldWeapon.type.ammunitionType?.let {
+            val weaponAmmunition = ammunition.where()
+                    .equalTo("ammunitionTypeName", it.name)
+                    .findAll()
+                    .map { EquipmentModel(it, null) }
+                    .toMutableList()
+            WeaponModel(heldWeapon, this, weaponAmmunition, index)
+        } ?: WeaponModel(heldWeapon, this, mutableListOf(), index)
+    }
+    return weapons.toMutableList<BaseViewModel>().apply {
+        val character = this@weaponModels
+        if (weapons.isEmpty().or(primary.job == Job.Type.MONK))
+            add(0, WeaponModel(character))
+        val section = HeaderModel.Section.WEAPONS
+        val titleInfo = if (character.attacksPerAction() > 1)
+            "Attacks per Action:  ${character.attacksPerAction()}" else ""
+        add(0, HeaderModel(section, AvatarModel(character), R.menu.menu_character_weapons, titleInfo))
+        add(FooterModel(section))
+    }
+}
 
 fun Character.spellModels(): List<BaseViewModel> {
     if (primary.job == Job.Type.BARBARIAN) return emptyList()

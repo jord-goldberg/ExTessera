@@ -24,11 +24,12 @@ data class WeaponModel(
         val isCustom: Boolean = false,
         val description: String = "",
         val bonus: Int = 0,
+        private val ammunition: MutableList<EquipmentModel> = mutableListOf(),
         val index: Int? = null
 
 ) : BaseViewModel() {
 
-    constructor(weapon: HeldWeapon, char: Character, index: Int?) :
+    constructor(weapon: HeldWeapon, char: Character, ammunition: MutableList<EquipmentModel>, index: Int?) :
             this(weapon.id,
                     weapon.name,
                     weapon.properties,
@@ -43,13 +44,14 @@ data class WeaponModel(
                             maxOf(char.dexterity.modifier(), char.strength.modifier())
                         else char.dexterity.modifier()
                     },
-                    (char.proficiencies.where().equalTo("name", weapon.type).findFirst() != null)
+                    (char.proficiencies.where().equalTo("name", weapon.type.formatted).findFirst() != null)
                             .or(weapon.isProficient),
                     char.proficiencyBonus(),
-                    weapon.type,
+                    weapon.type.formatted,
                     weapon.isCustom,
                     weapon.description,
                     weapon.bonus,
+                    ammunition,
                     index)
 
     constructor(char: Character) :
@@ -60,6 +62,8 @@ data class WeaponModel(
                     else char.strength.modifier(),
                     true,
                     char.proficiencyBonus())
+
+    var selectedAmmunition: EquipmentModel? = if (ammunition.isEmpty()) null else ammunition[0]
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is WeaponModel) model.id == id
@@ -76,4 +80,22 @@ data class WeaponModel(
     fun damageRoll(): String = "$damage ${if (modifier != 0 || bonus != 0) Ability.formatDamage(modifier + bonus) else ""}".trim()
 
     fun damageDetail(): String = "${damageRoll()} ($damageType)"
+
+    fun hasAmmunition() = ammunition.isNotEmpty()
+
+    fun ammunition() = ammunition.map { "${it.name}  (${it.amount})" }.toTypedArray()
+
+    fun selectAmmunition(position: Int) {
+        selectedAmmunition = ammunition[position]
+        notifyChange()
+    }
+
+    fun selectedAmmunitionPosition(): Int = selectedAmmunition?.let { ammunition.indexOf(it) } ?: 0
+
+    fun shootAmmunition(): EquipmentModel {
+        val ammo = selectedAmmunition ?: EquipmentModel()
+        if (ammo.amount == 1) ammunition.remove(selectedAmmunition)
+        notifyChange()
+        return ammo.remove()
+    }
 }

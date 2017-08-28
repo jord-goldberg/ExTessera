@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -51,8 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="bottom"
-                android:layout_marginStart="32dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
                 android:background="@color/grey_300"/>
 
             <EditText
@@ -62,12 +64,47 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:hint="Item name"
-                android:maxLines="1"
                 android:inputType="textCapSentences"
+                android:maxLines="1"
                 android:onTextChanged="@{(text, i, x, y) -> viewModel.setName(text)}"
                 android:textColor="@android:color/secondary_text_light"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:onCheckedChanged="@{(cb, isChecked) -> viewModel.toggleIsAmmunition(isChecked)}"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="16dp"
+                    android:text="Ammunition"
+                    android:visibility="@{viewModel.ammunitionType != null ? View.GONE : View.VISIBLE}"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:entries="@{viewModel.ammunitionTypes()}"
+                    android:onItemSelected="@{(p, v, position, id) -> viewModel.selectAmmunitionType(position)}"
+                    android:spinnerMode="dialog"
+                    android:visibility="@{viewModel.ammunitionType == null ? View.GONE : View.VISIBLE}"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -80,8 +117,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:layout_gravity="end"
+                    android:clickable="true"
                     android:foreground="?selectableItemBackground"
                     android:onClick="@{(v) -> viewModel.validateName() ? parent.onClick(v, viewModel.createAndDismiss(sheet)) : null}"
                     android:padding="@dimen/activity_horizontal_margin"

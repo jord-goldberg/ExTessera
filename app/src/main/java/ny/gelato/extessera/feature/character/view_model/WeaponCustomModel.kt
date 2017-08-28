@@ -7,7 +7,7 @@ import ny.gelato.extessera.data.model.Weapon
 /**
  * Created by jord.goldberg on 7/24/17.
  *
- * @layout bottom_sheet_character_weapon_create.xml
+ * @layout bottom_sheet_character_weapon_custom_create.xml
  */
 
 data class WeaponCustomModel(
@@ -33,9 +33,8 @@ data class WeaponCustomModel(
     }
 
     fun setBonus(bonusInput: CharSequence) {
-        if (bonusInput.isEmpty())
-            bonus = 0
-        else bonus = bonusInput.toString().toInt()
+        bonus = if (bonusInput.isEmpty()) 0
+        else bonusInput.toString().toInt()
     }
 
     fun selectType(position: Int) {

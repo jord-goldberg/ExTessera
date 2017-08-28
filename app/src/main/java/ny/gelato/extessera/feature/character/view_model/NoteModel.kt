@@ -10,6 +10,7 @@ import java.util.*
  * Created by jord.goldberg on 6/7/17.
  *
  * @layout bottom_sheet_character_note_create.xml
+ * @layout bottom_sheet_character_note_edit.xml
  * @layout item_character_note.xml
  */
 

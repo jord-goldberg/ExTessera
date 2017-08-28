@@ -18,13 +18,16 @@ open class HeldWeapon(
         var damage: String = "",
         var damageType: String = "",
         @Index var properties: String = "",
-        @Index var type: String = name,
+        @Index private var typeName: String = name,
         @Index var isCustom: Boolean = false,
         var description: String = "",
         var bonus: Int = 0,
         var isProficient: Boolean = false
 
 ) : RealmObject() {
+
+    val type: Weapon.Type
+        get() = Weapon.Type.valueOf(typeName)
 
     constructor(weapon: Weapon) :
             this(name = weapon.name,
@@ -33,5 +36,5 @@ open class HeldWeapon(
                     damage = weapon.damage,
                     damageType = weapon.damageType,
                     properties = weapon.properties,
-                    type = weapon.type)
+                    typeName = weapon.type.name)
 }

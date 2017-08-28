@@ -180,10 +180,16 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
                     .findFirst()
 
-            if (currentEquipment == null)
-                equipment.index?.let { character.equipment.add(it, Equipment(equipment.name, equipment.amount)) }
-                        ?: character.equipment.add(Equipment(equipment.name, equipment.amount))
-            else currentEquipment.number += 1
+            if (currentEquipment == null) {
+                val newEquipment = Equipment(
+                        name = equipment.name,
+                        number = equipment.amount,
+                        ammunitionTypeName = equipment.ammunitionType?.name)
+
+                equipment.index?.let { character.equipment.add(it, newEquipment) }
+                        ?: character.equipment.add(newEquipment)
+
+            } else currentEquipment.number += 1
             character.updated = Date()
         }
     }
@@ -227,7 +233,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
                     damage = weaponType.damage,
                     damageType = weaponType.damageType,
                     properties = weaponType.properties,
-                    type = weaponType.type,
+                    typeName = weaponType.type.name,
                     isCustom = true,
                     description = weapon.description,
                     bonus = weapon.bonus,
@@ -250,7 +256,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
                     damage = weaponType.damage,
                     damageType = weaponType.damageType,
                     properties = weaponType.properties,
-                    type = weaponType.type,
+                    typeName = weaponType.type.name,
                     isCustom = true,
                     description = weaponCustom.description,
                     bonus = weaponCustom.bonus,

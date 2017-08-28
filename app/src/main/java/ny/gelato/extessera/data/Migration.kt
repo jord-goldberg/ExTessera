@@ -3,6 +3,7 @@ package ny.gelato.extessera.data
 import io.realm.DynamicRealm
 import io.realm.FieldAttribute
 import io.realm.RealmMigration
+import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Ability
 import ny.gelato.extessera.data.model.character.Background
 import java.util.*
@@ -70,6 +71,25 @@ class Migration : RealmMigration {
             schema.get("Proficiency")
                     .renameField("type", "typeName")
                     .removeField("origin")
+
+            schema.get("Equipment")
+                    .addField("ammunitionTypeName", String::class.java, FieldAttribute.INDEXED)
+
+            schema.get("Weapon")
+                    .transform {
+                        val typeFormatted = it.getString("type")
+                        val type = Weapon.Type.values().single { it.formatted == typeFormatted }
+                        it.set("type", type.name)
+                    }
+                    .renameField("type", "typeName")
+
+            schema.get("HeldWeapon")
+                    .transform {
+                        val typeFormatted = it.getString("type")
+                        val type = Weapon.Type.values().single { it.formatted == typeFormatted }
+                        it.set("type", type.name)
+                    }
+                    .renameField("type", "typeName")
 
             schema.get("Preferences")
                     .addField("editAllSkills", Boolean::class.java)

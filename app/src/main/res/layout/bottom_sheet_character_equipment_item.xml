@@ -68,9 +68,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
                 android:layout_marginStart="32dp"
                 android:background="@color/grey_300"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="italic"
+                android:text="Ammunition"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:visibility="@{viewModel.ammunitionType == null ? View.GONE : View.VISIBLE}"/>
 
             <EditText
                 android:layout_width="match_parent"
