@@ -27,8 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="8dp">
+            android:orientation="vertical">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -201,10 +200,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:alpha=".87"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
+                android:background="@color/grey_200"
                 android:visibility="@{viewModel.hasAmmunition() ? View.VISIBLE : View.GONE}">
 
                 <View

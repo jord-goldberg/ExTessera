@@ -44,6 +44,8 @@ data class EquipmentModel(
         notifyChange()
     }
 
+    fun showAmmunitionType(): String = "Ammunition (${ammunitionType?.formatted?.toLowerCase()})"
+
     fun toggleIsAmmunition(isChecked: Boolean) {
         ammunitionType = if (isChecked) ammunitionTypes[0] else null
         notifyChange()
