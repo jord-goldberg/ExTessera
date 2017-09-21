@@ -140,7 +140,7 @@ class WeaponSearchFragment : Fragment(), WeaponSearchView {
         if (characters.isNotEmpty())
             PopupMenu(activity, v, Gravity.END).apply {
                 if (characters.isNotEmpty()) characters.forEachIndexed { index, character ->
-                    val name = character.name.substringBefore(" ")
+                    val name = character.firstName()
                     menu.add(0, index, index, "Add to $name")
                 }
                 setOnMenuItemClickListener {

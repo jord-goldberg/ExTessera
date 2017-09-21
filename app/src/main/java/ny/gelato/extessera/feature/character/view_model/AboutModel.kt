@@ -26,7 +26,7 @@ data class AboutModel(
 ) : BaseViewModel() {
 
     constructor(character: Character) :
-            this(character.name,
+            this(character.firstName(),
                     character.background.formatted,
                     character.alignment.formatted,
                     character.about,
@@ -38,7 +38,7 @@ data class AboutModel(
                     character.proficienciesFormatted(Proficiency.Type.TOOL),
                     character.proficienciesFormatted(Proficiency.Type.LANGUAGE))
 
-    fun title(): String = "About ${name.substringBefore(" ")}"
+    fun title(): String = "About $name"
 
     fun classFeaturesTitle(): String = "Class Features (PHB $classPhbPage)"
 }

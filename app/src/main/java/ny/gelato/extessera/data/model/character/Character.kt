@@ -201,6 +201,8 @@ open class Character(
         setPrimaryJobProficiencies()
     }
 
+    fun firstName(): String = name.replace(Regex("[^a-zA-Z]"), " ").substringBefore(" ")
+
     fun description(): String =
             "${subrace?.formatted ?: race.formatted} " +
                     "${primary.job.formatted}, Level ${primary.level}"

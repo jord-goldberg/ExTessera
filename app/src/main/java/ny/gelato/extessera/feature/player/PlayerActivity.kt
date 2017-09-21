@@ -43,7 +43,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
             val model = playerAdapter.feed[position]
             when (model) {
                 is CharacterModel -> {
-                    val snackBar = Snackbar.make(coordinator, "Delete ${model.name.substringBefore(" ")}?", Snackbar.LENGTH_LONG)
+                    val snackBar = Snackbar.make(coordinator, "Delete ${model.firstName}?", Snackbar.LENGTH_LONG)
                             .setAction("confirm") { _ ->
                                 playerAdapter.feed.removeAt(position)
                                 playerAdapter.notifyItemRemoved(position)

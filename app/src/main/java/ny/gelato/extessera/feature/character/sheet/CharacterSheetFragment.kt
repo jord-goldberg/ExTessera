@@ -178,7 +178,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     }
 
     override fun showHasInspiration(avatar: AvatarModel) {
-        if (avatar.isInspired) Toast.makeText(activity, "${avatar.name.substringBefore(" ")} " +
+        if (avatar.isInspired) Toast.makeText(activity, "${avatar.firstName} " +
                 "has gained inspiration!\n+1 to role-playing", Toast.LENGTH_SHORT)
                 .apply {
                     (view.findViewById(android.R.id.message) as TextView).gravity = Gravity.CENTER
