@@ -181,7 +181,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
         if (avatar.isInspired) Toast.makeText(activity, "${avatar.firstName} " +
                 "has gained inspiration!\n+1 to role-playing", Toast.LENGTH_SHORT)
                 .apply {
-                    (view.findViewById(android.R.id.message) as TextView).gravity = Gravity.CENTER
+                    view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
                     show()
                 }
     }

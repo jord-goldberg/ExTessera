@@ -96,7 +96,7 @@ class PlayerActivity : AppCompatActivity(), PlayerView {
             queryHint = "Search all spells, weapons..."
             setIconifiedByDefault(false)
             setOnClickListener { Search5eActivity.showSearchAll(this@PlayerActivity) }
-            findViewById(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->
+            findViewById<View>(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->
                 Search5eActivity.showSearchAll(this@PlayerActivity); true
             }
         }
