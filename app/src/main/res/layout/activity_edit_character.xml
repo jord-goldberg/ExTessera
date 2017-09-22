@@ -35,7 +35,7 @@
 
             <TextView
                 android:id="@+id/back_text"
-                android:layout_width="104dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:drawablePadding="8dp"
@@ -49,7 +49,7 @@
 
             <TextView
                 android:id="@+id/next_text"
-                android:layout_width="104dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:clickable="true"

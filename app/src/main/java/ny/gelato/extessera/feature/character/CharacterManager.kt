@@ -42,7 +42,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateLevel(level: LevelUpModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            if (Job.Type.valueOf(character.primary.job) == level.selectedJob)
+            if (character.primary.job == level.selectedJob)
                 character.levelUpPrimary()
             character.updated = Date()
         }
@@ -68,10 +68,8 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             character.hp = status.hp
             character.armor = status.armor - character.dexterity.modifier()
-            character.initiative = status.initiative - character.dexterity.modifier() -
-                    if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
-                    else 0
-            character.speed = status.speed
+            character.initiativeModifier += status.initiative - character.initiative()
+            character.speedModifier += status.speed - character.speed()
             character.primary.dice = status.dice
             character.updated = Date()
         }
@@ -88,8 +86,8 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateMaxHp(maxHp: MaxHpModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.maxHp = maxHp.current
-            character.hp = maxHp.current
+            character.baseHp = maxHp.current - (character.constitution.modifier() * character.level())
+            character.hp = character.maxHp()
             character.updated = Date()
         }
     }
@@ -123,7 +121,8 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun updateSkill(skill: SkillModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.skills.where().equalTo("type", skill.type.name).findFirst().update(skill)
+            character.skills.where().equalTo("typeName", skill.type.name).findFirst()
+                    .proficiency = skill.proficiency
             character.updated = Date()
         }
     }
@@ -131,7 +130,8 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
     override fun createNote(note: NoteModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.notes.add(Note(text = note.text, isDone = note.isDone))
+            note.index?.let { character.notes.add(it, Note(text = note.text)) }
+                    ?: character.notes.add(Note(text = note.text))
             character.updated = Date()
         }
     }
@@ -140,7 +140,12 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val characterNote = character.notes.where().equalTo("id", note.id).findFirst()
-            characterNote.isDone = note.isDone
+            when (note.updateFlag) {
+                NoteModel.Update.TEXT -> characterNote.text = note.text
+                NoteModel.Update.ARCHIVED -> {
+                    characterNote.archived = if (characterNote.archived == null) Date() else null
+                }
+            }
             character.updated = Date()
         }
     }
@@ -152,19 +157,6 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             character.notes.remove(deleteNote)
             character.updated = Date()
             deleteNote.deleteFromRealm()
-        }
-    }
-
-    override fun deleteCheckedNotes() {
-        realm.executeTransactionAsync { realm ->
-            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            character.notes
-                    .filter { it.isDone }
-                    .forEach {
-                        character.notes.remove(it)
-                        it.deleteFromRealm()
-                    }
-            character.updated = Date()
         }
     }
 
@@ -188,8 +180,16 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val currentEquipment = character.equipment.where().equalTo("name", equipment.name, Case.INSENSITIVE)
                     .findFirst()
 
-            if (currentEquipment == null) character.equipment.add(Equipment(equipment.name))
-            else currentEquipment.number += 1
+            if (currentEquipment == null) {
+                val newEquipment = Equipment(
+                        name = equipment.name,
+                        number = equipment.amount,
+                        ammunitionTypeName = equipment.ammunitionType?.name)
+
+                equipment.index?.let { character.equipment.add(it, newEquipment) }
+                        ?: character.equipment.add(newEquipment)
+
+            } else currentEquipment.number += 1
             character.updated = Date()
         }
     }
@@ -220,23 +220,47 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
         }
     }
 
-    override fun createWeapon(weaponCreate: WeaponCreateModel) {
+
+    override fun createWeapon(weapon: WeaponModel) {
         realm.executeTransactionAsync { realm ->
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
-            val weaponType = realm.where(Weapon::class.java).equalTo("name", weaponCreate.type.formatted)
+            val weaponType = realm.where(Weapon::class.java).equalTo("name", weapon.type)
                     .findFirst()
             val heldWeapon = HeldWeapon(
-                    name = weaponCreate.name,
+                    name = weapon.name,
                     isSimple = weaponType.isSimple,
                     isRanged = weaponType.isRanged,
                     damage = weaponType.damage,
                     damageType = weaponType.damageType,
                     properties = weaponType.properties,
-                    type = weaponType.type,
+                    typeName = weaponType.type.name,
                     isCustom = true,
-                    description = weaponCreate.description,
-                    bonus = weaponCreate.bonus,
-                    isProficient = weaponCreate.isProficient)
+                    description = weapon.description,
+                    bonus = weapon.bonus,
+                    isProficient = weapon.proficient)
+            weapon.index?.let { character.weapons.add(it, heldWeapon) }
+                    ?: character.weapons.add(heldWeapon)
+            character.updated = Date()
+        }
+    }
+
+    override fun createCustomWeapon(weaponCustom: WeaponCustomModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val weaponType = realm.where(Weapon::class.java).equalTo("name", weaponCustom.type.formatted)
+                    .findFirst()
+            val heldWeapon = HeldWeapon(
+                    name = weaponCustom.name,
+                    isSimple = weaponType.isSimple,
+                    isRanged = weaponType.isRanged,
+                    damage = weaponType.damage,
+                    damageType = weaponType.damageType,
+                    properties = weaponType.properties,
+                    typeName = weaponType.type.name,
+                    isCustom = true,
+                    description = weaponCustom.description,
+                    bonus = weaponCustom.bonus,
+                    isProficient = weaponCustom.isProficient)
             character.weapons.add(heldWeapon)
             character.updated = Date()
         }
@@ -249,6 +273,24 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             character.weapons.remove(deleteWeapon)
             character.updated = Date()
             deleteWeapon.deleteFromRealm()
+        }
+    }
+
+    override fun createSpell(spell: SpellModel) {
+        realm.executeTransactionAsync { realm ->
+            val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
+            val knownSpell = KnownSpell(
+                    name = spell.name,
+                    level = spell.level,
+                    requirements = spell.requirements,
+                    range = spell.range,
+                    type = spell.type,
+                    prepared = spell.prepared,
+                    castsSinceLongRest = spell.castsSinceLongRest
+            )
+            spell.index?.let { character.spells.add(it, knownSpell) }
+                    ?: character.spells.add(knownSpell)
+            character.updated = Date()
         }
     }
 
@@ -276,6 +318,7 @@ class CharacterManager @Inject constructor(val realm: Realm, val id: String) : C
             val character = realm.where(Character::class.java).equalTo("id", id).findFirst()
             val preferences = character.preferences
             when (preference) {
+                Preferences.Toggle.EDIT_SKILLS -> preferences.editAllSkills = !preferences.editAllSkills
                 Preferences.Toggle.SORT_SKILLS -> preferences.sortSkillsByAbility = !preferences.sortSkillsByAbility
                 Preferences.Toggle.SHOW_NOTES -> preferences.showNotes = !preferences.showNotes
                 Preferences.Toggle.SHOW_SPELLS -> preferences.showSpells = !preferences.showSpells

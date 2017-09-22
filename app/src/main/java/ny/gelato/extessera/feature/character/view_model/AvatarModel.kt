@@ -23,20 +23,25 @@ data class AvatarModel(
 
     private var newImageUrl: String = ""
 
+    var firstName = name
+
     constructor(char: Character) :
             this(char.name,
                     char.description(),
                     char.hasInspiration,
                     char.imagePath,
-                    char.imageUrl)
+                    char.imageUrl) {
+
+        firstName = char.firstName()
+    }
 
     fun menu(): AvatarModel = copy().apply { action = Action.CONTEXT_MENU }
 
     fun toggleInspiration(): AvatarModel = copy(isInspired = !isInspired)
 
     fun setImageUrl(url: CharSequence) {
-        if (url.isEmpty()) newImageUrl = ""
-        else newImageUrl = url.toString()
+        newImageUrl = if (url.isEmpty()) ""
+        else url.toString()
         notifyChange()
     }
 

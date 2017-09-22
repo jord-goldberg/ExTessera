@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_edit_character_proficiencies.*
 import ny.gelato.extessera.App
 import ny.gelato.extessera.R
+import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
+import ny.gelato.extessera.data.model.character.Equipment
 import ny.gelato.extessera.data.model.character.Proficiency
 import ny.gelato.extessera.feature.edit_character.EditCharacterView
 
@@ -54,19 +56,14 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         character.proficiencies
-                .filter {
-                    it.type == Proficiency.Type.TOOL.name
-                            || it.type == Proficiency.Type.LANGUAGE.name
-                }
+                .filter { it.type == Proficiency.Type.TOOL || it.type == Proficiency.Type.LANGUAGE }
                 .forEach { proficiency ->
                     proficiencies.find { it.proficiency == proficiency.name }
-                            ?.apply {
-                                origin = Proficiency.Origin.RACE_CLASS
-                                toggleIsChecked(true)
-                            }
+                            ?.toggleIsChecked()
                 }
 
-        editProficienciesAdapter = EditProficienciesAdapter().apply { feed = proficienciesWithHeaders() }
+        editProficienciesAdapter = EditProficienciesAdapter(this)
+                .apply { feed = proficienciesWithHeaders() }
 
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -80,30 +77,40 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
         activity.title = "Tool & Language Proficiencies"
     }
 
-    override fun validateInput(): Boolean = true
+    override fun onClick(v: View, viewModel: BaseViewModel) {
+        if (viewModel is EditProficiencyModel)
+            App.component.realm().executeTransaction { realm ->
+                val character = realm.where(Character::class.java)
+                        .equalTo("id", id)
+                        .findFirst()
 
-    override fun showNext() {
-        saveProficiencies()
-        Handler().postDelayed({ activity.finish() }, 200)
+                if (viewModel.isChecked)
+                    character.proficiencies.add(Proficiency(viewModel.type.name, viewModel.proficiency))
+                else character.proficiencies.where().equalTo("name", viewModel.proficiency)
+                        .findFirst().deleteFromRealm()
+            }
     }
 
-    private fun saveProficiencies() {
+    override fun showNext() {
         App.component.realm().executeTransaction { realm ->
             val character = realm.where(Character::class.java)
                     .equalTo("id", id)
                     .findFirst()
 
-            editProficienciesAdapter.feed
-                    .filter { it is EditProficiencyModel && it.isChecked }
-                    .forEach {
-                        if (it is EditProficiencyModel && it.origin == Proficiency.Origin.CHOICE) {
-                            val name = it.proficiency
-                            if (character.proficiencies.find { it.name == name } == null)
-                                character.proficiencies.add(Proficiency(it.type.name, it.proficiency,
-                                        Proficiency.Origin.CHOICE.name))
-                        }
+            character.proficiencies.where()
+                    .equalTo("typeName", Proficiency.Type.TOOL.name)
+                    .findAll()
+                    .filter {
+                        it.name != Proficiency.Tool.VEHICLE_LAND.formatted &&
+                                it.name != Proficiency.Tool.VEHICLE_WATER.formatted &&
+                                character.equipment.where()
+                                        .equalTo("name", it.name)
+                                        .findFirst() == null
                     }
+                    .forEach { character.equipment.add(Equipment(it.name)) }
         }
+
+        Handler().postDelayed({ activity.finish() }, 200)
     }
 
     private fun proficienciesWithHeaders(): List<Any> = mutableListOf<Any>().apply {
@@ -119,13 +126,14 @@ class EditProficienciesFragment : Fragment(), EditCharacterView {
     }
 
     private fun header(model: EditProficiencyModel): String = when (model.type) {
-        Proficiency.Type.TOOL ->
-            if (Proficiency.Tool.valueOf(model.name).isArtisan()) "Artisan's Tools"
-            else if (Proficiency.Tool.valueOf(model.name).isGaming()) "Gaming Sets"
-            else if (Proficiency.Tool.valueOf(model.name).isMusical()) "Musical Instruments"
-            else "Other Tools"
+        Proficiency.Type.TOOL -> when (Proficiency.Tool.valueOf(model.name).type) {
+            Proficiency.Tool.Type.ARTISAN -> "Artisan's Tools"
+            Proficiency.Tool.Type.GAMING -> "Gaming Sets"
+            Proficiency.Tool.Type.MUSIC -> "Musical Instruments"
+            Proficiency.Tool.Type.OTHER -> "Other Tools"
+        }
         Proficiency.Type.LANGUAGE ->
-            if (Proficiency.Language.valueOf(model.name).isCommon()) "Standard Languages"
+            if (Proficiency.Language.valueOf(model.name).isCommon) "Standard Languages"
             else "Exotic Languages"
         else -> "Other Proficiencies"
     }

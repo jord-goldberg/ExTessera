@@ -55,7 +55,7 @@
                 android:maxLines="1"
                 android:text="@{viewModel.showAmount()}"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                android:visibility="@{viewModel.isEmpty() || viewModel.amount == 1 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{viewModel.isEmpty() || viewModel.amount &lt;= 1 ? View.GONE : View.VISIBLE}"
                 tools:text="20"/>
 
         </LinearLayout>

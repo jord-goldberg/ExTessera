@@ -2,55 +2,364 @@ package ny.gelato.extessera.data.model.character
 
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.annotations.Index
 
 /**
  * Created by jord.goldberg on 5/8/17.
  */
 
 open class Job(
-        var job: String = Job.Type.FIGHTER.name,
+        @Index private var jobName: String = Job.Type.BARBARIAN.name,
+        @Index private var archetypeName: String? = null,
+        @Index private var subtypeName: String? = null,
         var level: Int = 1,
         var dice: Int = 1,
-        var features: RealmList<Feature> = RealmList()
+        var counters: RealmList<Counter> = RealmList()
 
 ) : RealmObject() {
 
-    enum class Type(val formatted: String) {
-        BARBARIAN("Barbarian"),
-        BARD("Bard"),
-        CLERIC("Cleric"),
-        DRUID("Druid"),
-        FIGHTER("Fighter"),
-        MONK("Monk"),
-        PALADIN("Paladin"),
-        RANGER("Ranger"),
-        ROGUE("Rogue"),
-        SORCERER("Sorcerer"),
-        WARLOCK("Warlock"),
-        WIZARD("Wizard")
+    var job: Type
+        get() = Type.valueOf(jobName)
+        set(value) {
+            jobName = value.name
+        }
+
+    var archetype: Archetype?
+        get() = archetypeName?.let { Archetype.valueOf(it) }
+        set(value) {
+            archetypeName = value?.name
+        }
+
+    var subtype: Subtype?
+        get() = subtypeName?.let { Subtype.valueOf(it) }
+        set(value) {
+            subtypeName = value?.name
+        }
+
+    enum class Type(val formatted: String,
+                    val archetypes: Array<Archetype>,
+                    val subtypes: Array<Subtype> = emptyArray(),
+                    val startingAbilityScores: HashMap<Ability.Type, Int>,
+                    val skills: Array<Skill.Type>) {
+
+        BARBARIAN("Barbarian",
+                archetypes = arrayOf(
+                        Archetype.BERSERKER,
+                        Archetype.TOTEM_WARRIOR),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 15),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 12),
+                        Pair(Ability.Type.CHA, 8)),
+                skills = arrayOf(
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.NATURE,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.SURVIVAL)),
+
+        BARD("Bard",
+                archetypes = arrayOf(
+                        Archetype.COLLEGE_OF_LORE,
+                        Archetype.COLLEGE_OF_VALOR),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 10),
+                        Pair(Ability.Type.DEX, 14),
+                        Pair(Ability.Type.CON, 12),
+                        Pair(Ability.Type.INT, 13),
+                        Pair(Ability.Type.WIS, 8),
+                        Pair(Ability.Type.CHA, 15)),
+                skills = Skill.Type.values()),
+
+        CLERIC("Cleric",
+                archetypes = arrayOf(
+                        Archetype.KNOWLEDGE_DOMAIN,
+                        Archetype.LIFE_DOMAIN,
+                        Archetype.LIGHT_DOMAIN,
+                        Archetype.NATURE_DOMAIN,
+                        Archetype.TEMPEST_DOMAIN,
+                        Archetype.TRICKERY_DOMAIN,
+                        Archetype.WAR_DOMAIN),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 13),
+                        Pair(Ability.Type.DEX, 8),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 15),
+                        Pair(Ability.Type.CHA, 12)),
+                skills = arrayOf(
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.RELIGION)),
+
+        DRUID("Druid",
+                archetypes = arrayOf(
+                        Archetype.CIRCLE_OF_THE_LAND,
+                        Archetype.CIRCLE_OF_THE_MOON),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 15),
+                        Pair(Ability.Type.CHA, 12)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.NATURE,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.RELIGION,
+                        Skill.Type.SURVIVAL)),
+
+        FIGHTER("Fighter",
+                archetypes = arrayOf(
+                        Archetype.CHAMPION,
+                        Archetype.BATTLE_MASTER,
+                        Archetype.ELDRITCH_KNIGHT),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 15),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 12),
+                        Pair(Ability.Type.CHA, 8)),
+                skills = arrayOf(
+                        Skill.Type.ACROBATICS,
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.SURVIVAL)),
+
+        MONK("Monk",
+                archetypes = arrayOf(
+                        Archetype.WAY_OF_THE_OPEN_HAND,
+                        Archetype.WAY_OF_SHADOW,
+                        Archetype.WAY_OF_THE_FOUR_ELEMENTS),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 12),
+                        Pair(Ability.Type.DEX, 15),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 10),
+                        Pair(Ability.Type.WIS, 14),
+                        Pair(Ability.Type.CHA, 8)),
+                skills = arrayOf(
+                        Skill.Type.ACROBATICS,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.RELIGION,
+                        Skill.Type.STEALTH)),
+
+        PALADIN("Paladin",
+                archetypes = arrayOf(
+                        Archetype.OATH_OF_DEVOTION,
+                        Archetype.OATH_OF_THE_ANCIENTS,
+                        Archetype.OATH_OF_VENGEANCE),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 15),
+                        Pair(Ability.Type.DEX, 10),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 12),
+                        Pair(Ability.Type.CHA, 14)),
+                skills = arrayOf(
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.RELIGION)),
+
+        RANGER("Ranger",
+                archetypes = arrayOf(
+                        Archetype.HUNTER,
+                        Archetype.BEAST_MASTER),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 12),
+                        Pair(Ability.Type.DEX, 15),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 14),
+                        Pair(Ability.Type.CHA, 10)),
+                skills = arrayOf(
+                        Skill.Type.ANIMAL_HANDLING,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.NATURE,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.STEALTH,
+                        Skill.Type.SURVIVAL)),
+
+        ROGUE("Rogue",
+                archetypes = arrayOf(
+                        Archetype.THIEF,
+                        Archetype.ASSASSIN,
+                        Archetype.ARCANE_TRICKSTER),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 12),
+                        Pair(Ability.Type.DEX, 15),
+                        Pair(Ability.Type.CON, 13),
+                        Pair(Ability.Type.INT, 8),
+                        Pair(Ability.Type.WIS, 14),
+                        Pair(Ability.Type.CHA, 10)),
+                skills = arrayOf(
+                        Skill.Type.ACROBATICS,
+                        Skill.Type.ATHLETICS,
+                        Skill.Type.DECEPTION,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.PERCEPTION,
+                        Skill.Type.PERFORMANCE,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.SLEIGHT_OF_HAND,
+                        Skill.Type.STEALTH)),
+
+        SORCERER("Sorcerer",
+                archetypes = arrayOf(
+                        Archetype.DRACONIC_BLOODLINE,
+                        Archetype.WILD_MAGIC),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 10),
+                        Pair(Ability.Type.CHA, 15)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.DECEPTION,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.PERSUASION,
+                        Skill.Type.RELIGION)),
+
+        WARLOCK("Warlock",
+                archetypes = arrayOf(
+                        Archetype.ARCHFEY,
+                        Archetype.FIEND,
+                        Archetype.GREAT_OLD_ONE),
+                subtypes = arrayOf(
+                        Subtype.PACT_OF_THE_CHAIN,
+                        Subtype.PACT_OF_THE_BLADE,
+                        Subtype.PACT_OF_THE_TOME),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 12),
+                        Pair(Ability.Type.WIS, 10),
+                        Pair(Ability.Type.CHA, 15)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.DECEPTION,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INTIMIDATION,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.NATURE,
+                        Skill.Type.RELIGION)),
+
+        WIZARD("Wizard",
+                archetypes = arrayOf(
+                        Archetype.SCHOOL_OF_ABJURATION,
+                        Archetype.SCHOOL_OF_CONJURATION,
+                        Archetype.SCHOOL_OF_DIVINATION,
+                        Archetype.SCHOOL_OF_ENCHANTMENT,
+                        Archetype.SCHOOL_OF_EVOCATION,
+                        Archetype.SCHOOL_OF_ILLUSION,
+                        Archetype.SCHOOL_OF_NECROMANCY,
+                        Archetype.SCHOOL_OF_TRANSMUTATION),
+                startingAbilityScores = hashMapOf(
+                        Pair(Ability.Type.STR, 8),
+                        Pair(Ability.Type.DEX, 13),
+                        Pair(Ability.Type.CON, 14),
+                        Pair(Ability.Type.INT, 15),
+                        Pair(Ability.Type.WIS, 10),
+                        Pair(Ability.Type.CHA, 12)),
+                skills = arrayOf(
+                        Skill.Type.ARCANA,
+                        Skill.Type.HISTORY,
+                        Skill.Type.INSIGHT,
+                        Skill.Type.INVESTIGATION,
+                        Skill.Type.MEDICINE,
+                        Skill.Type.RELIGION))
     }
 
     enum class Archetype(val formatted: String) {
-
-        BERSERKER("Berserker") {
-            override fun type(): Type = Type.BARBARIAN
-        },
-        TOTEM_WARRIOR("Totem Warrior"){
-            override fun type(): Type = Type.BARBARIAN
-        },
-        COLLEGE_OF_LORE("College of Lore"){
-            override fun type(): Type = Type.BARD
-        },
-        COLLEGE_OF_VALOR("College of Valor"){
-            override fun type(): Type = Type.BARD
-        },
-
-        ;
-
-        abstract fun type(): Type
+        BERSERKER("Berserker"),
+        TOTEM_WARRIOR("Totem Warrior"),
+        COLLEGE_OF_LORE("College of Lore"),
+        COLLEGE_OF_VALOR("College of Valor"),
+        KNOWLEDGE_DOMAIN("Knowledge Domain"),
+        LIFE_DOMAIN("Life Domain"),
+        LIGHT_DOMAIN("Light Domain"),
+        NATURE_DOMAIN("Nature Domain"),
+        TEMPEST_DOMAIN("Tempest Domain"),
+        TRICKERY_DOMAIN("Trickery Domain"),
+        WAR_DOMAIN("War Domain"),
+        CIRCLE_OF_THE_LAND("Circle of the Land"),
+        CIRCLE_OF_THE_MOON("Circle of the Moon"),
+        CHAMPION("Champion"),
+        BATTLE_MASTER("Battle Master"),
+        ELDRITCH_KNIGHT("Eldritch Knight"),
+        WAY_OF_THE_OPEN_HAND("Way of the Open Hand"),
+        WAY_OF_SHADOW("Way of Shadow"),
+        WAY_OF_THE_FOUR_ELEMENTS("Way of the Four Elements"),
+        OATH_OF_DEVOTION("Oath of Devotion"),
+        OATH_OF_THE_ANCIENTS("Oath of the Ancients"),
+        OATH_OF_VENGEANCE("Oath of Vengeance"),
+        HUNTER("Hunter"),
+        BEAST_MASTER("Beast Master"),
+        THIEF("Thief"),
+        ASSASSIN("Assassin"),
+        ARCANE_TRICKSTER("Arcane Trickster"),
+        DRACONIC_BLOODLINE("Draconic Bloodline"),
+        WILD_MAGIC("Wild Magic"),
+        ARCHFEY("The Archfey"),
+        FIEND("The Fiend"),
+        GREAT_OLD_ONE("The Great Old One"),
+        SCHOOL_OF_ABJURATION("School of Abjuration"),
+        SCHOOL_OF_CONJURATION("School of Conjuration"),
+        SCHOOL_OF_DIVINATION("School of Divination"),
+        SCHOOL_OF_ENCHANTMENT("School of Enchantment"),
+        SCHOOL_OF_EVOCATION("School of Evocation"),
+        SCHOOL_OF_ILLUSION("School of Illusion"),
+        SCHOOL_OF_NECROMANCY("School of Necromancy"),
+        SCHOOL_OF_TRANSMUTATION("School of Transmutation")
     }
 
-    fun playersHandbookPage(): Int = when (Type.valueOf(job)) {
+    enum class Subtype(val formatted: String) {
+        PACT_OF_THE_CHAIN("Pact of the Chain"),
+        PACT_OF_THE_BLADE("Pact of the Blade"),
+        PACT_OF_THE_TOME("Pact of the Tome")
+    }
+
+    fun features(): List<String> = mutableListOf<String>().apply {
+        (1..level)
+                .flatMap { featuresForLevel(it) }
+                .forEach { feature ->
+                    if (feature.contains(" (")) {
+                        val oldFeature = find { it.contains(feature.substringBefore(" (")) }
+                        oldFeature?.let {
+                            add(indexOf(it), feature)
+                            remove(it)
+                        } ?: add(feature)
+                    } else add(feature)
+                }
+    }
+
+    fun playersHandbookPage(): Int = when (job) {
         Job.Type.BARBARIAN -> 46
         Job.Type.BARD -> 51
         Job.Type.CLERIC -> 56
@@ -65,7 +374,7 @@ open class Job(
         Job.Type.WIZARD -> 112
     }
 
-    fun hitDieMax(): Int = when (Type.valueOf(job)) {
+    fun hitDieMax(): Int = when (job) {
         Type.BARBARIAN -> 12
         Type.FIGHTER, Type.PALADIN, Type.RANGER -> 10
         Type.BARD, Type.CLERIC, Type.DRUID, Type.MONK, Type.ROGUE, Type.WARLOCK -> 8
@@ -76,14 +385,14 @@ open class Job(
 
     fun hitDiceFormatted(): String = "$dice${hitDieMaxFormatted()}"
 
-    fun castingAbility(): Ability.Type = when (Type.valueOf(job)) {
+    fun castingAbility(): Ability.Type = when (job) {
         Type.BARD, Type.PALADIN, Type.SORCERER, Type.WARLOCK -> Ability.Type.CHA
         Type.CLERIC, Type.DRUID, Type.MONK, Type.RANGER -> Ability.Type.WIS
         Type.FIGHTER, Type.ROGUE, Type.WIZARD -> Ability.Type.INT
         else -> Ability.Type.STR
     }
 
-    fun casterLevel(): Int = when (Type.valueOf(job)) {
+    fun casterLevel(): Int = when (job) {
         Type.BARD, Type.CLERIC, Type.DRUID, Type.SORCERER, Type.WIZARD -> level
         Type.PALADIN, Type.RANGER -> level / 2
         Type.ROGUE, Type.FIGHTER -> level / 3
@@ -104,30 +413,44 @@ open class Job(
         else -> 0
     }
 
-    fun resetLevelTo(level: Int) {
-        features.deleteAllFromRealm()
-        for (i in 1..level) {
-            this.level = i
-            addOrUpdateFeatures(featuresForLevel())
+    fun hasToSelectArchetype(): Boolean = (archetypeName == null) && level >= when (job) {
+        Type.BARBARIAN, Type.BARD, Type.FIGHTER, Type.MONK, Type.PALADIN, Type.RANGER, Type.ROGUE -> 3
+        Type.CLERIC, Type.SORCERER, Type.WARLOCK -> 1
+        Type.DRUID, Type.WIZARD -> 2
+    }
+
+    fun hasToSelectSubtype(): Boolean = when (job) {
+        Type.WARLOCK -> !hasToSelectArchetype() && (subtypeName == null) && level >= 3
+        else -> false
+    }
+
+    fun attacksPerAction(): Int = when (job) {
+        Type.BARBARIAN, Type.MONK, Type.PALADIN, Type.RANGER -> if (level < 5) 1 else 2
+        Type.BARD -> if (level > 5 && archetype == Archetype.COLLEGE_OF_VALOR) 2 else 1
+        Type.FIGHTER -> when (level) {
+            in 1..4 -> 1
+            in 5..10 -> 2
+            in 11..19 -> 3
+            else -> 4
         }
+        else -> 1
     }
 
     fun levelNotes(): List<Note> = ArrayList<Note>().apply {
-        val features = featuresForLevel()
+        val features = featuresForLevel(level)
 
         if (features.isNotEmpty()) {
-            addOrUpdateFeatures(features)
-            add(Note(text = "${Type.valueOf(job).formatted} $level " +
+            add(Note(text = "${job.formatted} $level " +
                     "${if (features.size > 1) "features" else "feature"} " +
                     "(PHB ${playersHandbookPage()}):\n" +
-                    features.map { it.name }.toString().substring(1).dropLast(1)))
+                    features.toString().substring(1).dropLast(1)))
         }
 
         when (level) {
             4, 8, 12, 16, 19 -> add(Note(text = "Ability Score Improvement"))
         }
 
-        when (Type.valueOf(job)) {
+        when (job) {
             Type.BARBARIAN -> when (level) {
                 6, 10, 14 -> add(Note(text = "Choose Path feature"))
             }
@@ -149,7 +472,7 @@ open class Job(
             }
             Type.DRUID -> when (level) {
                 4, 8 -> add(Note(text = "Wild Shape improvement"))
-                6, 10, 14 -> add (Note(text = "Choose Druid Circle feature"))
+                6, 10, 14 -> add(Note(text = "Choose Druid Circle feature"))
 
                 18 -> add(Note(text = "Magical Secrets: learn 2 spells"))
             }
@@ -196,228 +519,218 @@ open class Job(
         }
     }
 
-    private fun featuresForLevel(): List<Feature> = ArrayList<Feature>().apply {
-        when (Type.valueOf(job)) {
+    private fun featuresForLevel(level: Int): List<String> = ArrayList<String>().apply {
+        when (job) {
             Type.BARBARIAN -> when (level) {
                 1 -> {
-                    add(Feature("Rage"))
-                    add(Feature("Unarmored Defense"))
+                    add("Rage")
+                    add("Unarmored Defense")
                 }
                 2 -> {
-                    add(Feature("Reckless Attack"))
-                    add(Feature("Danger Sense"))
+                    add("Reckless Attack")
+                    add("Danger Sense")
                 }
-                3 -> add(Feature("Primal Path"))
+                3 -> add("Primal Path")
                 5 -> {
-                    add(Feature("Extra Attack"))
-                    add(Feature("Fast Movement"))
+                    add("Extra Attack")
+                    add("Fast Movement")
                 }
-                7 -> add(Feature("Feral Instinct"))
-                9 -> add(Feature("Brutal Critical (+1d)"))
-                11 -> add(Feature("Relentless Rage"))
-                13 -> add(Feature("Brutal Critical (+2d)"))
-                15 -> add(Feature("Persistent Rage"))
-                17 -> add(Feature("Brutal Critical (+3d)"))
-                18 -> add(Feature("Indomitable Might"))
-                20 -> add(Feature("Primal Champion"))
+                7 -> add("Feral Instinct")
+                9 -> add("Brutal Critical (+1d)")
+                11 -> add("Relentless Rage")
+                13 -> add("Brutal Critical (+2d)")
+                15 -> add("Persistent Rage")
+                17 -> add("Brutal Critical (+3d)")
+                18 -> add("Indomitable Might")
+                20 -> add("Primal Champion")
             }
             Type.BARD -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Bardic Inspiration (d6)"))
+                    add("Spellcasting")
+                    add("Bardic Inspiration (d6)")
                 }
                 2 -> {
-                    add(Feature("Jack of All Trades"))
-                    add(Feature("Song of Rest (d6)"))
+                    add("Jack of All Trades")
+                    add("Song of Rest (d6)")
                 }
-                3 -> add(Feature("Bard College"))
+                3 -> add("Bard College")
                 5 -> {
-                    add(Feature("Bardic Inspiration (d8)"))
-                    add(Feature("Font of Inspiration"))
+                    add("Bardic Inspiration (d8)")
+                    add("Font of Inspiration")
                 }
-                6 -> add(Feature("Countercharm"))
-                9 -> add(Feature("Song of Rest d8"))
-                10 -> add(Feature("Bardic Inspiration (d10)"))
-                13 -> add(Feature("Song of Rest (d10)"))
-                15 -> add(Feature("Bardic Inspiration (d12)"))
-                17 -> add(Feature("Song of Rest (d12)"))
-                20 -> add(Feature("Superior Inspiration"))
+                6 -> add("Countercharm")
+                9 -> add("Song of Rest d8")
+                10 -> add("Bardic Inspiration (d10)")
+                13 -> add("Song of Rest (d10)")
+                15 -> add("Bardic Inspiration (d12)")
+                17 -> add("Song of Rest (d12)")
+                20 -> add("Superior Inspiration")
             }
             Type.CLERIC -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Divine Domain"))
+                    add("Spellcasting")
+                    add("Divine Domain")
                 }
-                2 -> add(Feature("Channel Divinity (1/rest)"))
-                5 -> add(Feature("Destroy Undead (CR 1/2)"))
-                6 -> add(Feature("Channel Divinity (2/rest)"))
-                8 -> add(Feature("Destroy Undead (CR 1)"))
-                10 -> add(Feature("Divine Intervention"))
-                11 -> add(Feature("Destroy Undead (CR 2)"))
-                14 -> add(Feature("Destroy Undead (CR 3)"))
-                17 -> add(Feature("Destroy Undead (CR 4)"))
-                18 -> add(Feature("Channel Divinity (3/rest)"))
-                20 -> add(Feature("Divine Intervention improvement"))
+                2 -> add("Channel Divinity (1/rest)")
+                5 -> add("Destroy Undead (CR 1/2)")
+                6 -> add("Channel Divinity (2/rest)")
+                8 -> add("Destroy Undead (CR 1)")
+                10 -> add("Divine Intervention")
+                11 -> add("Destroy Undead (CR 2)")
+                14 -> add("Destroy Undead (CR 3)")
+                17 -> add("Destroy Undead (CR 4)")
+                18 -> add("Channel Divinity (3/rest)")
+                20 -> add("Divine Intervention improvement")
             }
             Type.DRUID -> when (level) {
                 1 -> {
-                    add(Feature("Druidic"))
-                    add(Feature("Spellcasting"))
+                    add("Druidic")
+                    add("Spellcasting")
                 }
                 2 -> {
-                    add(Feature("Wild Shape"))
-                    add(Feature("Druid Circle"))
+                    add("Wild Shape")
+                    add("Druid Circle")
                 }
                 18 -> {
-                    add(Feature("Timeless Body"))
-                    add(Feature("Beast Spells"))
+                    add("Timeless Body")
+                    add("Beast Spells")
                 }
-                20 -> add(Feature("Archdruid"))
+                20 -> add("Archdruid")
             }
             Type.FIGHTER -> when (level) {
                 1 -> {
-                    add(Feature("Fighting Style"))
-                    add(Feature("Second Wind"))
+                    add("Fighting Style")
+                    add("Second Wind")
                 }
-                2 -> add(Feature("Action Surge (one use)"))
-                3 -> add(Feature("Martial Archetype"))
-                5 -> add(Feature("Extra Attack (1)"))
-                9 -> add(Feature("Indomitable (one use)"))
-                11 -> add(Feature("Extra Attack (2)"))
-                13 -> add(Feature("Indomitable (two uses)"))
-                15 -> add(Feature("Persistent Rage"))
+                2 -> add("Action Surge (one use)")
+                3 -> add("Martial Archetype")
+                5 -> add("Extra Attack (1)")
+                9 -> add("Indomitable (one use)")
+                11 -> add("Extra Attack (2)")
+                13 -> add("Indomitable (two uses)")
+                15 -> add("Persistent Rage")
                 17 -> {
-                    add(Feature("Action Surge (two uses)"))
-                    add(Feature("Indomitable (three uses)"))
+                    add("Action Surge (two uses)")
+                    add("Indomitable (three uses)")
                 }
-                20 -> add(Feature("Extra Attack (3)"))
+                20 -> add("Extra Attack (3)")
             }
             Type.MONK -> when (level) {
                 1 -> {
-                    add(Feature("Unarmored Defense"))
-                    add(Feature("Martial Arts"))
+                    add("Unarmored Defense")
+                    add("Martial Arts")
                 }
                 2 -> {
-                    add(Feature("Ki"))
-                    add(Feature("Unarmored Movement"))
+                    add("Ki")
+                    add("Unarmored Movement")
                 }
                 3 -> {
-                    add(Feature("Monastic Tradition"))
-                    add(Feature("Deflect Missiles"))
+                    add("Monastic Tradition")
+                    add("Deflect Missiles")
                 }
-                4 -> add(Feature("Slow Fall"))
+                4 -> add("Slow Fall")
                 5 -> {
-                    add(Feature("Extra Attack"))
-                    add(Feature("Stunning Strike"))
+                    add("Extra Attack")
+                    add("Stunning Strike")
                 }
-                6 -> add(Feature("Ki Empowered Strikes"))
+                6 -> add("Ki Empowered Strikes")
                 7 -> {
-                    add(Feature("Evasion"))
-                    add(Feature("Stillness of Mind"))
+                    add("Evasion")
+                    add("Stillness of Mind")
                 }
-                9 -> add(Feature("Unarmored Movement improvement"))
-                10 -> add(Feature("Purity of Body"))
-                13 -> add(Feature("Tongue of the Sun and Moon"))
-                14 -> add(Feature("Diamond Soul"))
-                15 -> add(Feature("Timeless Body"))
-                18 -> add(Feature("Empty Body"))
-                20 -> add(Feature("Perfect Self"))
+                9 -> add("Unarmored Movement improvement")
+                10 -> add("Purity of Body")
+                13 -> add("Tongue of the Sun and Moon")
+                14 -> add("Diamond Soul")
+                15 -> add("Timeless Body")
+                18 -> add("Empty Body")
+                20 -> add("Perfect Self")
             }
             Type.PALADIN -> when (level) {
                 1 -> {
-                    add(Feature("Divine Sense"))
-                    add(Feature("Lay on Hands"))
+                    add("Divine Sense")
+                    add("Lay on Hands")
                 }
                 2 -> {
-                    add(Feature("Fighting Style"))
-                    add(Feature("Spellcasting"))
-                    add(Feature("Divine Smite"))
+                    add("Fighting Style")
+                    add("Spellcasting")
+                    add("Divine Smite")
                 }
                 3 -> {
-                    add(Feature("Divine Health"))
-                    add(Feature("Sacred Oath"))
+                    add("Divine Health")
+                    add("Sacred Oath")
                 }
-                5 -> add(Feature("Extra Attack"))
-                6 -> add(Feature("Aura of Protection"))
-                10 -> add(Feature("Aura of Courage"))
-                11 -> add(Feature("Improved Divine Smite"))
-                14 -> add(Feature("Cleansing Touch"))
-                18 -> add(Feature("Aura improvements"))
+                5 -> add("Extra Attack")
+                6 -> add("Aura of Protection")
+                10 -> add("Aura of Courage")
+                11 -> add("Improved Divine Smite")
+                14 -> add("Cleansing Touch")
+                18 -> add("Aura improvements")
             }
 
             Job.Type.RANGER -> when (level) {
                 1 -> {
-                    add(Feature("Favored Enemy"))
-                    add(Feature("Natural Explorer"))
+                    add("Favored Enemy")
+                    add("Natural Explorer")
                 }
                 2 -> {
-                    add(Feature("Fighting Style"))
-                    add(Feature("Spellcasting"))
+                    add("Fighting Style")
+                    add("Spellcasting")
                 }
                 3 -> {
-                    add(Feature("Ranger Archetype"))
-                    add(Feature("Primeval Awareness"))
+                    add("Ranger Archetype")
+                    add("Primeval Awareness")
                 }
-                5 -> add(Feature("Extra Attack"))
-                8 -> add(Feature("Land's Stride"))
-                10 -> add(Feature("Hide in Plain Sight"))
-                14 -> add(Feature("Vanish"))
-                18 -> add(Feature("Feral Senses"))
-                20 -> add(Feature("Foe Slayer"))
+                5 -> add("Extra Attack")
+                8 -> add("Land's Stride")
+                10 -> add("Hide in Plain Sight")
+                14 -> add("Vanish")
+                18 -> add("Feral Senses")
+                20 -> add("Foe Slayer")
             }
             Job.Type.ROGUE -> when (level) {
                 1 -> {
-                    add(Feature("Sneak Attack"))
-                    add(Feature("Thieves' Cant"))
+                    add("Sneak Attack")
+                    add("Thieves' Cant")
                 }
-                2 -> add(Feature("Cunning Action"))
-                3 -> add(Feature("Roguish Archetype"))
-                5 -> add(Feature("Uncanny Dodge"))
-                7 -> add(Feature("Evasion"))
-                11 -> add(Feature("Reliable Talent"))
-                14 -> add(Feature("Blind Sense"))
-                15 -> add(Feature("Slippery Mind"))
-                18 -> add(Feature("Elusive"))
-                20 -> add(Feature("Stroke of Luck"))
+                2 -> add("Cunning Action")
+                3 -> add("Roguish Archetype")
+                5 -> add("Uncanny Dodge")
+                7 -> add("Evasion")
+                11 -> add("Reliable Talent")
+                14 -> add("Blind Sense")
+                15 -> add("Slippery Mind")
+                18 -> add("Elusive")
+                20 -> add("Stroke of Luck")
             }
             Job.Type.SORCERER -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Sorcerous Origin"))
+                    add("Spellcasting")
+                    add("Sorcerous Origin")
                 }
-                2 -> add(Feature("Font of Magic"))
-                3 -> add(Feature("Metamagic"))
-                20 -> add(Feature("Sorcerous Restoration"))
+                2 -> add("Font of Magic")
+                3 -> add("Metamagic")
+                20 -> add("Sorcerous Restoration")
             }
             Job.Type.WARLOCK -> when (level) {
                 1 -> {
-                    add(Feature("Otherworldly Patron"))
-                    add(Feature("Pact Magic"))
+                    add("Otherworldly Patron")
+                    add("Pact Magic")
                 }
-                2 -> add(Feature("Eldritch Invocations"))
-                3 -> add(Feature("Pact Boon"))
-                11 -> add(Feature("Mystic Arcanum"))
-                20 -> add(Feature("Eldritch Master"))
+                2 -> add("Eldritch Invocations")
+                3 -> add("Pact Boon")
+                11 -> add("Mystic Arcanum")
+                20 -> add("Eldritch Master")
             }
             Job.Type.WIZARD -> when (level) {
                 1 -> {
-                    add(Feature("Spellcasting"))
-                    add(Feature("Arcane Recovery"))
+                    add("Spellcasting")
+                    add("Arcane Recovery")
                 }
-                2 -> add(Feature("Arcane Tradition"))
-                18 -> add(Feature("Spell Mastery"))
-                20 -> add(Feature("Signature Spell"))
+                2 -> add("Arcane Tradition")
+                18 -> add("Spell Mastery")
+                20 -> add("Signature Spell")
             }
-        }
-    }
-
-    private fun addOrUpdateFeatures(new: List<Feature>) {
-        for (feature in new) {
-            if (feature.name.contains(" (")) {
-                val old = features.where().contains("name", feature.name.substringBefore(" (")).findFirst()
-                old?.let { features.remove(it); it.deleteFromRealm() }
-            }
-            features.add(feature)
         }
     }
 }

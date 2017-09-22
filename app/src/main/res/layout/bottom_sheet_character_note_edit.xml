@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="sheet"
+            type="android.support.design.widget.BottomSheetDialog"/>
+
+        <variable
+            name="viewModel"
+            type="ny.gelato.extessera.feature.character.view_model.NoteModel"/>
+
+        <variable
+            name="parent"
+            type="ny.gelato.extessera.base.BaseView"/>
+
+        <import type="android.view.View"/>
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="1dp"
+                android:alpha=".87"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center_vertical"
+                android:text="Edit Note"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="32dp"
+                android:background="@color/grey_300"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@{viewModel.text}"
+                android:hint="Write it down"
+                android:inputType="textMultiLine|textCapSentences"
+                android:onTextChanged="@{(note, i, x, y) -> viewModel.setText(note)}"
+                android:textColor="@android:color/secondary_text_light"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:alpha=".87"
+                android:layoutDirection="rtl">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> viewModel.validateText() ? parent.onClick(v, viewModel.updateTextAndDismiss(sheet)) : null}"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="Edit"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    android:onClick="@{(v) -> sheet.dismiss()}"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="Cancel"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
+                    android:textColor="@color/colorPrimaryDark"
+                    tools:visibility="visible"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

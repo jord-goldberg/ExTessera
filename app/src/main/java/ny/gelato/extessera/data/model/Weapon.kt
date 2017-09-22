@@ -15,133 +15,70 @@ open class Weapon(
         var damage: String = "",
         var damageType: String = DamageType.BLUDGEONING,
         @Index var properties: String = "",
-        @Index var type: String = name,
+        @Index private var typeName: String = "",
         @Index var isCustom: Boolean = false,
         var description: String = "",
         var bonus: Int = 0
 
 ) : RealmObject() {
 
-    enum class Type(val formatted: String) {
-        CLUB("Club") {
-            override fun isSimple(): Boolean = true
-        },
-        DAGGER("Dagger") {
-            override fun isSimple(): Boolean = true
-        },
-        GREATCLUB("Greatclub") {
-            override fun isSimple(): Boolean = true
-        },
-        HANDAXE("Handaxe") {
-            override fun isSimple(): Boolean = true
-        },
-        JAVELIN("Javelin") {
-            override fun isSimple(): Boolean = true
-        },
-        LIGHT_HAMMER("Light hammer") {
-            override fun isSimple(): Boolean = true
-        },
-        MACE("Mace") {
-            override fun isSimple(): Boolean = true
-        },
-        QUARTERSTAFF("Quarterstaff") {
-            override fun isSimple(): Boolean = true
-        },
-        SICKLE("Sickle") {
-            override fun isSimple(): Boolean = true
-        },
-        SPEAR("Spear") {
-            override fun isSimple(): Boolean = true
-        },
-        CROSSBOW_LIGHT("Crossbow, light") {
-            override fun isSimple(): Boolean = true
-        },
-        DART("Dart") {
-            override fun isSimple(): Boolean = true
-        },
-        SHORTBOW("Shortbow") {
-            override fun isSimple(): Boolean = true
-        },
-        SLING("Sling") {
-            override fun isSimple(): Boolean = true
-        },
-        BATTLEAXE("Battleaxe") {
-            override fun isSimple(): Boolean = false
-        },
-        FLAIL("Flail") {
-            override fun isSimple(): Boolean = false
-        },
-        GLAIVE("Glaive") {
-            override fun isSimple(): Boolean = false
-        },
-        GREATAXE("Greataxe") {
-            override fun isSimple(): Boolean = false
-        },
-        GREATSWORD("Greatsword") {
-            override fun isSimple(): Boolean = false
-        },
-        HALBERD("Halberd") {
-            override fun isSimple(): Boolean = false
-        },
-        LANCE("Lance") {
-            override fun isSimple(): Boolean = false
-        },
-        LONGSWORD("Longsword") {
-            override fun isSimple(): Boolean = false
-        },
-        MAUL("Maul") {
-            override fun isSimple(): Boolean = false
-        },
-        MORNINGSTAR("Morningstar") {
-            override fun isSimple(): Boolean = false
-        },
-        PIKE("Pike") {
-            override fun isSimple(): Boolean = false
-        },
-        RAPIER("Rapier") {
-            override fun isSimple(): Boolean = false
-        },
-        SCIMITAR("Scimitar") {
-            override fun isSimple(): Boolean = false
-        },
-        SHORTSWORD("Shortsword") {
-            override fun isSimple(): Boolean = false
-        },
-        TRIDENT("Trident") {
-            override fun isSimple(): Boolean = false
-        },
-        WAR_PICK("War pick") {
-            override fun isSimple(): Boolean = false
-        },
-        WARHAMMER("Warhammer") {
-            override fun isSimple(): Boolean = false
-        },
-        WHIP("Whip") {
-            override fun isSimple(): Boolean = false
-        },
-        BLOWGUN("Blowgun") {
-            override fun isSimple(): Boolean = false
-        },
-        CROSSBOW_HAND("Crossbow, hand") {
-            override fun isSimple(): Boolean = false
-        },
-        CROSSBOW_HEAVY("Crossbow, heavy") {
-            override fun isSimple(): Boolean = false
-        },
-        LONGBOW("Longbow") {
-            override fun isSimple(): Boolean = false
-        },
-        NET("Net") {
-            override fun isSimple(): Boolean = false
-        };
+    val type: Type
+        get() = Type.valueOf(typeName)
 
-        abstract fun isSimple(): Boolean
+    enum class Type(val formatted: String, val isSimple: Boolean = true, val ammunitionType: AmmunitionType? = null) {
+        CLUB("Club"),
+        DAGGER("Dagger"),
+        GREATCLUB("Greatclub"),
+        HANDAXE("Handaxe"),
+        JAVELIN("Javelin"),
+        LIGHT_HAMMER("Light hammer"),
+        MACE("Mace"),
+        QUARTERSTAFF("Quarterstaff"),
+        SICKLE("Sickle"),
+        SPEAR("Spear"),
+        CROSSBOW_LIGHT("Crossbow, light", ammunitionType = AmmunitionType.BOLT),
+        DART("Dart"),
+        SHORTBOW("Shortbow", ammunitionType = AmmunitionType.ARROW),
+        SLING("Sling", ammunitionType = AmmunitionType.BULLET),
+        BATTLEAXE("Battleaxe", isSimple = false),
+        FLAIL("Flail", isSimple = false),
+        GLAIVE("Glaive", isSimple = false),
+        GREATAXE("Greataxe", isSimple = false),
+        GREATSWORD("Greatsword", isSimple = false),
+        HALBERD("Halberd", isSimple = false),
+        LANCE("Lance", isSimple = false),
+        LONGSWORD("Longsword", isSimple = false),
+        MAUL("Maul", isSimple = false),
+        MORNINGSTAR("Morningstar", isSimple = false),
+        PIKE("Pike", isSimple = false),
+        RAPIER("Rapier", isSimple = false),
+        SCIMITAR("Scimitar", isSimple = false),
+        SHORTSWORD("Shortsword", isSimple = false),
+        TRIDENT("Trident", isSimple = false),
+        WAR_PICK("War pick", isSimple = false),
+        WARHAMMER("Warhammer", isSimple = false),
+        WHIP("Whip", isSimple = false),
+        BLOWGUN("Blowgun", isSimple = false, ammunitionType = AmmunitionType.NEEDLE),
+        CROSSBOW_HAND("Crossbow, hand", isSimple = false, ammunitionType = AmmunitionType.BOLT),
+        CROSSBOW_HEAVY("Crossbow, heavy", isSimple = false, ammunitionType = AmmunitionType.BOLT),
+        LONGBOW("Longbow", isSimple = false, ammunitionType = AmmunitionType.ARROW),
+        NET("Net", isSimple = false)
+    }
+
+    enum class AmmunitionType(val formatted: String) {
+        ARROW("Arrow"),
+        BOLT("Bolt"),
+        BULLET("Sling Bullet"),
+        NEEDLE("Blowgun Needle")
     }
 
     object DamageType {
-        @JvmField val BLUDGEONING = "Bludgeoning"
-        @JvmField val PIERCING = "Piercing"
-        @JvmField val SLASHING = "Slashing"
+        @JvmField
+        val BLUDGEONING = "Bludgeoning"
+        @JvmField
+        val PIERCING = "Piercing"
+        @JvmField
+        val SLASHING = "Slashing"
     }
 
     fun category(): String = "${if (isSimple) "Simple" else "Martial"} ${if (isRanged) "Ranged" else "Melee"}"

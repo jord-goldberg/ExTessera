@@ -58,7 +58,7 @@
                     android:layout_weight="1"
                     android:alpha=".87"
                     android:fontFamily="sans-serif-smallcaps"
-                    android:text="@{viewModel.title}"
+                    android:text="@{viewModel.title()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     tools:text="Spells"/>
 
@@ -68,11 +68,12 @@
                     android:alpha=".87"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel)}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.isEditingSection ? viewModel.updateSection() : viewModel)}"
                     android:paddingEnd="@dimen/activity_horizontal_margin"
                     android:paddingTop="1dp"
                     android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:src="@drawable/ic_more_vert"
+                    android:src="@{viewModel.isEditingSection ? @drawable/ic_save_white : @drawable/ic_more_vert}"
+                    android:tint="@{viewModel.isEditingSection ? @color/colorAccent : @color/black}"
                     tools:src="@drawable/ic_more_vert"/>
 
             </LinearLayout>

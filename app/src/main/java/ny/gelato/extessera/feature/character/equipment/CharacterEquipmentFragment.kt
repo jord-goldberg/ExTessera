@@ -67,16 +67,8 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     val model = equipmentAdapter.feed[position] as EquipmentModel
-                    val snackBarText = "Remove ${model.name}?"
-                    val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("confirm") { _ -> characterManager.deleteEquipment(model) }
-                            .addCallback(object : Snackbar.Callback() {
-                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                        equipmentAdapter.notifyItemChanged(position)
-                                }
-                            })
-                    snackBar.show()
+                    characterManager.deleteEquipment(model)
+                    showUndoSnackbar(model)
                 }
 
                 override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
@@ -134,7 +126,10 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
             when (viewModel.action) {
                 BaseViewModel.Action.CREATE -> characterManager.createEquipment(viewModel)
                 BaseViewModel.Action.UPDATE -> characterManager.updateEquipment(viewModel)
-                BaseViewModel.Action.DELETE -> characterManager.deleteEquipment(viewModel)
+                BaseViewModel.Action.DELETE -> {
+                    characterManager.deleteEquipment(viewModel)
+                    showUndoSnackbar(viewModel)
+                }
                 else -> showEquipmentItem(viewModel)
             }
         }
@@ -150,6 +145,10 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
 
     override fun showCreateEquipment() {
         showBottomSheet(EquipmentModel(), R.layout.bottom_sheet_character_equipment_create)
+    }
+
+    override fun showEquipmentDeleted(equipment: EquipmentModel) {
+        showUndoSnackbar(equipment)
     }
 
     private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {
@@ -171,5 +170,17 @@ class CharacterEquipmentFragment : Fragment(), CharacterEquipmentView {
             setOnMenuItemClickListener { true }
             show()
         }
+    }
+
+    private fun showUndoSnackbar(model: EquipmentModel) {
+        Snackbar.make(coordinator, "${model.name} removed", Snackbar.LENGTH_LONG)
+                .setAction("undo") { characterManager.createEquipment(model) }
+                .addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        if (event == Snackbar.Callback.DISMISS_EVENT_MANUAL)
+                            characterManager.createEquipment(model)
+                    }
+                })
+                .show()
     }
 }

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -45,7 +48,7 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     tools:text="Arrows"/>
 
-                <TextView
+                <com.robinhood.ticker.TickerView
                     android:layout_width="wrap_content"
                     android:layout_height="46dp"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
@@ -54,9 +57,10 @@
                     android:alpha=".87"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:text="@{viewModel.showAmount()}"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-                    tools:text="348"/>
+                    app:ticker_animationDuration="200"/>
 
             </LinearLayout>
 
@@ -65,18 +69,30 @@
                 android:layout_height="1dp"
                 android:layout_gravity="bottom"
                 android:layout_marginStart="32dp"
-                android:layout_marginBottom="8dp"
                 android:background="@color/grey_300"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="sans-serif"
+                android:textStyle="italic"
+                android:text="@{viewModel.showAmmunitionType()}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                android:visibility="@{viewModel.ammunitionType == null ? View.GONE : View.VISIBLE}"
+                tools:text="Ammunition (arrow)"/>
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:hint="Amount"
+                android:hint="Amount (default = 1)"
                 android:inputType="number"
                 android:maxLength="9"
                 android:onTextChanged="@{(amount, i, x, y) -> viewModel.setChange(amount)}"
@@ -93,10 +109,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:layout_gravity="end"
+                    android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel.addAndDismiss(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.add())}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="+ Add"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"
@@ -107,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:foreground="?selectableItemBackground"
-                    android:onClick="@{(v) -> parent.onClick(v, viewModel.removeAndDismiss(sheet))}"
+                    android:onClick="@{(v) -> parent.onClick(v, viewModel.removeAndDismissIfZero(sheet))}"
                     android:padding="@dimen/activity_horizontal_margin"
                     android:text="Remove"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Button"

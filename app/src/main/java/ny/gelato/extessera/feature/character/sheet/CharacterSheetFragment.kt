@@ -70,26 +70,21 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     val model = sheetAdapter.feed[position]
-                    val snackBarText = "Remove " + when (model) {
-                        is WeaponModel -> model.name
-                        is SpellModel -> model.name
-                        is EquipmentModel -> model.name
-                        else -> "note"
-                    } + "?"
-                    val snackBar = Snackbar.make(coordinator, snackBarText, Snackbar.LENGTH_LONG)
-                            .setAction("confirm") { _ -> presenter.delete(model) }
-                            .addCallback(object : Snackbar.Callback() {
-                                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                                    if (event != Snackbar.Callback.DISMISS_EVENT_ACTION)
-                                        sheetAdapter.notifyItemChanged(position)
-                                }
-                            })
-                    snackBar.show()
+                    when (model) {
+                        is NoteModel -> {
+                            model.updateArchived()
+                            presenter.update(model)
+                            Snackbar.make(coordinator, "Note archived", Snackbar.LENGTH_LONG)
+                                    .setAction("undo") { _ -> presenter.update(model) }
+                                    .show()
+                        }
+                        else -> presenter.delete(model)
+                    }
                 }
 
                 override fun getSwipeDirs(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder): Int {
                     val model: BaseViewModel = sheetAdapter.feed[viewHolder.adapterPosition]
-                    if ((model is NoteModel && model.isDone)
+                    if ((model is NoteModel && !model.isEmpty())
                             .or(model is WeaponModel && model.name != "Unarmed Strike")
                             .or(model is SpellModel && !model.isEmpty())
                             .or(model is EquipmentModel && !model.isEmpty()))
@@ -150,8 +145,7 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     override fun onClick(v: View, viewModel: BaseViewModel) {
         if (viewModel.action == BaseViewModel.Action.CONTEXT_MENU) {
             showPopupMenu(v, viewModel)
-        }
-        else presenter.routeOnClick(viewModel)
+        } else presenter.routeOnClick(viewModel)
     }
 
     override fun onLongClick(v: View, viewModel: BaseViewModel): Boolean {
@@ -184,10 +178,10 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
     }
 
     override fun showHasInspiration(avatar: AvatarModel) {
-        if (avatar.isInspired) Toast.makeText(activity, "${avatar.name.substringBefore(" ")} " +
+        if (avatar.isInspired) Toast.makeText(activity, "${avatar.firstName} " +
                 "has gained inspiration!\n+1 to role-playing", Toast.LENGTH_SHORT)
                 .apply {
-                    (view.findViewById(android.R.id.message) as TextView).gravity = Gravity.CENTER
+                    view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
                     show()
                 }
     }
@@ -217,6 +211,10 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
 
     override fun showCreateNote() {
         showBottomSheet(NoteModel(), R.layout.bottom_sheet_character_note_create)
+    }
+
+    override fun showEditNote(note: NoteModel) {
+        showBottomSheet(note, R.layout.bottom_sheet_character_note_edit)
     }
 
     override fun showIsStabilized() {
@@ -251,6 +249,10 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
         showBottomSheet(equipment, R.layout.bottom_sheet_character_equipment_item)
     }
 
+    override fun showEquipmentDeleted(equipment: EquipmentModel) {
+        showUndoSnackbar(equipment, "${equipment.name} removed")
+    }
+
     override fun showEquipmentInventoryFor(character: Character) {
         val fragment = CharacterEquipmentFragment.newInstance(character.id)
         fragmentManager.beginTransaction()
@@ -268,20 +270,28 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
         showBottomSheet(weapon, R.layout.bottom_sheet_character_weapon)
     }
 
+    override fun showWeaponDeleted(weapon: WeaponModel) {
+        showUndoSnackbar(weapon, "${weapon.name} removed")
+    }
+
     override fun showWeaponsFor(character: Character) {
         Search5eActivity.showWeaponSearch(activity)
     }
 
     override fun showCreateWeapon() {
-        showBottomSheet(WeaponCreateModel(), R.layout.bottom_sheet_character_weapon_create)
+        showBottomSheet(WeaponCustomModel(), R.layout.bottom_sheet_character_weapon_custom_create)
     }
 
     override fun showSpellDetail(spell: SpellModel) {
         SpellDetailBottomFragment.newInstance(spell.name, true).show(fragmentManager, spell.name)
     }
 
+    override fun showSpellDeleted(spell: SpellModel) {
+        showUndoSnackbar(spell, "${spell.name} removed")
+    }
+
     override fun showSpellsFor(character: Character) {
-        Search5eActivity.showSpellSearch(activity, character.primary.job, character.primary.spellLevel())
+        Search5eActivity.showSpellSearch(activity, character.primary.job.name, character.primary.spellLevel())
     }
 
     private fun showBottomSheet(model: BaseViewModel, layoutRes: Int) {
@@ -317,5 +327,17 @@ class CharacterSheetFragment : Fragment(), CharacterSheetView {
             }
             show()
         }
+    }
+
+    private fun showUndoSnackbar(model: BaseViewModel, snackbarText: String) {
+        Snackbar.make(coordinator, snackbarText, Snackbar.LENGTH_LONG)
+                .setAction("undo") { presenter.create(model) }
+                .addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        if (event == Snackbar.Callback.DISMISS_EVENT_MANUAL)
+                            presenter.create(model)
+                    }
+                })
+                .show()
     }
 }

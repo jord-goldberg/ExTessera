@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.*
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 
 import ny.gelato.extessera.R
 import kotlinx.android.synthetic.main.activity_character.*
@@ -50,7 +51,7 @@ class CharacterActivity : AppCompatActivity() {
             isFocusable = false
             setIconifiedByDefault(false)
             setOnClickListener { Search5eActivity.showSearchAll(this@CharacterActivity) }
-            findViewById(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->
+            findViewById<View>(android.support.v7.appcompat.R.id.search_src_text).setOnTouchListener { _, _ ->
                 Search5eActivity.showSearchAll(this@CharacterActivity); true
             }
         }

@@ -10,7 +10,7 @@ import rx.Observable
  * Created by jord.goldberg on 5/1/17.
  *
  * Interface implemented by CharacterManager - this contract outlines the CRUD functions/interactions
- * between a Character data model and this features' view models
+ * between a Character data model and this features view models
  */
 
 interface CharacterDataSource {
@@ -44,8 +44,6 @@ interface CharacterDataSource {
 
     fun deleteNote(note: NoteModel)
 
-    fun deleteCheckedNotes()
-
 
     fun updateCoin(coin: CoinModel)
 
@@ -56,10 +54,14 @@ interface CharacterDataSource {
     fun deleteEquipment(equipment: EquipmentModel)
 
 
-    fun createWeapon(weaponCreate: WeaponCreateModel)
+    fun createWeapon(weapon: WeaponModel)
+
+    fun createCustomWeapon(weaponCustom: WeaponCustomModel)
 
     fun deleteWeapon(weaponId: String)
 
+
+    fun createSpell(spell: SpellModel)
 
     fun updateSpell(spell: SpellModel)
 

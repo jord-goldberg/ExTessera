@@ -41,6 +41,8 @@ interface CharacterSheetView : BaseView {
 
     fun showCreateNote()
 
+    fun showEditNote(note: NoteModel)
+
     fun showIsStabilized()
 
     fun showEditHp(hp: HpModel)
@@ -57,9 +59,13 @@ interface CharacterSheetView : BaseView {
 
     fun showEquipmentItem(equipment: EquipmentModel)
 
+    fun showEquipmentDeleted(equipment: EquipmentModel)
+
     fun showEquipmentInventoryFor(character: Character)
 
     fun showWeaponDetail(weapon: WeaponModel)
+
+    fun showWeaponDeleted(weapon: WeaponModel)
 
     fun showWeaponsFor(character: Character)
 
@@ -68,4 +74,6 @@ interface CharacterSheetView : BaseView {
     fun showSpellDetail(spell: SpellModel)
 
     fun showSpellsFor(character: Character)
+
+    fun showSpellDeleted(spell: SpellModel)
 }

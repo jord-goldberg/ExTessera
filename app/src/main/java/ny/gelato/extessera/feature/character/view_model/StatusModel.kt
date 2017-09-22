@@ -1,11 +1,9 @@
 package ny.gelato.extessera.feature.character.view_model
 
 import android.support.design.widget.BottomSheetDialog
-import io.realm.Case
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Ability
 import ny.gelato.extessera.data.model.character.Character
-import ny.gelato.extessera.data.model.character.Skill
 
 /**
  * Created by jord.goldberg on 5/23/17.
@@ -30,20 +28,12 @@ data class StatusModel(
 
     constructor(character: Character) :
             this(hp = character.hp,
-                    maxHp = character.maxHp,
-                    armor = character.armor + character.dexterity.modifier(),
-                    initiative = character.initiative + character.dexterity.modifier() +
-                            if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
-                            else 0,
-                    speed = character.speed,
+                    maxHp = character.maxHp(),
+                    armor = character.armorClass(),
+                    initiative = character.initiative(),
+                    speed = character.speed(),
                     proficiencyBonus = character.proficiencyBonus(),
-                    passiveWisdom = 10 + character.wisdom.modifier() + when (character.skills.where()
-                            .equalTo("type", "Perception", Case.INSENSITIVE).findFirst().proficiency) {
-                        Skill.Proficiency.FULL.name -> character.proficiencyBonus()
-                        Skill.Proficiency.EXPERT.name -> character.proficiencyBonus() * 2
-                        else -> if (character.isJackOfAllTrades()) character.proficiencyBonus() / 2
-                        else 0
-                    },
+                    passiveWisdom = character.passivePerception(),
                     dice = character.primary.dice,
                     maxDice = character.primary.level,
                     hitDie = character.primary.hitDieMaxFormatted(),

@@ -26,7 +26,7 @@ open class SpellSlots(
 
         val primaryCasterLevel = character.primary.casterLevel()
 
-        if (character.primary.job == Job.Type.WARLOCK.name) setWarlockSlots(primaryCasterLevel)
+        if (character.primary.job == Job.Type.WARLOCK) setWarlockSlots(primaryCasterLevel)
         else if (primaryCasterLevel != 0) setCasterSlots(primaryCasterLevel)
     }
 

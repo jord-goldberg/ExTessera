@@ -76,6 +76,7 @@
                         android:entries="@{viewModel.raceOptions()}"
                         android:onItemSelected="@{(p, v, position, id) -> viewModel.selectRace(position)}"
                         android:selectedItemPosition="@{viewModel.selectedRacePosition()}"
+                        android:spinnerMode="dialog"
                         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
                     <Spinner
@@ -88,6 +89,7 @@
                         android:entries="@{viewModel.jobOptions()}"
                         android:onItemSelected="@{(p, v, position, id) -> viewModel.selectJob(position)}"
                         android:selectedItemPosition="@{viewModel.selectedJobPosition()}"
+                        android:spinnerMode="dialog"
                         app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
                     <EditText
@@ -107,14 +109,15 @@
                 <Spinner
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_marginEnd="8dp"
                     android:layout_marginStart="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:backgroundTint="@color/colorAccent"
                     android:entries="@{viewModel.subraceOptions()}"
                     android:onItemSelected="@{(p, v, position, id) -> viewModel.selectSubrace(position)}"
                     android:selectedItemPosition="@{viewModel.selectedSubracePosition()}"
+                    android:spinnerMode="dialog"
                     android:visibility="@{viewModel.subraceOptions().length == 0 ? View.GONE : View.VISIBLE}"
                     app:popupTheme="@style/AppTheme.PopupOverlay"/>
 

@@ -19,4 +19,6 @@ interface CharacterEquipmentView : BaseView {
     fun showEquipmentItem(equipment: EquipmentModel)
 
     fun showCreateEquipment()
+
+    fun showEquipmentDeleted(equipment: EquipmentModel)
 }

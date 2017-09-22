@@ -18,12 +18,13 @@ data class SkillModel(
         val bonus: Int = 0,
         val type: Skill.Type = Skill.Type.ACROBATICS,
         var proficiency: Skill.Proficiency = Skill.Proficiency.NONE,
-        var jackOfAllTrades: Boolean = false
+        val jackOfAllTrades: Boolean = false,
+        val showCheckBox: Boolean = false
 
 ) : BaseViewModel() {
 
     constructor(char: Character, skill: Skill) : this(
-            when (Skill.Type.valueOf(skill.type).ability()) {
+            when (skill.type.ability) {
                 Ability.Type.STR -> char.strength.modifier()
                 Ability.Type.DEX -> char.dexterity.modifier()
                 Ability.Type.CON -> char.constitution.modifier()
@@ -32,30 +33,24 @@ data class SkillModel(
                 Ability.Type.CHA -> char.charisma.modifier()
             },
             char.proficiencyBonus(),
-            Skill.Type.valueOf(skill.type),
-            Skill.Proficiency.valueOf(skill.proficiency),
-            char.isJackOfAllTrades())
+            skill.type,
+            skill.proficiency,
+            char.isJackOfAllTrades(),
+            char.preferences.editAllSkills)
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is SkillModel) model.type == type
             else false
 
-    fun showStat(): String = "(${type.ability().formatted})"
+    fun updateProficiency(proficiency: Skill.Proficiency): SkillModel =
+            copy(proficiency = proficiency).apply { action = Action.UPDATE }
 
-    fun none(sheet: BottomSheetDialog): SkillModel {
+    fun updateProficiencyAndDismiss(proficiency: Skill.Proficiency, sheet: BottomSheetDialog): SkillModel {
         sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.NONE).apply { action = Action.UPDATE }
+        return updateProficiency(proficiency)
     }
 
-    fun full(sheet: BottomSheetDialog): SkillModel {
-        sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.FULL).apply { action = Action.UPDATE }
-    }
-
-    fun expert(sheet: BottomSheetDialog): SkillModel {
-        sheet.dismiss()
-        return copy(proficiency = Skill.Proficiency.EXPERT).apply { action = Action.UPDATE }
-    }
+    fun showStat(): String = "(${type.ability.formatted})"
 
     fun showModifier(): String = Ability.format(modifier + when (proficiency) {
         Skill.Proficiency.NONE -> if (jackOfAllTrades) bonus / 2 else 0

@@ -3,7 +3,7 @@ package ny.gelato.extessera.feature.edit_character.edit_basics
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
 import ny.gelato.extessera.data.model.character.Job
-import ny.gelato.extessera.data.model.character.Trait
+import ny.gelato.extessera.data.model.character.Race
 
 /**
  * Created by jord.goldberg on 7/5/17.
@@ -15,28 +15,26 @@ data class EditBasicsModel(
         var name: String = "",
         var level: Int = 1,
         var job: Job.Type = Job.Type.FIGHTER,
-        var race: Trait.Race = Trait.Race.HUMAN,
-        var subrace: Trait.Subrace? = null
+        var race: Race = Race.HUMAN,
+        var subrace: Race.Subrace? = null
 
 ) : BaseViewModel() {
 
     constructor(character: Character) :
             this(character.name,
                     character.primary.level,
-                    Job.Type.valueOf(character.primary.job),
-                    Trait.Race.valueOf(character.race),
-                    if (character.subrace == null) null
-                    else Trait.Subrace.valueOf(character.subrace!!))
+                    character.primary.job,
+                    character.race,
+                    character.subrace)
 
     private val jobs = Job.Type.values()
-    private val races = Trait.Race.values()
-    private val subraces = Trait.Subrace.values()
+    private val races = Race.values()
 
     fun jobOptions(): Array<String> = jobs.map { it.formatted }.toTypedArray()
 
     fun raceOptions(): Array<String> = races.map { it.formatted }.toTypedArray()
 
-    fun subraceOptions(): Array<String> = subraces.filter { it.race() == race }.map { it.formatted }.toTypedArray()
+    fun subraceOptions(): Array<String> = race.subraces.map { it.formatted }.toTypedArray()
 
     fun showLevelHint(): String = if (level < 10) "  $level  " else " $level "
 
@@ -65,15 +63,15 @@ data class EditBasicsModel(
 
     fun selectRace(position: Int) {
         race = races[position]
-        if (!race.hasSubrace()) subrace = null
+        if (race.subraces.isEmpty()) subrace = null
         notifyChange()
     }
 
     fun selectedRacePosition(): Int = race.ordinal
 
     fun selectSubrace(position: Int) {
-        subrace = subraces.filter { it.race() == race }[position]
+        subrace = race.subraces[position]
     }
 
-    fun selectedSubracePosition(): Int = subraces.filter { it.race() == race }.indexOf(subrace)
+    fun selectedSubracePosition(): Int = race.subraces.indexOf(subrace)
 }

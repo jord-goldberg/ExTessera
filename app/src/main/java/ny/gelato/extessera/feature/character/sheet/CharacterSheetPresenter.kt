@@ -87,7 +87,7 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
                     }
                     GoToModel.Destination.EQUIPMENT -> view.showScrollToDestination(CoinModel())
                 }
-                is NoteModel -> view.showCreateNote()
+                is NoteModel -> if (model.isEmpty()) view.showCreateNote()
                 is HpModel -> view.showEditHp(HpModel(character))
                 is MaxHpModel -> view.showEditMaxHp(MaxHpModel(character))
                 is SkillModel -> view.showSelectSkillProficiency(model)
@@ -111,6 +111,10 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
         is AvatarModel -> {
             characterManager.updateAvatar(model)
             view.showHasInspiration(model)
+            true
+        }
+        is NoteModel -> {
+            view.showEditNote(model.copy())
             true
         }
         is StatusModel -> {
@@ -146,7 +150,6 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
                 view.showHasInspiration(avatar)
             }
             R.id.action_notes_create -> view.showCreateNote()
-            R.id.action_notes_clear_checked -> characterManager.deleteCheckedNotes()
             R.id.action_notes_hide -> characterManager.updatePreference(Preferences.Toggle.SHOW_NOTES)
             R.id.action_death_save_reset -> characterManager.updateDeathSaves(DeathSaveModel())
             R.id.action_death_save_stabilize -> {
@@ -155,6 +158,7 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
             }
             R.id.action_status_long_rest -> view.showConfirmLongRest(model as StatusModel)
             R.id.action_status_edit_max_hp -> view.showEditMaxHp(MaxHpModel(character))
+            R.id.action_skills_edit_proficiencies -> characterManager.updatePreference(Preferences.Toggle.EDIT_SKILLS)
             R.id.action_skills_toggle_sort -> characterManager.updatePreference(Preferences.Toggle.SORT_SKILLS)
             R.id.action_weapons_add -> view.showWeaponsFor(character)
             R.id.action_weapons_add_custom -> view.showCreateWeapon()
@@ -167,8 +171,10 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
     fun create(model: BaseViewModel) {
         when (model) {
             is NoteModel -> characterManager.createNote(model)
-            is WeaponCreateModel -> characterManager.createWeapon(model)
             is EquipmentModel -> characterManager.createEquipment(model)
+            is WeaponModel -> characterManager.createWeapon(model)
+            is WeaponCustomModel -> characterManager.createCustomWeapon(model)
+            is SpellModel -> characterManager.createSpell(model)
         }
     }
 
@@ -177,6 +183,8 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
             is AvatarModel -> characterManager.updateAvatar(model)
             is ExpModel -> characterManager.updateExp(model)
             is LevelUpModel -> characterManager.updateLevel(model)
+            is HeaderModel -> if (model.section == HeaderModel.Section.SKILLS)
+                characterManager.updatePreference(Preferences.Toggle.EDIT_SKILLS)
             is NoteModel -> characterManager.updateNote(model)
             is DeathSaveModel -> {
                 characterManager.updateDeathSaves(model)
@@ -197,9 +205,18 @@ class CharacterSheetPresenter @Inject constructor(val characterManager: Characte
     fun delete(model: BaseViewModel) {
         when (model) {
             is NoteModel -> characterManager.deleteNote(model)
-            is WeaponModel -> characterManager.deleteWeapon(model.id)
-            is SpellModel -> characterManager.deleteSpell(model.name)
-            is EquipmentModel -> characterManager.deleteEquipment(model)
+            is EquipmentModel -> {
+                characterManager.deleteEquipment(model)
+                view.showEquipmentDeleted(model)
+            }
+            is WeaponModel -> {
+                characterManager.deleteWeapon(model.id)
+                view.showWeaponDeleted(model)
+            }
+            is SpellModel -> {
+                characterManager.deleteSpell(model.name)
+                view.showSpellDeleted(model)
+            }
         }
     }
 }

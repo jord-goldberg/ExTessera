@@ -1,6 +1,9 @@
 package ny.gelato.extessera.feature.character.view_model
 
+import android.databinding.BindingAdapter
 import android.support.design.widget.BottomSheetDialog
+import com.robinhood.ticker.TickerUtils
+import com.robinhood.ticker.TickerView
 import ny.gelato.extessera.base.BaseViewModel
 import ny.gelato.extessera.data.model.character.Character
 import java.text.NumberFormat
@@ -15,7 +18,7 @@ import java.text.NumberFormat
 data class CoinModel(
         val type: Type = CoinModel.Type.COPPER,
         var amount: Int = 0,
-        var change: Int = 0
+        var change: Int = 1
 
 ) : BaseViewModel() {
 
@@ -38,8 +41,8 @@ data class CoinModel(
             else false
 
     fun setChange(coin: CharSequence) {
-        if (coin.isEmpty()) change = 0
-        else change = coin.toString().toInt()
+        change = if (coin.isEmpty()) 1
+        else coin.toString().toInt()
         isSpendingTooMuch = false
         notifyChange()
     }
@@ -49,15 +52,16 @@ data class CoinModel(
         notifyChange()
     }
 
-    fun addCoin(sheet: BottomSheetDialog): CoinModel {
-        sheet.dismiss()
+    fun addCoin(): CoinModel {
         amount += change
+        notifyChange()
         return this.copy().apply { action = Action.UPDATE }
     }
 
-    fun spendCoin(sheet: BottomSheetDialog): CoinModel {
-        sheet.dismiss()
+    fun spendCoinAndDismissIfZero(sheet: BottomSheetDialog): CoinModel {
         amount -= change
+        notifyChange()
+        if (amount == 0) sheet.dismiss()
         return this.apply { action = Action.UPDATE }
     }
 
@@ -73,7 +77,7 @@ data class CoinModel(
 
     fun showType(): String = "${showName().first()}P"
 
-    fun showHint(): String = "${showName()} pieces"
+    fun showHint(): String = "${showName()} pieces (default = 1)"
 
     fun showAddCoin(): String = "+ ${showName()}"
 

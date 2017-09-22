@@ -2,6 +2,7 @@ package ny.gelato.extessera.feature.character.view_model
 
 import android.support.design.widget.BottomSheetDialog
 import ny.gelato.extessera.base.BaseViewModel
+import ny.gelato.extessera.data.model.Weapon
 import ny.gelato.extessera.data.model.character.Equipment
 
 /**
@@ -14,13 +15,21 @@ import ny.gelato.extessera.data.model.character.Equipment
 
 data class EquipmentModel(
         var name: String = "",
-        var amount: Int = 1
+        var amount: Int = 1,
+        var ammunitionType: Weapon.AmmunitionType? = null,
+        val index: Int? = null
 
 ) : BaseViewModel() {
 
-    constructor(equipment: Equipment) : this(equipment.name, equipment.number)
+    constructor(equipment: Equipment, index: Int?) :
+            this(equipment.name,
+                    equipment.number,
+                    equipment.ammunitionType,
+                    index)
 
-    var change = 0
+    private val ammunitionTypes = Weapon.AmmunitionType.values()
+
+    var change = 1
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is EquipmentModel) name == model.name
@@ -35,11 +44,25 @@ data class EquipmentModel(
         notifyChange()
     }
 
+    fun showAmmunitionType(): String = "Ammunition (${ammunitionType?.formatted?.toLowerCase()})"
+
+    fun toggleIsAmmunition(isChecked: Boolean) {
+        ammunitionType = if (isChecked) ammunitionTypes[0] else null
+        notifyChange()
+    }
+
+    fun ammunitionTypes() = ammunitionTypes.map { it.formatted }.toTypedArray()
+
+    fun selectAmmunitionType(position: Int) {
+        ammunitionType = ammunitionTypes[position]
+        notifyChange()
+    }
+
     fun validateName(): Boolean = name.isNotBlank()
 
     fun setChange(amount: CharSequence) {
-        if (amount.isEmpty()) change = 0
-        else change = amount.toString().toInt()
+        change = if (amount.isEmpty()) 1
+        else amount.toString().toInt()
     }
 
     fun createAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
@@ -48,17 +71,25 @@ data class EquipmentModel(
         return this
     }
 
-    fun addAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
-        sheet.dismiss()
+    fun add(): EquipmentModel {
         amount += change
         notifyChange()
         return this.copy().apply { action = Action.UPDATE }
     }
 
-    fun removeAndDismiss(sheet: BottomSheetDialog): EquipmentModel {
-        sheet.dismiss()
+    fun remove(): EquipmentModel {
         amount -= change
         notifyChange()
         return this.copy().apply { action = Action.UPDATE }
+    }
+
+    fun removeAndDismissIfZero(sheet: BottomSheetDialog): EquipmentModel {
+        amount -= change
+        notifyChange()
+        return if (amount < 1) {
+            amount += change
+            sheet.dismiss()
+            this.copy().apply { action = Action.DELETE }
+        } else this.copy().apply { action = Action.UPDATE }
     }
 }

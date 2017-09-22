@@ -9,14 +9,14 @@ import ny.gelato.extessera.base.BaseViewModel
  * To ensure that the RecyclerView DiffUtil's animation reflects this visual congruity,
  * we must hold a reference to the header to differentiate between footers
  *
- * @param headerTitle to differentiate between Footers
+ * @param section to differentiate between Footers
  *
  * @layout item_character_footer.xml
  */
 
-data class FooterModel(val headerTitle: String) : BaseViewModel() {
+data class FooterModel(private val section: HeaderModel.Section) : BaseViewModel() {
 
     override fun isSameAs(model: BaseViewModel): Boolean =
-            if (model is FooterModel) headerTitle == model.headerTitle
+            if (model is FooterModel) section == model.section
             else false
 }

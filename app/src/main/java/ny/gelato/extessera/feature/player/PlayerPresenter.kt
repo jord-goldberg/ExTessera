@@ -38,6 +38,7 @@ class PlayerPresenter @Inject constructor(val playerManager: PlayerManager) : Ba
     fun start() {
         val subscription = playerManager
                 .getPlayerCharacters()
+                .map { it.sort("created") }
                 .compose(feed)
                 .subscribe(
                         { feed -> view.showPlayer(feed) },

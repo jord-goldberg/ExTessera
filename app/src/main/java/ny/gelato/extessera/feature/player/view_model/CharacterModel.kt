@@ -23,6 +23,8 @@ data class CharacterModel(
 
 ) : BaseAvatar, BaseViewModel() {
 
+    var firstName = name
+
     constructor(char: Character) :
             this(char.id,
                     char.name,
@@ -31,7 +33,10 @@ data class CharacterModel(
                     char.imagePath,
                     char.imageUrl,
                     SimpleDateFormat("'Created: 'MM.dd.yy").format(char.created),
-                    SimpleDateFormat("'Updated: 'MM.dd.yy").format(char.updated))
+                    SimpleDateFormat("'Updated: 'MM.dd.yy").format(char.updated)) {
+
+        firstName = char.firstName()
+    }
 
     override fun isSameAs(model: BaseViewModel): Boolean =
             if (model is CharacterModel) this.name == model.name

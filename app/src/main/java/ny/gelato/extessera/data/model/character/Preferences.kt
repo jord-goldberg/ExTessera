@@ -7,6 +7,7 @@ import io.realm.RealmObject
  */
 
 open class Preferences(
+        var editAllSkills: Boolean = true,
         var sortSkillsByAbility: Boolean = false,
         var dcAbility: String = Ability.Type.DEX.name,
         var showNotes: Boolean = true,
@@ -15,6 +16,7 @@ open class Preferences(
 ) : RealmObject() {
 
     enum class Toggle {
+        EDIT_SKILLS,
         SORT_SKILLS,
         SHOW_NOTES,
         SHOW_SPELLS

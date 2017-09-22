@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="sheet"
             type="android.support.design.widget.BottomSheetDialog"/>
@@ -17,7 +18,9 @@
             type="ny.gelato.extessera.base.BaseView"/>
 
         <import type="android.view.View"/>
+
         <import type="ny.gelato.extessera.data.model.character.Skill.Type"/>
+
         <import type="ny.gelato.extessera.data.model.character.Skill.Proficiency"/>
     </data>
 
@@ -75,22 +78,22 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.none(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.NONE, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingStart="12dp"
                 android:visibility="@{viewModel.jackOfAllTrades ? View.GONE : View.VISIBLE}">
 
-                <ImageView
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:src="@drawable/ic_proficiency_none"
-                    android:tint="@{viewModel.proficiency == Proficiency.NONE ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+                    android:checked="@{viewModel.proficiency == Proficiency.NONE}"
+                    android:clickable="false"
+                    android:gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="44dp"
                     android:gravity="center"
                     android:text="No Proficiency"
                     android:textColor="@{viewModel.proficiency == Proficiency.NONE ? @color/colorAccent : @android:color/tertiary_text_light}"/>
@@ -103,22 +106,22 @@
                 android:layout_marginTop="8dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.none(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.NONE, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingStart="12dp"
                 android:visibility="@{viewModel.jackOfAllTrades ? View.VISIBLE : View.GONE}">
 
-                <ImageView
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:src="@drawable/ic_proficiency_half"
-                    android:tint="@{viewModel.proficiency == Proficiency.NONE ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+                    android:checked="@{viewModel.proficiency == Proficiency.NONE}"
+                    android:clickable="false"
+                    android:gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="44dp"
                     android:gravity="center"
                     android:text="Jack of all Trades"
                     android:textColor="@{viewModel.proficiency == Proficiency.NONE ? @color/colorAccent : @android:color/tertiary_text_light}"/>
@@ -130,21 +133,21 @@
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.full(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.FULL, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin">
+                android:paddingStart="12dp">
 
-                <ImageView
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:src="@drawable/ic_proficiency_full"
-                    android:tint="@{viewModel.proficiency == Proficiency.FULL ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+                    android:checked="@{viewModel.proficiency == Proficiency.FULL}"
+                    android:clickable="false"
+                    android:gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="44dp"
                     android:gravity="center"
                     android:text="Proficient"
                     android:textColor="@{viewModel.proficiency == Proficiency.FULL ? @color/colorAccent : @android:color/tertiary_text_light}"/>
@@ -156,21 +159,21 @@
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:foreground="?selectableItemBackground"
-                android:onClick="@{(v) -> parent.onClick(v, viewModel.expert(sheet))}"
+                android:onClick="@{(v) -> parent.onClick(v, viewModel.updateProficiencyAndDismiss(Proficiency.EXPERT, sheet))}"
                 android:paddingEnd="@dimen/activity_horizontal_margin"
-                android:paddingStart="@dimen/activity_horizontal_margin">
+                android:paddingStart="12dp">
 
-                <ImageView
+                <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:src="@drawable/ic_proficiency_expert"
-                    android:tint="@{viewModel.proficiency == Proficiency.EXPERT ? @color/colorAccent : @android:color/tertiary_text_light}"/>
+                    android:checked="@{viewModel.proficiency == Proficiency.EXPERT}"
+                    android:clickable="false"
+                    android:gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
-                    android:layout_marginStart="40dp"
+                    android:layout_marginStart="44dp"
                     android:gravity="center"
                     android:text="Expert"
                     android:textColor="@{viewModel.proficiency == Proficiency.EXPERT ? @color/colorAccent : @android:color/tertiary_text_light}"/>

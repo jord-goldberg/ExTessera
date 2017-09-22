@@ -25,47 +25,19 @@ open class Armor(
         SHIELD("Shields")
     }
 
-    enum class Type(val formatted: String) {
-        PADDED("Padded") {
-            override fun category(): Category = Category.LIGHT
-        },
-        LEATHER("Leather") {
-            override fun category(): Category = Category.LIGHT
-        },
-        STUDDED_LEATHER("Studded leather") {
-            override fun category(): Category = Category.LIGHT
-        },
-        HIDE("Hide") {
-            override fun category(): Category = Category.MEDIUM
-        },
-        CHAIN_SHIRT("Chain shirt") {
-            override fun category(): Category = Category.MEDIUM
-        },
-        SCALE_MAIL("Scale mail") {
-            override fun category(): Category = Category.MEDIUM
-        },
-        BREASTPLATE("Breastplate") {
-            override fun category(): Category = Category.MEDIUM
-        },
-        HALF_PLATE("Half plate") {
-            override fun category(): Category = Category.MEDIUM
-        },
-        RING_MAIL("Ring mail") {
-            override fun category(): Category = Category.HEAVY
-        },
-        CHAIN_MAIL("Chain mail") {
-            override fun category(): Category = Category.HEAVY
-        },
-        SPLINT("Splint") {
-            override fun category(): Category = Category.HEAVY
-        },
-        PLATE("Plate") {
-            override fun category(): Category = Category.HEAVY
-        },
-        SHIELD("Shield") {
-            override fun category(): Category = Category.SHIELD
-        };
-
-        abstract fun category(): Category
+    enum class Type(val formatted: String, val category: Category) {
+        PADDED("Padded", Category.LIGHT),
+        LEATHER("Leather", Category.LIGHT),
+        STUDDED_LEATHER("Studded leather", Category.LIGHT),
+        HIDE("Hide", Category.MEDIUM),
+        CHAIN_SHIRT("Chain shirt", Category.MEDIUM),
+        SCALE_MAIL("Scale mail", Category.MEDIUM),
+        BREASTPLATE("Breastplate", Category.MEDIUM),
+        HALF_PLATE("Half plate", Category.MEDIUM),
+        RING_MAIL("Ring mail", Category.HEAVY),
+        CHAIN_MAIL("Chain mail", Category.HEAVY),
+        SPLINT("Splint", Category.HEAVY),
+        PLATE("Plate", Category.HEAVY),
+        SHIELD("Shield", Category.SHIELD)
     }
 }
