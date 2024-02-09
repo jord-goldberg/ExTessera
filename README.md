@@ -6,16 +6,7 @@ https://play.google.com/store/apps/details?id=ny.gelato.extessera
 
 That's the main idea behind the creation of this app: No matter who's the master of the dungeon, the real power & fun is in a roll of the dice.
 
-Ex Tessera is meant to facilitate this fun by replacing a 5th edition paper character sheet. No more writing and constantly re-writing information. Easy to use, like this:
-
-
-![ ](https://media.giphy.com/media/xT39D5cbo5VGmk14uQ/giphy.gif)
-
-
-Searching for spells and weapons is easy, too:
-
-
-![ ](https://media.giphy.com/media/3oEhmPluqSfhQZRCgw/giphy.gif)
+Ex Tessera is meant to facilitate this fun by replacing a 5th edition paper character sheet. No more writing and constantly re-writing information.
 
 
 ### Summary
